@@ -9,7 +9,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           {/* Halaman publik */}
-          {/* <Route path="/" element={<HomePage />} /> */}
+          <Route path="/home" element={<HomePage />} />
           <Route path="/" element={<SignupPage />} />
         </Routes>
       </BrowserRouter>
