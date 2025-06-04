@@ -1,5 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import HomePage from "./pages/HomePage.jsx";
+import SignupPage from "./pages/SignupPage.jsx";
+
 
 function App() {
   return (
@@ -7,7 +9,8 @@ function App() {
       <BrowserRouter>
         <Routes>
           {/* Halaman publik */}
-          <Route path="/" element={<HomePage />} />
+          {/* <Route path="/" element={<HomePage />} /> */}
+          <Route path="/" element={<SignupPage />} />
         </Routes>
       </BrowserRouter>
     </>
