@@ -4,6 +4,9 @@ import {
   AiOutlineMenuFold,
   AiOutlineMenu,
   AiOutlineShoppingCart,
+  AiOutlineSearch,
+  AiOutlineMoon,
+  AiOutlineUser,
 } from "react-icons/ai";
 import { Link } from "react-router-dom";
 
@@ -67,7 +70,10 @@ export default function Navbar() {
         {/* last section */}
         <div className="flex items-center gap-4">
           {/* cart icon */}
-          <AiOutlineShoppingCart className="text-3xl" />
+          <AiOutlineSearch className="text-xl hidden md:flex" />
+          <AiOutlineMoon className="text-xl hidden md:flex" />
+          <AiOutlineShoppingCart className="text-xl hidden md:flex" />
+          <AiOutlineUser className="text-xl hidden md:flex" />
           <img
             width={40}
             height={40}

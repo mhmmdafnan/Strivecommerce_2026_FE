@@ -67,14 +67,14 @@ const signupPage = () => {
   }, []);
 
   return (
-    <div className="h-screen flex justify-center mt-10 md:mt-0 bg-white">
+    <div className="h-screen flex justify-center items-center bg-white">
       {/* Wrapper card */}
 
       <div className="w-full">
         {/* Logo */}
-        <div className="flex justify-center mt-8 mb-4 ">
+        <div className="flex justify-center mb-6">
           <div className="">
-            <img src={Logo} alt="Logo" className="mx-auto h-10" />
+            <img src={Logo} alt="Logo" className="mx-auto h-10"/>
           </div>
         </div>
         <div className=" flex flex-col md:flex-row items-center ">
