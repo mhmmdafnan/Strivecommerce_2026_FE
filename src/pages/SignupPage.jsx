@@ -74,7 +74,7 @@ const signupPage = () => {
         <img src={Logo} alt="Logo" className="mx-auto h-10" />
       </div>
 
-      <div className=" w-full flex flex-col md:flex-row items-center">
+      <div className=" w-full flex flex-col md:flex-row items-center justify-center gap-5 md:gap-0 h-[calc(100vh-170px)] md:h-[calc(100vh-100px)]">
         {/* Kiri: Gambar */}
         <div className="hidden md:block md:w-2/4">
           <div className="flex justify-center items-center">
