@@ -18,7 +18,7 @@ export default function Navbar() {
 
   return (
     <main>
-      <nav className="flex justify-between px-8 items-center py-6   ">
+      <nav className="flex justify-between px-8 items-center py-4">
         <div className="flex items-center gap-8 ">
           {/* menu */}
           <AiOutlineMenu
@@ -27,7 +27,7 @@ export default function Navbar() {
           />
           <Link
             className="hidden lg:block  text-gray-400 hover:text-black"
-            to=""
+            to="/home"
           >
             Produk
           </Link>
@@ -40,7 +40,7 @@ export default function Navbar() {
         </div>
         {/* logo */}
         <div className="">
-          <img src={Logo} alt="Logo" className="mx-auto h-6" />
+          <img src={Logo} alt="Logo" className="mx-auto h-10" />
         </div>
         {/* sidebar mobile menu */}
         <div
@@ -58,7 +58,7 @@ export default function Navbar() {
                 className="text-3xl items-center hover:text-red-600 cursor-pointer"
               />
             </div>
-            <Link className="font-bold text-gray-500" to="">
+            <Link className="font-bold text-gray-500" to="/home">
               Produk
             </Link>
             <Link className="font-bold text-gray-500" to="">

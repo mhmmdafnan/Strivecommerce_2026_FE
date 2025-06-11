@@ -1,27 +1,112 @@
 import React from "react";
 import { AiOutlineShoppingCart } from "react-icons/ai";
+import { MdOutlineStoreMallDirectory } from "react-icons/md";
 import Navbar from "../Component/Navbar";
 import fotoToko from "../assets/img/produk/toko olahraga1.jpeg";
 import produk1 from "../assets/img/produk/kursi 1.jpg";
 import produk2 from "../assets/img/produk/kursi 2.jpg";
 import produk3 from "../assets/img/produk/kursi 3.jpg";
+import { useNavigate } from "react-router-dom";
 
 const HomePage = () => {
+  const navigate = useNavigate();
+  const produkList = [
+    {
+      id: 1,
+      nama: "Nama Barang wkwkwkwkwkkwkwkw",
+      harga: "Rp. 100.000",
+      toko: "Toko",
+      gambar: produk1,
+    },
+    {
+      id: 2,
+      nama: "Nama Barang wkwkwkwkwkkwkwkw",
+      harga: "Rp. 100.000",
+      toko: "Toko",
+      gambar: produk2,
+    },
+    {
+      id: 3,
+      nama: "Nama Barang wkwkwkwkwkkwkwkw",
+      harga: "Rp. 100.000",
+      toko: "Toko",
+      gambar: produk3,
+    },
+    {
+      id: 1,
+      nama: "Nama Barang wkwkwkwkwkkwkwkw",
+      harga: "Rp. 100.000",
+      toko: "Toko",
+      gambar: produk1,
+    },
+    {
+      id: 2,
+      nama: "Nama Barang wkwkwkwkwkkwkwkw",
+      harga: "Rp. 100.000",
+      toko: "Toko",
+      gambar: produk2,
+    },
+    {
+      id: 3,
+      nama: "Nama Barang wkwkwkwkwkkwkwkw",
+      harga: "Rp. 100.000",
+      toko: "Toko",
+      gambar: produk3,
+    },
+    {
+      id: 1,
+      nama: "Nama Barang wkwkwkwkwkkwkwkw",
+      harga: "Rp. 100.000",
+      toko: "Toko",
+      gambar: produk1,
+    },
+    {
+      id: 2,
+      nama: "Nama Barang wkwkwkwkwkkwkwkw",
+      harga: "Rp. 100.000",
+      toko: "Toko",
+      gambar: produk2,
+    },
+    {
+      id: 3,
+      nama: "Nama Barang wkwkwkwkwkkwkwkw",
+      harga: "Rp. 100.000",
+      toko: "Toko",
+      gambar: produk3,
+    },
+    // dan seterusnya
+  ];
+
   return (
     <>
       <Navbar />
       {/* container */}
-      <div className="mx-20 font-bold h-screen p-4">
+      <div className="mx-5 md:mx-20 font-bold h-screen py-4">
         {/* Produk Utama */}
-        <div className="flex flex-row gap-x-4 mb-8 md:mb-16">
+        <div className="flex flex-row gap-x-4 mb-2 md:mb-4">
           <div className="relative basis-full lg:basis-2/3 h-80">
+            {/* Overlay Teks Atas */}
+            <div className="absolute top-3 left-4 w-fit bg-[#FE5D26] bg-opacity-80 text-white px-4 py-2 rounded-xl cursor-pointer">
+              <div className="flex justify-between items-center">
+                <div className="flex gap-x-1 md:gap-x-2 items-center">
+                  <div className="flex text-4xl items-center justify-center hover:scale-110 transition-all duration-300 ">
+                    <MdOutlineStoreMallDirectory />
+                  </div>
+                  <div className="group max-w-20 md:max-w-40 overflow-hidden">
+                    <h1 className="text-lg font-semibold whitespace-nowrap group-hover:animate-marquee">
+                      Toko Olahraga Unsulbar
+                    </h1>
+                  </div>
+                </div>
+              </div>
+            </div>
             <img
               src={fotoToko}
               className="w-full object-cover h-full rounded-3xl"
               alt=""
             />
-            {/* Overlay Teks */}
-            <div className="absolute bottom-4 left-4 right-4 bg-gradient-to-tr from-[#C9C9C9] to-[#636363] opacity-95 text-white px-4 py-2 rounded-xl">
+            {/* Overlay Teks Bawah */}
+            <div className="absolute bottom-4 left-4 right-4 bg-gradient-to-tr from-[#C9C9C9] to-[#636363] opacity-95 text-white px-4 py-2 rounded-xl hover:scale-95 transition-all duration-300 cursor-pointer">
               <div className="flex justify-between items-center">
                 <div className="flex gap-x-2 items-center">
                   <div className="h-12 w-12">
@@ -33,12 +118,10 @@ const HomePage = () => {
                   </div>
                   <div className="">
                     <h1 className="text-lg font-semibold">Toko</h1>
-                    <span className="text-sm font-extralight">
-                      Rp. xxxxxx,00
-                    </span>
+                    <span className="text-sm font-extralight">Rp. xxxxxx</span>
                   </div>
                 </div>
-                <div className="flex bg-white rounded-full text-xl text-gray-800 items-center justify-center p-2">
+                <div className="flex bg-white rounded-full text-xl text-gray-800 items-center justify-center p-2  hover:scale-125 transition-all duration-300">
                   <AiOutlineShoppingCart />
                 </div>
               </div>
@@ -54,48 +137,27 @@ const HomePage = () => {
         </div>
         {/* List Produk rekomendasi Karousel */}
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2 md:gap-4 lg:gap-6">
-          <div className="h-44 ">
-            <img
-              src={produk1}
-              className="w-full h-full object-cover rounded-3xl border-2 border-gray-200"
-              alt=""
-            />
-          </div>
-          <div className="h-44 ">
-            <img
-              src={produk2}
-              className="w-full h-full object-cover rounded-3xl border-2 border-gray-200"
-              alt=""
-            />
-          </div>
-          <div className="h-44 ">
-            <img
-              src={produk3}
-              className="w-full h-full object-cover rounded-3xl border-2 border-gray-200"
-              alt=""
-            />
-          </div>
-          <div className="h-44 ">
-            <img
-              src={produk1}
-              className="w-full h-full object-cover rounded-3xl border-2 border-gray-200"
-              alt=""
-            />
-          </div>
-          <div className="h-44 ">
-            <img
-              src={produk2}
-              className="w-full h-full object-cover rounded-3xl border-2 border-gray-200"
-              alt=""
-            />
-          </div>
-          <div className="h-44 ">
-            <img
-              src={produk3}
-              className="w-full h-full object-cover rounded-3xl border-2 border-gray-200"
-              alt=""
-            />
-          </div>
+          {produkList.map((produk) => (
+            <div onClick={()=>navigate("/detailProduk")} key={produk.id} className="h-34 cursor-pointer hover:shadow-md rounded-xl p-2">
+              <img
+                src={produk.gambar}
+                className="w-full h-30 object-cover rounded-3xl border-2 border-gray-200 hover:scale-105 transition-all duration-250"
+                alt={produk.nama}
+              />
+              <div className="p-2">
+                <div className="text-sm font-extralight text-black">
+                  {produk.harga}
+                </div>
+                <div className="text-md font-medium text-black truncate">
+                  {produk.nama}
+                </div>
+                <div className="flex items-center gap-x-1 text-sm font-extralight text-gray-500">
+                  <MdOutlineStoreMallDirectory />
+                  {produk.toko}
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </>

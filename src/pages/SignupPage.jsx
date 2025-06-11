@@ -60,7 +60,9 @@ const signupPage = () => {
 
   const sendData = (loginData) => {};
 
-  const onSubmitClick = () => {};
+  const onSubmitClick = () => {
+    navigate("/home");
+  };
 
   useEffect(() => {
     firstInputRef.current?.focus();
@@ -70,7 +72,7 @@ const signupPage = () => {
     <div className="h-screen bg-white">
       {/* Wrapper card */}
       {/* Logo */}
-      <div className="flex justify-center py-6">
+      <div className="flex justify-center py-5">
         <img src={Logo} alt="Logo" className="mx-auto h-10" />
       </div>
 
@@ -109,7 +111,7 @@ const signupPage = () => {
             </p>
 
             {/* Form */}
-            <form className="space-y-3" action={onSubmitClick}>
+            <div className="space-y-3" action={onSubmitClick}>
               <input
                 ref={firstInputRef}
                 type="text"
@@ -167,13 +169,13 @@ const signupPage = () => {
                   {showConfPassword ? <FaEyeSlash /> : <FaEye />}
                 </div>
               </div>
-              <button
-                type="submit"
-                className="w-full bg-[#EE6D3F] hover:bg-[#ff8052] transition duration-150 px-3 py-2  rounded-lg text-white text-xs md:text-sm font-semibold"
+              <div
+                onClick={onSubmitClick}
+                className="w-full text-center bg-[#EE6D3F] hover:bg-[#ff8052] transition duration-150 px-3 py-2  rounded-lg text-white text-xs md:text-sm font-semibold cursor-pointer"
               >
                 Sign Up
-              </button>
-            </form>
+              </div>
+            </div>
 
             <div className="text-red-500 text-xs hidden mb-3" id="message-div">
               *isian form tidak benar
