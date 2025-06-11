@@ -67,16 +67,13 @@ const signupPage = () => {
   }, []);
 
   return (
-    <div className="h-screen flex justify-center items-center bg-white">
+    <div className="h-screen bg-white">
       {/* Wrapper card */}
-
+      {/* Logo */}
+      <div className="flex justify-center py-6">
+        <img src={Logo} alt="Logo" className="mx-auto h-10" />
+      </div>
       <div className="w-full">
-        {/* Logo */}
-        <div className="flex justify-center mb-6">
-          <div className="">
-            <img src={Logo} alt="Logo" className="mx-auto h-10"/>
-          </div>
-        </div>
         <div className=" flex flex-col md:flex-row items-center ">
           {/* Kiri: Gambar */}
           <div className="hidden md:block md:w-2/4">
@@ -93,7 +90,7 @@ const signupPage = () => {
             </p>
           </div>
           {/* Kanan: Form */}
-          <div className="w-full md:w-2/4 flex justify-center md:justify-start items-center bg-white ">
+          <div className="w-full md:w-2/4  flex justify-center md:justify-start items-center bg-white ">
             <div className="w-full max-w-md mx-5 lg:mx-10 rounded-xl px-14 py-6 border-2 border-[#B2B2B2] shadow-xl">
               {/* Heading */}
               <h2 className="text-center text-2xl font-semibold text-gray-800 ">
