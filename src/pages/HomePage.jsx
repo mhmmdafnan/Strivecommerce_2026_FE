@@ -33,42 +33,42 @@ const HomePage = () => {
       gambar: produk3,
     },
     {
-      id: 1,
+      id: 4,
       nama: "Nama Barang wkwkwkwkwkkwkwkw",
       harga: "Rp. 100.000",
       toko: "Toko",
       gambar: produk1,
     },
     {
-      id: 2,
+      id: 5,
       nama: "Nama Barang wkwkwkwkwkkwkwkw",
       harga: "Rp. 100.000",
       toko: "Toko",
       gambar: produk2,
     },
     {
-      id: 3,
+      id: 6,
       nama: "Nama Barang wkwkwkwkwkkwkwkw",
       harga: "Rp. 100.000",
       toko: "Toko",
       gambar: produk3,
     },
     {
-      id: 1,
+      id: 7,
       nama: "Nama Barang wkwkwkwkwkkwkwkw",
       harga: "Rp. 100.000",
       toko: "Toko",
       gambar: produk1,
     },
     {
-      id: 2,
+      id: 8,
       nama: "Nama Barang wkwkwkwkwkkwkwkw",
       harga: "Rp. 100.000",
       toko: "Toko",
       gambar: produk2,
     },
     {
-      id: 3,
+      id: 9,
       nama: "Nama Barang wkwkwkwkwkkwkwkw",
       harga: "Rp. 100.000",
       toko: "Toko",
@@ -138,7 +138,11 @@ const HomePage = () => {
         {/* List Produk rekomendasi Karousel */}
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2 md:gap-4 lg:gap-6">
           {produkList.map((produk) => (
-            <div onClick={()=>navigate("/detailProduk")} key={produk.id} className="h-34 cursor-pointer hover:shadow-md rounded-xl p-2">
+            <div
+              onClick={() => navigate("/detailProduk")}
+              key={produk.id}
+              className="h-34 cursor-pointer hover:shadow-md rounded-xl p-2"
+            >
               <img
                 src={produk.gambar}
                 className="w-full h-30 object-cover rounded-3xl border-2 border-gray-200 hover:scale-105 transition-all duration-250"

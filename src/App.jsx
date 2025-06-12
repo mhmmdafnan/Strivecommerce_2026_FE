@@ -1,8 +1,9 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import "keen-slider/keen-slider.min.css";
+
 import HomePage from "./pages/HomePage.jsx";
 import SignupPage from "./pages/SignupPage.jsx";
 import DetailProdukPage from "./pages/DetailProdukPage.jsx";
-
 
 function App() {
   return (
