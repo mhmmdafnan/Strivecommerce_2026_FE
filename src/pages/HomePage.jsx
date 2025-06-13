@@ -81,7 +81,7 @@ const HomePage = () => {
     <>
       <Navbar />
       {/* container */}
-      <div className="mx-5 md:mx-20 font-bold h-screen py-4">
+      <div className="max-w-7xl mx-auto font-bold h-screen px-5 md:px-20 py-4">
         {/* Produk Utama */}
         <div className="flex flex-row gap-x-4 mb-2 md:mb-4">
           <div className="relative basis-full lg:basis-2/3 h-80">
