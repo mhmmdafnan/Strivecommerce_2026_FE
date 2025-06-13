@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+// import { useNavigate } from "react-router-dom";
 // import { FaAlignJustify } from "react-icons/fa6";
 import {
   AiOutlineMenuFold,
@@ -8,13 +9,18 @@ import {
   AiOutlineMoon,
   AiOutlineUser,
 } from "react-icons/ai";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import ava from "../assets/img/picture1.jpeg";
 import Logo from "../assets/img/logo.png";
 
 export default function Navbar() {
   const [isSideMenuOpen, setMenu] = useState(false);
+
+  const navigate = useNavigate();
+  const handleCartClick = () => {
+    navigate("/keranjang");
+  };
 
   return (
     <main>
@@ -72,7 +78,12 @@ export default function Navbar() {
           {/* cart icon */}
           <AiOutlineSearch className="text-xl hidden md:flex" />
           <AiOutlineMoon className="text-xl hidden md:flex" />
-          <AiOutlineShoppingCart className="text-xl hidden md:flex" />
+          <div onClick={handleCartClick} className="cursor-pointer">
+            <AiOutlineShoppingCart className="text-xl hidden md:flex " />
+            {/* <div className="hidden opacity-0 group-hover:opacity-100 transition-all duration-500 group-hover:block">
+              keranjang
+            </div> */}
+          </div>
           <AiOutlineUser className="text-xl hidden md:flex" />
           <img
             width={40}
