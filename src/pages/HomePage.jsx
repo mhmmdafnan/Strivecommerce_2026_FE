@@ -81,7 +81,7 @@ const HomePage = () => {
     <>
       <Navbar />
       {/* container */}
-      <div className="max-w-7xl mx-auto font-bold h-screen px-5 md:px-20 py-4">
+      <div className="max-w-7xl mx-auto font-bold h-screen px-5 md:px-20 py-5">
         {/* Produk Utama */}
         <div className="flex flex-row gap-x-4 mb-2 md:mb-4">
           <div className="relative basis-full lg:basis-2/3 h-80">
@@ -145,7 +145,7 @@ const HomePage = () => {
             >
               <img
                 src={produk.gambar}
-                className="w-full h-30 object-cover rounded-3xl border-2 border-gray-200 hover:scale-105 transition-all duration-250"
+                className="w-full h-30 object-cover rounded-3xl border-2 border-gray-200 hover:scale-105 transition-all duration-300"                     
                 alt={produk.nama}
               />
               <div className="p-2">

@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { useKeenSlider } from "keen-slider/react";
 import "keen-slider/keen-slider.min.css";
 
@@ -93,6 +93,32 @@ const produk = {
 
 const DetailProdukPage = () => {
   const navigate = useNavigate();
+  const [fotoUtama, setFotoUtama] = useState(produk.fotoProduk[0]);
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [zoom, setZoom] = useState(false);
+  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [jumlahProduk, setJumlahProduk] = useState(1);
+  const [stokProduk, setStokProduk] = useState(10);
+
+  const handleMouseMove = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    setPosition({ x, y });
+  };
+
+  const jumlahProdukHandler = (action) => {
+    if (action === "tambahkan") {
+      if (jumlahProduk >= stokProduk) {
+        alert(`Jumlah produk melebihi stok yang tersedia (${stokProduk})`); 
+        return;
+      }
+      setJumlahProduk((prev) => prev + 1);
+    } else {
+      setJumlahProduk((prev) => (prev > 0 ? prev - 1 : 0));
+    }
+  };
+
   const [sliderRef, instanceRef] = useKeenSlider({
     slides: {
       perView: 2,
@@ -129,10 +155,25 @@ const DetailProdukPage = () => {
           <div className="flex flex-col md:flex-row gap-10">
             {/* Gambar Utama */}
             <div className="basis-1/2 max-w-4xl">
-              <div className="flex rounded-xl border-[1px] border-gray-500 max-h-[400px] h-[350px] items-center justify-center">
+              <div
+                className="flex rounded-xl border-[1px] border-gray-500 max-h-[400px] h-[350px] items-center justify-center overflow-hidden"
+                onMouseMove={handleMouseMove}
+                onMouseEnter={() => setZoom(true)}
+                onMouseLeave={() => setZoom(false)}
+              >
                 <img
-                  src={produk.fotoProduk[0]}
-                  className="object-contain h-full w-full rounded-xl object-center"
+                  src={fotoUtama}
+                  className="h-full w-full object-contain rounded-xl transition-transform duration-300 cursor-zoom-in"
+                  style={
+                    zoom
+                      ? {
+                          transform: "scale(2)",
+                          transformOrigin: "center",
+                          transformOrigin: `${position.x}% ${position.y}%`,
+                          transition: "transform 0.2s ease-in-out",
+                        }
+                      : { transform: "scale(1)" }
+                  }
                   alt={produk.nama}
                 />
               </div>
@@ -141,7 +182,16 @@ const DetailProdukPage = () => {
                 {produk.fotoProduk.map((foto, index) => (
                   <div
                     key={index}
-                    className="h-20 w-20 border-2 border-gray-500 rounded-xl"
+                    onClick={() => {
+                      setFotoUtama(foto);
+                      setSelectedIndex(index);
+                    }}
+                    className={`h-20 w-20 rounded-xl cursor-pointer transition-all duration-200 
+                 border-[1px] hover:border-[#EE6D3F] ${
+                   selectedIndex === index
+                     ? "border-[#EE6D3F] ring-2 ring-[#EE6D3F]"
+                     : "border-gray-500"
+                 }`}
                   >
                     <img
                       src={foto}
@@ -168,11 +218,11 @@ const DetailProdukPage = () => {
                   {produk.deskripsi}
                 </div>
               </div>
-              <div className="mt-10 hidden md:block">
+              <div className="mt-6 hidden md:block">
                 <span className="text-[#EE6D3F] text-sm font-semibold">
                   Stok Produk :{" "}
                 </span>
-                <span className="text-sm font-semibold">10 </span>
+                <span className="text-sm font-semibold">{stokProduk} </span>
               </div>
               <div className="border-b-2 rounded-xl border-[#D2D0D0] " />
             </div>
@@ -184,7 +234,16 @@ const DetailProdukPage = () => {
               {produk.fotoProduk.map((foto, index) => (
                 <div
                   key={index}
-                  className="h-20 w-20 border-[1px] border-gray-500 rounded-xl"
+                  onClick={() => {
+                    setFotoUtama(foto);
+                    setSelectedIndex(index);
+                  }}
+                  className={`h-20 w-20 rounded-xl cursor-pointer transition-all duration-200 
+              border-[1px] hover:border-[#EE6D3F] ${
+                selectedIndex === index
+                  ? "border-[#EE6D3F] ring-2 ring-[#EE6D3F]"
+                  : "border-gray-500"
+              }`}
                 >
                   <img
                     src={foto}
@@ -200,11 +259,19 @@ const DetailProdukPage = () => {
               <div className="flex justify-between">
                 <h1 className="text-xl">Jumlah</h1>
                 <div className="flex gap-x-2 items-center">
-                  <div className="bg-[#E1DDDD] px-2 rounded-md cursor-pointer hover:bg-[#cac8c8]">
+                  <div
+                    onClick={() => jumlahProdukHandler("kurang")}
+                    className="bg-[#E1DDDD] px-2 rounded-md cursor-pointer hover:bg-[#cac8c8]"
+                  >
                     -
                   </div>
-                  <div className="bg-[#E1DDDD] px-5 rounded-md">0</div>
-                  <div className="bg-[#E1DDDD] px-2 rounded-md cursor-pointer hover:bg-[#cac8c8]">
+                  <div className="bg-[#E1DDDD] px-5 rounded-md">
+                    {jumlahProduk}
+                  </div>
+                  <div
+                    onClick={() => jumlahProdukHandler("tambahkan")}
+                    className="bg-[#E1DDDD] px-2 rounded-md cursor-pointer hover:bg-[#cac8c8]"
+                  >
                     +
                   </div>
                 </div>
@@ -224,7 +291,7 @@ const DetailProdukPage = () => {
           <div className="fixed bottom-0 left-0 right-0 bg-white shadow-black shadow-2xl p-4 border-t md:hidden z-50 ">
             <div className="">
               <span className="text-[#EE6D3F] text-xs font-semibold">
-                Stok Produk :{" "}
+                Stok Produk :
               </span>
               <span className="text-xs font-semibold">10 </span>
             </div>
@@ -301,7 +368,7 @@ const DetailProdukPage = () => {
                 <img
                   src={item.gambar}
                   alt={item.nama}
-                  className="w-full h-40 object-contain rounded-xl border-[1px] border-gray-600 hover:scale-105 transition-all duration-250"
+                  className="w-full h-40 object-contain rounded-xl border-[1px] border-gray-600 hover:scale-105 transition-all duration-300"
                 />
                 <div className="mt-2 text-sm text-black font-light">
                   {item.harga}
