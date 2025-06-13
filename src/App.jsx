@@ -1,8 +1,10 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import "keen-slider/keen-slider.min.css";
+
 import HomePage from "./pages/HomePage.jsx";
 import SignupPage from "./pages/SignupPage.jsx";
 import DetailProdukPage from "./pages/DetailProdukPage.jsx";
-
+import KeranjangPage from "./pages/KeranjangPage.jsx";
 
 function App() {
   return (
@@ -12,6 +14,7 @@ function App() {
           {/* Halaman publik */}
           <Route path="/home" element={<HomePage />} />
           <Route path="/detailProduk" element={<DetailProdukPage />} />
+          <Route path="/keranjang" element={<KeranjangPage />} />
           <Route path="/" element={<SignupPage />} />
         </Routes>
       </BrowserRouter>
