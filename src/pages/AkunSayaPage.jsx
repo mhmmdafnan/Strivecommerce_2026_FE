@@ -1,0 +1,128 @@
+import React from "react";
+import Navbar from "../Component/Navbar";
+import { useNavigate } from "react-router-dom";
+import ava from "../assets/img/picture1.jpeg";
+import { MdOutlineEdit, MdOutlineStore } from "react-icons/md";
+
+const AkunSayaPage = () => {
+  const navigate = useNavigate();
+
+  return (
+    <>
+      <Navbar />
+      <div className="max-w-7xl mx-auto px-5 md:px-10 py-5 mb-20 md:mt-0">
+        <h1 className="text-sm text-gray-600 cursor-pointer">Akun Saya</h1>
+
+        <div className="bg-white shadow-lg border-[1px] rounded-lg px-4 py-6 mt-4 max-w-5xl mx-auto">
+          <div className="flex flex-col md:flex-row gap-5 md:gap-10 mb-6 justify-center">
+            <div className="flex justify-end">
+              <div
+                // onClick={() => navigate("/ubahDataDiri")}
+                className="md:hidden flex w-fit items-center justify-center text-white py-1 px-8 rounded-md bg-[#EE6D3F] hover:bg-[#d25f35] cursor-pointer transition-colors duration-300"
+              >
+                <MdOutlineStore className="inline-block mr-2 text-xl" />
+                Buka Toko
+              </div>
+            </div>
+            {/* Kartu Foto Profil */}
+            <div className="flex justify-center md:justify-start md:basis-1/2 max-w-[300px] w-full">
+              <div className="bg-[#E9E9E9] rounded-lg p-4 border-2 border-[#EE6D3F] shadow-md">
+                <div className="w-full h-50 relative">
+                  <img
+                    src={ava}
+                    alt="Profile"
+                    className="w-full h-full object-cover rounded-lg cursor-pointer"
+                  />
+                  {/* Overlay Ubah Foto */}
+                  <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-[90%] text-[#EE6D3F] hover:scale-105 font-semibold text-lg px-2 py-1 border-2 border-[#EE6D3F] rounded-lg text-center cursor-pointer transition-transform duration-300">
+                    Ubah Foto
+                  </div>
+                </div>
+
+                {/* Info Ukuran File */}
+                <div className="text-xs mt-4 px-2">
+                  Besar file:
+                  <ul className="list-disc list-inside mb-2 px-1">
+                    <li>Max 2 MB</li>
+                  </ul>
+                  Format:
+                  <ul className="list-disc list-inside px-1">
+                    <li>JPG, JPEG, PNG</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            {/* Data Diri */}
+            <div className="md:basis-1/2 px-2 md:px-0 w-full ">
+              <div className="flex justify-between items-center mb-2 md:mb-4">
+                <h1 className="text-xl font-bold text-gray-800">Data Diri</h1>
+                <div className="hidden md:flex justify-end">
+                  <div
+                    // onClick={() => navigate("/ubahDataDiri")}
+                    className="flex w-fit items-center justify-center text-white  px-8 py-1 rounded-md bg-[#EE6D3F] hover:bg-[#d25f35] cursor-pointer transition-colors duration-300"
+                  >
+                    <MdOutlineStore className="inline-block mr-2 text-xl" />
+                    Buka Toko
+                  </div>
+                </div>
+              </div>
+
+              <div className="text-sm space-y-2">
+                <div>
+                  <h2>Nama Pengguna</h2>
+                  <p className="text-xs font-extralight text-gray-500">
+                    John Doe
+                  </p>
+                </div>
+                <div>
+                  <h2>Email</h2>
+                  <p className="text-xs font-extralight text-gray-500">
+                    johndoe@example.com
+                  </p>
+                </div>
+                <div>
+                  <h2>Nomor Telepon</h2>
+                  <p className="text-xs font-extralight text-gray-500">
+                    +62 812-3456-7890
+                  </p>
+                </div>
+                <div>
+                  <h2>Tanggal Lahir</h2>
+                  <p className="text-xs font-extralight text-gray-500">
+                    1 Januari 1990
+                  </p>
+                </div>
+                <div>
+                  <h2>Jenis Kelamin</h2>
+                  <p className="text-xs font-extralight text-gray-500">
+                    Laki-laki
+                  </p>
+                </div>
+                {/* Tombol Aksi */}
+                <div className="mt-4 space-y-2">
+                  <div
+                    // onClick={() => navigate("/ubahDataDiri")}
+                    className="flex w-fit items-center justify-center text-[#EE6D3F] border-2 border-[#EE6D3F] px-4 rounded-md hover:bg-[#EE6D3F] hover:text-white cursor-pointer transition-colors duration-300"
+                  >
+                    <MdOutlineEdit className="inline-block mr-1" />
+                    Ubah Data Diri
+                  </div>
+
+                  <div
+                    // onClick={() => navigate("/ubahPassword")}
+                    className="flex w-fit items-center justify-center bg-[#4B4B4A] text-white px-5 border-2 border-[#4B4B4A] rounded-md hover:bg-[#242323] cursor-pointer transition-colors duration-300"
+                  >
+                    Ubah Password
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default AkunSayaPage;

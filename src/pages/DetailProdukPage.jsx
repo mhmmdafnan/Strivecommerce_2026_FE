@@ -110,7 +110,7 @@ const DetailProdukPage = () => {
   const jumlahProdukHandler = (action) => {
     if (action === "tambahkan") {
       if (jumlahProduk >= stokProduk) {
-        alert(`Jumlah produk melebihi stok yang tersedia (${stokProduk})`); 
+        alert(`Jumlah produk melebihi stok yang tersedia (${stokProduk})`);
         return;
       }
       setJumlahProduk((prev) => prev + 1);
@@ -218,7 +218,7 @@ const DetailProdukPage = () => {
                   {produk.deskripsi}
                 </div>
               </div>
-              <div className="mt-6 hidden md:block">
+              <div className="mt-4 hidden md:block">
                 <span className="text-[#EE6D3F] text-sm font-semibold">
                   Stok Produk :{" "}
                 </span>
@@ -229,7 +229,7 @@ const DetailProdukPage = () => {
           </div>
 
           {/* Galeri dan Tombol Beli */}
-          <div className="hidden md:flex flex-col md:flex-row mt-4 gap-4 ">
+          <div className="hidden md:flex flex-col md:flex-row mt-2 gap-4 ">
             <div className="md:basis-1/2 flex gap-2 p-2 max-w-4xl">
               {produk.fotoProduk.map((foto, index) => (
                 <div
@@ -327,7 +327,7 @@ const DetailProdukPage = () => {
                 alt=""
               />
             </div>
-            <div onClick={() => navigate("/")} className="cursor-pointer">
+            <div onClick={() => navigate("/toko")} className="cursor-pointer">
               <div className="text-xl font-semibold hover:text-[#EE6D3F]">
                 Toko
               </div>
