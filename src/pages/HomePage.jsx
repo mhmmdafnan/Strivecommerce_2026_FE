@@ -106,7 +106,7 @@ const HomePage = () => {
               alt=""
             />
             {/* Overlay Teks Bawah */}
-            <div className="absolute bottom-4 left-4 right-4 bg-gradient-to-tr from-[#C9C9C9] to-[#636363] opacity-95 text-white px-4 py-2 rounded-xl hover:scale-95 transition-all duration-300 cursor-pointer">
+            <div className="absolute bottom-4 left-4 right-4 bg-gradient-to-tr from-[#C9C9C9] to-[#636363] opacity-95 text-white px-4 py-2 rounded-xl hover:scale-95 transition-all duration-500 cursor-pointer">
               <div className="flex justify-between items-center">
                 <div className="flex gap-x-2 items-center">
                   <div className="h-12 w-12">
