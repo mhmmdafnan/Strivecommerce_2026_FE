@@ -5,6 +5,7 @@ import HomePage from "./pages/HomePage.jsx";
 import SignupPage from "./pages/SignupPage.jsx";
 import DetailProdukPage from "./pages/DetailProdukPage.jsx";
 import KeranjangPage from "./pages/KeranjangPage.jsx";
+import CheckoutPage from "./pages/CheckoutPage.jsx";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
           <Route path="/home" element={<HomePage />} />
           <Route path="/detailProduk" element={<DetailProdukPage />} />
           <Route path="/keranjang" element={<KeranjangPage />} />
+          <Route path="/checkout" element={<CheckoutPage />} />
           <Route path="/" element={<SignupPage />} />
         </Routes>
       </BrowserRouter>
