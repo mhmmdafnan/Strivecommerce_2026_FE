@@ -17,6 +17,10 @@ export default function Navbar() {
   const [isSideMenuOpen, setMenu] = useState(false);
   const navigate = useNavigate();
 
+  const handleCartClick = () => {
+    navigate("/keranjang");
+  };
+
   return (
     <main>
       <nav className="flex justify-between px-8 items-center py-4">
@@ -73,7 +77,12 @@ export default function Navbar() {
           {/* cart icon */}
           <AiOutlineSearch className="text-xl hidden md:flex" />
           <AiOutlineMoon className="text-xl hidden md:flex" />
-          <AiOutlineShoppingCart className="text-xl hidden md:flex" />
+          <div onClick={handleCartClick} className="cursor-pointer">
+            <AiOutlineShoppingCart className="text-xl hidden md:flex " />
+            {/* <div className="hidden opacity-0 group-hover:opacity-100 transition-all duration-500 group-hover:block">
+              keranjang
+            </div> */}
+          </div>
           <AiOutlineUser className="text-xl hidden md:flex" />
           <img
             onClick={() => navigate("/akunSaya")}
