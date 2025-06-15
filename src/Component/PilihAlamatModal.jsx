@@ -21,7 +21,12 @@ const PilihAlamatModal = ({ isOpen, onClose, onSelect }) => {
   return (
     <div className="w-screen h-screen fixed top-0 left-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         
-        <div className="bg-white p-6 rounded-lg shadow-lg">
+        <div className="bg-white p-6 rounded-lg shadow-lg relative">
+
+            <div className="absolute  bg-gray-100 top-2 right-2 px-2 py-1 rounded-md hover:bg-red-400 hover:text-white transition-all duration-300 cursor-pointer" onClick={onClose}>
+                X
+            </div>
+
             <h2 className="text-lg font-semibold mb-4">Pilih Alamat</h2>
             
             <div className="alamat mb-4 bg-white mx-2 p-2 rounded-lg  shadow-md md:flex md:justify-between justify-center items-center">
