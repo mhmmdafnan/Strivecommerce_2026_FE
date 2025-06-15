@@ -5,6 +5,11 @@ import Navbar from "../Component/Navbar";
 import { CiLocationOn  } from "react-icons/ci";
 import { MdDelete  } from "react-icons/md";
 import SelectPengiriman from "../Component/SelectPengiriman";
+import PilihAlamatModal from "../Component/PilihAlamatModal";
+import BcaLogo from "../assets/img/logo/BCA.png"
+import BRILogo from "../assets/img/logo/BRIVA.png"
+import Gopay from "../assets/img/logo/gopay.png"
+import Mandiri from "../assets/img/logo/Mandiri.png"
 
 const CheckoutPage = () => {
 
@@ -14,13 +19,21 @@ const CheckoutPage = () => {
     const [pengiriman, setPengiriman] = useState(0);
     const [ongkir, setOngkir] = useState(12000);
     const [metodePembayaran, setMetodePembayaran] = useState("");
-    const ongkirSementara = [12000,15000,45000,60000,23000]
+    const ongkirSementara = [12000,15000,45000,60000,23000];
+    const [showAlamatModal, setShowAlamatModal] = useState(false);
 
     const handlePengirimanChange = (e) => {
         setPengiriman(e.target.value);
         setOngkir(ongkirSementara[e.target.value]);
     };
 
+    const onCloseAlamatModal = () => {
+        setShowAlamatModal(false);
+    };
+
+    const showAlamatModalHandler = () => {
+        setShowAlamatModal(true);
+    };
 
     const totalPayment = () => {
         const totalBarang = keranjang.reduce((total, toko) => {
@@ -37,6 +50,8 @@ const CheckoutPage = () => {
         <>
             <Navbar />
 
+            <PilihAlamatModal isOpen={showAlamatModal} onClose={onCloseAlamatModal} onSelect={showAlamatModalHandler} />
+
             <div className="judul p-4">
                 <h1 className="">Checkout</h1>
             </div>
@@ -46,8 +61,8 @@ const CheckoutPage = () => {
                     
                     <div className="lg:flex w-ful ">
                         <div className="lg:min-w-[650px] ">
-                            <div className="alamat bg-white mx-2 p-2 rounded-lg shadow-md flex justify-between items-center">
-                                <div className="max-w-72 ">
+                            <div className="alamat bg-white mx-2 p-2 rounded-lg  shadow-md md:flex md:justify-between justify-center items-center">
+                                <div className="">
                                     <p className="text-xs text-gray-600">Alamat Pengiriman</p>
                                     <div className="flex items-center flex-row gap-2 mt-1">
                                         <CiLocationOn />
@@ -64,8 +79,10 @@ const CheckoutPage = () => {
                                         082246657077
                                     </div>
                                 </div>
-                                <div className="bg-orange-500  text-white text-xs px-4 py-2 rounded-lg cursor-pointer">
-                                    Ganti Alamat
+                                <div className="flex justify-center items-center mt-2 md:mt-0">
+                                    <div className="bg-orange-500 text-center min-w-36 max-w-96 text-white text-xs px-4 py-2 rounded-lg cursor-pointer" onClick={showAlamatModalHandler}>
+                                        Ganti Alamat
+                                    </div>
                                 </div>
 
                             </div>
@@ -173,7 +190,12 @@ const CheckoutPage = () => {
                                 <div className="title">
                                     <h4>Piilh Metode Pembayaran</h4>
                                 </div>
-                                <label className="flex items-center gap-2">
+                               
+                                <label className="flex items-center my-2  justify-between gap-2">
+                                    <div className="flex items-center">
+                                        <img src={BRILogo} alt="" className="w-8 object-contain" />
+                                        <p className="ml-2">BRI Virtual Account</p>
+                                    </div>
                                     <input
                                         type="radio"
                                         name="metodePembayaran"
@@ -181,19 +203,12 @@ const CheckoutPage = () => {
                                         checked={metodePembayaran === "BRIVA"}
                                         onChange={(e) => setMetodePembayaran(e.target.value)}
                                     />
-                                    BRI Virtual Account
                                 </label>
-                                <label className="flex items-center gap-2">
-                                    <input
-                                        type="radio"
-                                        name="metodePembayaran"
-                                        value="MANDVA"
-                                        checked={metodePembayaran === "MANDVA"}
-                                        onChange={(e) => setMetodePembayaran(e.target.value)}
-                                    />
-                                    Mandiri Virtual Account
-                                </label>
-                                <label className="flex items-center gap-2">
+                                <label className="flex items-center my-2  justify-between gap-2">
+                                    <div className="flex items-center">
+                                        <img src={BcaLogo} alt="" className="w-8 object-contain" />
+                                        <p className="ml-2">BCA Virtual Account</p>
+                                    </div>
                                     <input
                                         type="radio"
                                         name="metodePembayaran"
@@ -201,38 +216,35 @@ const CheckoutPage = () => {
                                         checked={metodePembayaran === "BCAVA"}
                                         onChange={(e) => setMetodePembayaran(e.target.value)}
                                     />
-                                    BCA Virtual Account
                                 </label>
-                                <label className="flex items-center gap-2">
+                                <label className="flex items-center my-2  justify-between gap-2">
+                                    <div className="flex items-center">
+                                        <img src={Mandiri} alt="" className="w-8 object-contain" />
+                                        <p className="ml-2">Mandiri Virtual Account</p>
+                                    </div>
                                     <input
                                         type="radio"
                                         name="metodePembayaran"
-                                        value="GOPAY"
-                                        checked={metodePembayaran === "GOPAY"}
+                                        value="Mandiri"
+                                        checked={metodePembayaran === "Mandiri"}
                                         onChange={(e) => setMetodePembayaran(e.target.value)}
                                     />
-                                    Gopay
                                 </label>
-                                <label className="flex items-center gap-2">
+                                <label className="flex items-center my-black justify-between gap-2">
+                                    <div className="flex items-center">
+                                        <img src={Gopay} alt="" className="w-8 object-contain" />
+                                        <p className="ml-2">Gopay</p>
+                                    </div>
                                     <input
                                         type="radio"
                                         name="metodePembayaran"
-                                        value="DANA"
-                                        checked={metodePembayaran === "DANA"}
+                                        value="gopay"
+                                        checked={metodePembayaran === "gopay"}
                                         onChange={(e) => setMetodePembayaran(e.target.value)}
                                     />
-                                    Dana
                                 </label>
-                                <label className="flex items-center gap-2">
-                                    <input
-                                        type="radio"
-                                        name="metodePembayaran"
-                                        value="OVO"
-                                        checked={metodePembayaran === "OVO"}
-                                        onChange={(e) => setMetodePembayaran(e.target.value)}
-                                    />
-                                    OVO
-                                </label>
+                               
+                               
                             </div>
 
                             <div className="button-bayar text-white py-2 mt-2 mx-2 bg-orange-500 text-center rounded-lg shadow-md">
