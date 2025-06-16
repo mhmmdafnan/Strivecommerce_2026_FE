@@ -8,6 +8,7 @@ import AkunSayaPage from "./pages/AkunSayaPage.jsx";
 import TokoPage from "./pages/TokoPage.jsx";
 
 import KeranjangPage from "./pages/KeranjangPage.jsx";
+import CheckoutPage from "./pages/CheckoutPage.jsx";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path="/akunSaya" element={<AkunSayaPage />} />
           <Route path="/toko" element={<TokoPage />} />
           <Route path="/keranjang" element={<KeranjangPage />} />
+          <Route path="/checkout" element={<CheckoutPage />} />
           <Route path="/" element={<SignupPage />} />
         </Routes>
       </BrowserRouter>
