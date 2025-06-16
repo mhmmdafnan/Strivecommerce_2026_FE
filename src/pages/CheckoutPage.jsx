@@ -3,7 +3,6 @@ import { useNavigate, useLocation } from "react-router-dom";
 
 import Navbar from "../Component/Navbar";
 import { CiLocationOn  } from "react-icons/ci";
-import { MdDelete  } from "react-icons/md";
 import SelectPengiriman from "../Component/SelectPengiriman";
 import PilihAlamatModal from "../Component/PilihAlamatModal";
 import BcaLogo from "../assets/img/logo/BCA.png"

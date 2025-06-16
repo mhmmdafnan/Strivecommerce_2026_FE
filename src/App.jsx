@@ -9,6 +9,7 @@ import TokoPage from "./pages/TokoPage.jsx";
 
 import KeranjangPage from "./pages/KeranjangPage.jsx";
 import CheckoutPage from "./pages/CheckoutPage.jsx";
+import FormUMKMPage from "./pages/FormUMKMPage.jsx";
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <Route path="/home" element={<HomePage />} />
           <Route path="/detailProduk" element={<DetailProdukPage />} />
           <Route path="/akunSaya" element={<AkunSayaPage />} />
+          <Route path="/formUMKM" element={<FormUMKMPage />} />
           <Route path="/toko" element={<TokoPage />} />
           <Route path="/keranjang" element={<KeranjangPage />} />
           <Route path="/checkout" element={<CheckoutPage />} />
