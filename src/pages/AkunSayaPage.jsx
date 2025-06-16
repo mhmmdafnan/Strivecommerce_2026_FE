@@ -1,11 +1,18 @@
-import React from "react";
-import Navbar from "../Component/Navbar";
+import React, { useState } from "react";
+
 import { useNavigate } from "react-router-dom";
 import ava from "../assets/img/picture1.jpeg";
 import { MdOutlineEdit, MdOutlineStore } from "react-icons/md";
 
+import Navbar from "../Component/Navbar";
+import EditAccountModal from "../Component/EditAccountModal";
+import GantiPasswordModal from "../Component/GantiPasswordModal";
+
 const AkunSayaPage = () => {
   const navigate = useNavigate();
+  const [isEditProfileModalOpen, setIsEditProfileModalOpen] = useState(false);
+  const [isGantiPasswordOpen, setGantiPasswordOpen] = useState(false);
+  const idUser = "10";
 
   return (
     <>
@@ -102,7 +109,7 @@ const AkunSayaPage = () => {
                 {/* Tombol Aksi */}
                 <div className="mt-4 space-y-2">
                   <div
-                    // onClick={() => navigate("/ubahDataDiri")}
+                    onClick={() => setIsEditProfileModalOpen(true)}
                     className="flex w-fit items-center justify-center text-[#EE6D3F] border-2 border-[#EE6D3F] px-4 rounded-md hover:bg-[#EE6D3F] hover:text-white cursor-pointer transition-colors duration-300"
                   >
                     <MdOutlineEdit className="inline-block mr-1" />
@@ -110,7 +117,7 @@ const AkunSayaPage = () => {
                   </div>
 
                   <div
-                    // onClick={() => navigate("/ubahPassword")}
+                    onClick={() => setGantiPasswordOpen(true)}
                     className="flex w-fit items-center justify-center bg-[#4B4B4A] text-white px-5 border-2 border-[#4B4B4A] rounded-md hover:bg-[#242323] cursor-pointer transition-colors duration-300"
                   >
                     Ubah Password
@@ -121,6 +128,19 @@ const AkunSayaPage = () => {
           </div>
         </div>
       </div>
+      {/* Modal  */}
+      <EditAccountModal
+        isOpen={isEditProfileModalOpen}
+        onClose={() => setIsEditProfileModalOpen(false)}
+        onGantiPassword={() => setGantiPasswordOpen(true)}
+        idUser={idUser}
+      />
+
+      {/* Modal Ganti Password */}
+      <GantiPasswordModal
+        isOpen={isGantiPasswordOpen}
+        onClose={() => setGantiPasswordOpen(false)}
+      />
     </>
   );
 };

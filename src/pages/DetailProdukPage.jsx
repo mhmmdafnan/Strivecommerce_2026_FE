@@ -137,7 +137,7 @@ const DetailProdukPage = () => {
   return (
     <>
       <Navbar />
-      <div className="max-w-7xl mx-auto px-5 md:px-10 py-5 mb-20 md:mt-0">
+      <div className="max-w-7xl mx-auto px-5 md:px-20 py-5 mb-20 md:mt-0">
         {/* Navigation */}
         <div className="flex gap-x-1 p-1 my-2">
           <div className="text-sm text-gray-400 hover:text-gray-800 cursor-pointer">
@@ -334,7 +334,12 @@ const DetailProdukPage = () => {
               <div className="text-xs ">XX barang terjual</div>
             </div>
           </div>
-          <div className="text-xl p-1 hover:scale-125  cursor-pointer">
+          <div
+            onClick={() => {
+              window.open("https://wa.me/6281225759764", "_blank");
+            }}
+            className="text-xl p-1 hover:scale-125  cursor-pointer"
+          >
             <IoChatboxEllipsesOutline />
           </div>
         </div>
