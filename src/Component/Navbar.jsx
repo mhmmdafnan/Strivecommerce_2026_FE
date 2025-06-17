@@ -12,6 +12,7 @@ import {
 
 import ava from "../assets/img/picture1.jpeg";
 import Logo from "../assets/img/logo.png";
+import ToggleDarkMode from "../Component/ToggleDarkMode.jsx"
 
 export default function Navbar() {
   const [isSideMenuOpen, setMenu] = useState(false);
@@ -75,15 +76,29 @@ export default function Navbar() {
         {/* last section */}
         <div className="flex items-center gap-4">
           {/* cart icon */}
-          <AiOutlineSearch className="text-xl hidden md:flex" />
-          <AiOutlineMoon className="text-xl hidden md:flex" />
-          <div onClick={handleCartClick} className="cursor-pointer">
-            <AiOutlineShoppingCart className="text-xl hidden md:flex " />
-            {/* <div className="hidden opacity-0 group-hover:opacity-100 transition-all duration-500 group-hover:block">
-              keranjang
-            </div> */}
+          <div onClick={handleCartClick} className="cursor-pointer group w-6 hover:w-12 transition-all flex duration-500">
+            <AiOutlineMoon className="text-xl hidden md:flex group-hover:hidden" />
+            {/* <AiOutlineShoppingCart className="text-xl hidden md:flex " /> */}
+            <div className="hidden ml-2 group-hover:flex opacity-0 group-hover:opacity-100 transition-all duration-500 whitespace-nowrap text-sm">
+              <ToggleDarkMode/>
+            </div>
           </div>
-          <AiOutlineUser className="text-xl hidden md:flex" />
+          <div onClick={handleCartClick} className="cursor-pointer group w-6 hover:w-32 transition-all flex items-center duration-500">
+            <AiOutlineSearch className="text-xl hidden md:flex" />
+            {/* <AiOutlineShoppingCart className="text-xl hidden md:flex " /> */}
+            <div className="ml-2 hidden group-hover:flex opacity-0 group-hover:opacity-100 transition-all duration-500 whitespace-nowrap text-sm">
+              <input type="text" className="border-2 rounded-lg w-24 px-2"/>
+            </div>
+
+          </div>
+          <div onClick={handleCartClick} className="cursor-pointer group w-6 hover:w-24 transition-all flex duration-500">
+            <AiOutlineShoppingCart className="text-xl hidden md:flex " />
+            <span className="ml-2 hidden group-hover:flex opacity-0 group-hover:opacity-100 transition-all duration-500 whitespace-nowrap text-sm">
+              Keranjang
+            </span>
+          </div>
+
+          {/* <AiOutlineUser className="text-xl hidden md:flex" /> */}
           <img
             onClick={() => navigate("/akunSaya")}
             width={40}

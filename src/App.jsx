@@ -11,6 +11,7 @@ import TokoSayaPage from "./pages/TokoSayaPage.jsx";
 import KeranjangPage from "./pages/KeranjangPage.jsx";
 import CheckoutPage from "./pages/CheckoutPage.jsx";
 import FormUMKMPage from "./pages/FormUMKMPage.jsx";
+import LoadingAcc from "./pages/LoadingACC.jsx";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
           <Route path="/tokoSaya" element={<TokoSayaPage />} />
           <Route path="/keranjang" element={<KeranjangPage />} />
           <Route path="/checkout" element={<CheckoutPage />} />
+          <Route path="/loading" element={<LoadingAcc />} />
           <Route path="/" element={<SignupPage />} />
         </Routes>
       </BrowserRouter>
