@@ -8,11 +8,12 @@ import { MdOutlineStoreMallDirectory } from "react-icons/md";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 
 import Navbar from "../Component/Navbar";
+import ModalShare from "../Component/ShareModal";
 import produk1 from "../assets/img/produk/kursi 1.jpg";
 import produk2 from "../assets/img/produk/kursi 2.jpg";
 import produk3 from "../assets/img/produk/kursi 3.jpg";
 import fotoToko from "../assets/img/market foto.png";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const produkList = [
   {
@@ -92,6 +93,7 @@ const produk = {
 };
 
 const DetailProdukPage = () => {
+  const location = useLocation();
   const navigate = useNavigate();
   const [fotoUtama, setFotoUtama] = useState(produk.fotoProduk[0]);
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -99,6 +101,9 @@ const DetailProdukPage = () => {
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [jumlahProduk, setJumlahProduk] = useState(1);
   const [stokProduk, setStokProduk] = useState(10);
+  const [openModal, setOpenModal] = useState(false);
+  const shareUrl = `${window.location.origin}${location.pathname}`;
+  const shareText = `Cek produk ${produk.nama}, cuma di sini!`;
 
   const handleMouseMove = (e) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -280,13 +285,18 @@ const DetailProdukPage = () => {
                 <div className="bg-[#E1DDDD] hover:bg-gray-300 w-fit p-2 text-xl rounded-lg cursor-pointer">
                   <AiOutlineShoppingCart />
                 </div>
+                <button
+                  onClick={() => setOpenModal(true)}
+                  className="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600"
+                >
+                  Share
+                </button>
                 <div className="flex bg-[#EE6D3F] hover:bg-[#cf582d] font-semibold text-white justify-center items-center w-full rounded-lg cursor-pointer">
                   Beli
                 </div>
               </div>
             </div>
           </div>
-
           {/* Jumlah & Beli — Fixed Bottom di hp */}
           <div className="fixed bottom-0 left-0 right-0 bg-white shadow-black shadow-2xl p-4 border-t md:hidden z-50 ">
             <div className="">
@@ -311,6 +321,12 @@ const DetailProdukPage = () => {
               <div className="bg-[#E1DDDD] w-fit p-2 text-xl rounded-lg">
                 <AiOutlineShoppingCart />
               </div>
+              <button
+                onClick={() => setOpenModal(true)}
+                className="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600"
+              >
+                Share
+              </button>
               <div className="flex bg-[#EE6D3F] font-semibold text-white justify-center items-center w-full rounded-lg cursor-pointer">
                 Beli
               </div>
@@ -387,6 +403,12 @@ const DetailProdukPage = () => {
           </div>
         </div>
       </div>
+      <ModalShare
+        isOpen={openModal}
+        onClose={() => setOpenModal(false)}
+        url={shareUrl}
+        text={shareText}
+      />
     </>
   );
 };
