@@ -13,13 +13,14 @@ import CheckoutPage from "./pages/CheckoutPage.jsx";
 import FormUMKMPage from "./pages/FormUMKMPage.jsx";
 import LoadingAcc from "./pages/LoadingACC.jsx";
 
+
 function App() {
   return (
     <>
       <BrowserRouter>
         <Routes>
           {/* Halaman publik */}
-          <Route path="/home" element={<HomePage />} />
+          <Route path="/" element={<HomePage />} />
           <Route path="/detailProduk" element={<DetailProdukPage />} />
           <Route path="/akunSaya" element={<AkunSayaPage />} />
           <Route path="/formUMKM" element={<FormUMKMPage />} />
@@ -28,7 +29,7 @@ function App() {
           <Route path="/keranjang" element={<KeranjangPage />} />
           <Route path="/checkout" element={<CheckoutPage />} />
           <Route path="/loading" element={<LoadingAcc />} />
-          <Route path="/" element={<SignupPage />} />
+          <Route path="/register" element={<SignupPage />} />
         </Routes>
       </BrowserRouter>
     </>

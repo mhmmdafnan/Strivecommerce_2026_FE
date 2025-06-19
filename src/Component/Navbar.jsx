@@ -10,20 +10,44 @@ import {
   AiOutlineUser,
 } from "react-icons/ai";
 
+// import { Cookies } from "react-cookie";
+import { useCookies } from "react-cookie";
+
 import ava from "../assets/img/picture1.jpeg";
 import Logo from "../assets/img/logo.png";
 import ToggleDarkMode from "../Component/ToggleDarkMode.jsx"
+import LoginModal from "./LoginModal.jsx";
 
 export default function Navbar() {
   const [isSideMenuOpen, setMenu] = useState(false);
+  const [isLoginModalOpen, setLoginModalOpen] = useState(false);
   const navigate = useNavigate();
+  const showLoginModal = () => {
+    setLoginModalOpen(true);
+  };
+
+  const [cookies, setCookie, removeCookie] = useCookies();
 
   const handleCartClick = () => {
     navigate("/keranjang");
   };
 
+  const onSuccessLogin = (data) => {
+    console.log(data);
+    setCookie("isLoggedIn", true);
+    setCookie("token", data.token);
+    
+    setLoginModalOpen(false);
+    console.log(cookies["token"]);
+  }
+
   return (
     <main>
+      <LoginModal
+        isOpen={isLoginModalOpen}
+        onClose={() => setLoginModalOpen(false)}
+        onSuccess={(data) => onSuccessLogin(data)}
+      />
       <nav className="flex justify-between px-8 items-center py-4">
         <div className="flex items-center gap-8 ">
           {/* menu */}
@@ -83,30 +107,51 @@ export default function Navbar() {
               <ToggleDarkMode/>
             </div>
           </div>
-          <div onClick={handleCartClick} className="cursor-pointer group w-6 hover:w-32 transition-all flex items-center duration-500">
-            <AiOutlineSearch className="text-xl hidden md:flex" />
+          {/* <div onClick={handleCartClick} className="cursor-pointer group w-6 hover:w-32 transition-all flex items-center duration-500">
+            <AiOutlineSearch className="text-xl hidden md:flex" /> */}
             {/* <AiOutlineShoppingCart className="text-xl hidden md:flex " /> */}
-            <div className="ml-2 hidden group-hover:flex opacity-0 group-hover:opacity-100 transition-all duration-500 whitespace-nowrap text-sm">
+            {/* <div className="ml-2 hidden group-hover:flex opacity-0 group-hover:opacity-100 transition-all duration-500 whitespace-nowrap text-sm">
               <input type="text" className="border-2 rounded-lg w-24 px-2"/>
-            </div>
+            </div> */}
 
-          </div>
-          <div onClick={handleCartClick} className="cursor-pointer group w-6 hover:w-24 transition-all flex duration-500">
-            <AiOutlineShoppingCart className="text-xl hidden md:flex " />
-            <span className="ml-2 hidden group-hover:flex opacity-0 group-hover:opacity-100 transition-all duration-500 whitespace-nowrap text-sm">
-              Keranjang
-            </span>
-          </div>
+          {/* </div> */}
+
+          {
+            (cookies.isLoggedIn) ? (
+              <div onClick={handleCartClick} className="cursor-pointer group w-6 hover:w-24 transition-all flex duration-500">
+                <AiOutlineShoppingCart className="text-xl hidden md:flex " />
+                <span className="ml-2 hidden group-hover:flex opacity-0 group-hover:opacity-100 transition-all duration-500 whitespace-nowrap text-sm">
+                  Keranjang
+                </span>
+              </div>
+            ) : null
+          }
+
+          
 
           {/* <AiOutlineUser className="text-xl hidden md:flex" /> */}
-          <img
-            onClick={() => navigate("/akunSaya")}
-            width={40}
-            height={40}
-            className="h-8 w-8 rounded-full cursor-pointer "
-            src={ava}
-            alt="avatar-img"
-          />
+          {
+            (cookies["isLoggedIn"]) ? (
+              <>
+                <img
+                onClick={() => navigate("/akunSaya")}
+                width={40}
+                height={40}
+                className="h-8 w-8 rounded-full cursor-pointer "
+                src={ava}
+                alt="avatar-img"
+              />
+              </>
+            ) : (
+              <>
+              <div className="cursor-pointer group ml-4 justify-center hover:border-b-2 border-[#FE5D26] transition-all flex duration-500" onClick={showLoginModal}>
+                Login
+              </div>
+              </>
+            )
+            
+          }
+          
           {/* avtar img */}
         </div>
       </nav>

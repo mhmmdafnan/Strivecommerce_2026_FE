@@ -7,9 +7,11 @@ import produk1 from "../assets/img/produk/kursi 1.jpg";
 import produk2 from "../assets/img/produk/kursi 2.jpg";
 import produk3 from "../assets/img/produk/kursi 3.jpg";
 import { useNavigate } from "react-router-dom";
+import cookies from "react-cookies";
 
 const HomePage = () => {
   const navigate = useNavigate();
+  const cookie = cookies;
   const produkList = [
     {
       id: 1,

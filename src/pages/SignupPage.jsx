@@ -3,15 +3,18 @@ import { useState, useEffect, useRef } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 
+import axios from "axios";
+
 import SignupImg from "../assets/img/market foto.png";
 import Logo from "../assets/img/logo.png";
 
 import LoginModal from "../Component/LoginModal";
 
 const signupPage = () => {
+  const apiUrl = import.meta.env.VITE_API_URL;
   const [showPassword, setShowPassword] = useState(false);
   const [showConfPassword, setShowConfPassword] = useState(false);
-  const [loginLoading, setLoginLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [isLoginModalOpen, setLoginModalOpen] = useState(false);
   const navigate = useNavigate();
   const firstInputRef = useRef(null);
@@ -58,7 +61,39 @@ const signupPage = () => {
     }
   };
 
-  const sendData = (loginData) => {};
+  const sendData = (loginData) => {
+    setLoading(true);
+    try {
+      axios
+        .post(`${apiUrl}/api/v1/register`, {
+          firstName: loginData.firstName,
+          lastName: loginData.lastName,
+          email: loginData.email,
+          pass: loginData.pass,
+        })
+        .then((response) => {
+          console.log(response);
+          setLoading(false);
+          if (response.success) {
+            navigate("/");
+          } else {
+            const msg_div = document.getElementById("message-div");
+            msg_div.classList.remove("hidden");
+            // msg_div.innerHTML = response.data.message;
+          }
+        })
+        
+    } catch (error) {
+        setLoading(false);
+        const msg_div = document.getElementById("message-div");
+        msg_div.classList.remove("hidden");
+        msg_div.innerHTML = "Terjadi kesalahan, silakan coba lagi.";
+    } finally {
+      setLoading(false);
+    }
+    
+
+  };
 
   const onSubmitClick = () => {
     navigate("/home");
@@ -111,7 +146,7 @@ const signupPage = () => {
             </p>
 
             {/* Form */}
-            <div className="space-y-3" action={onSubmitClick}>
+            <div className="space-y-3" >
               <input
                 ref={firstInputRef}
                 type="text"
@@ -170,7 +205,7 @@ const signupPage = () => {
                 </div>
               </div>
               <div
-                onClick={onSubmitClick}
+                onClick={sendData.bind(this, formData)}
                 className="w-full text-center bg-[#EE6D3F] hover:bg-[#ff8052] transition duration-150 px-3 py-2  rounded-lg text-white text-xs md:text-sm font-semibold cursor-pointer"
               >
                 Sign Up

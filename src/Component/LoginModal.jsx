@@ -4,8 +4,13 @@ import { useNavigate, useLocation } from "react-router-dom";
 
 import Logo from "../assets/img/logo.png";
 import LogoGoogle from "../assets/img/googleIcon.png";
+import axios from "axios";
 
-const LoginModal = ({ isOpen, onClose }) => {
+import { useCookies } from "react-cookie";
+
+const LoginModal = ({ isOpen, onClose, onSuccess }) => {
+  const apiUrl = import.meta.env.VITE_API_URL; // URL API
+  const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showLoginError, setShowLoginError] = useState(false);
   const [showEmptyError, setShowEmptyError] = useState(false);
@@ -13,12 +18,51 @@ const LoginModal = ({ isOpen, onClose }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const firstInputRef = useRef(null);
+  const [cookies, setCookie, removeCookie] = useCookies(["isLoggedIn"]);
 
   const [formData, setFormData] = useState({
     // inisialisasi state untuk menyimpan data form
     email: "",
     pass: "",
   });
+
+  const sendData = async (e) => {
+    e.preventDefault(); // mencegah reload halaman saat submit form
+    setLoading(true); // set loading true saat proses pengiriman data 
+    if(!check_empty()) {
+      setShowEmptyError(true);
+      setLoading(false);
+      return;
+    }
+
+    try {
+      axios
+        .post(`${apiUrl}/api/v1/login`, {
+          email: formData.email,
+          password: formData.pass,
+        })
+        .then((response) => {
+          console.log(response);
+          setLoading(false);
+          if (response.data.success) {
+                // console.log(data);
+            setCookie("isLoggedIn", true);
+            setCookie("token", response.data.token);
+            onSuccess(response); // panggil fungsi onSuccess jika login berhasil
+          } else {
+            // const msg_div = document.getElementById("message-div");
+            // msg_div.classList.remove("hidden");
+            // msg_div.innerHTML = response.data.message;
+          }
+        })
+    } catch (error) {
+      console.error("Error during login:", error);
+      setShowLoginError(true); // tampilkan pesan error jika terjadi kesalahan
+      setLoading(false);  
+    } finally {
+      setLoading(false); // set loading false setelah proses selesai
+    }
+  }
 
   const check_empty = () => {
     if (formData.email === "") {
@@ -126,6 +170,7 @@ const LoginModal = ({ isOpen, onClose }) => {
           <button
             className="w-full bg-[#EE6D3F] hover:bg-[#ff8052] transition duration-150 px-3 py-2 rounded-lg text-white text-xs md:text-sm"
             type="submit"
+            onClick={sendData}
           >
             Sign In
           </button>
