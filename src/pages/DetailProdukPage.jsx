@@ -6,13 +6,15 @@ import { AiOutlineShoppingCart } from "react-icons/ai";
 import { IoChatboxEllipsesOutline } from "react-icons/io5";
 import { MdOutlineStoreMallDirectory } from "react-icons/md";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { FaShareNodes } from "react-icons/fa6";
 
 import Navbar from "../Component/Navbar";
+import ModalShare from "../Component/ShareModal";
 import produk1 from "../assets/img/produk/kursi 1.jpg";
 import produk2 from "../assets/img/produk/kursi 2.jpg";
 import produk3 from "../assets/img/produk/kursi 3.jpg";
 import fotoToko from "../assets/img/market foto.png";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const produkList = [
   {
@@ -92,6 +94,7 @@ const produk = {
 };
 
 const DetailProdukPage = () => {
+  const location = useLocation();
   const navigate = useNavigate();
   const [fotoUtama, setFotoUtama] = useState(produk.fotoProduk[0]);
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -99,6 +102,9 @@ const DetailProdukPage = () => {
   const [position, setPosition] = useState({ x: 0, y: 0 });
   const [jumlahProduk, setJumlahProduk] = useState(1);
   const [stokProduk, setStokProduk] = useState(10);
+  const [openModal, setOpenModal] = useState(false);
+  const shareUrl = `${window.location.origin}${location.pathname}`;
+  const shareText = `Cek produk ${produk.nama}, cuma di sini!`;
 
   const handleMouseMove = (e) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -277,6 +283,12 @@ const DetailProdukPage = () => {
                 </div>
               </div>
               <div className="flex gap-x-2 mt-4">
+                <button
+                  onClick={() => setOpenModal(true)}
+                  className="p-2 border-black border-2 rounded-xl hover:text-[#EE6D3F] hover:border-[#EE6D3F] cursor-pointer transition-all duration-200"
+                >
+                  <FaShareNodes className="hover:scale-125 transition-transform duration-300" />
+                </button>
                 <div className="bg-[#E1DDDD] hover:bg-gray-300 w-fit p-2 text-xl rounded-lg cursor-pointer">
                   <AiOutlineShoppingCart />
                 </div>
@@ -286,7 +298,6 @@ const DetailProdukPage = () => {
               </div>
             </div>
           </div>
-
           {/* Jumlah & Beli — Fixed Bottom di hp */}
           <div className="fixed bottom-0 left-0 right-0 bg-white shadow-black shadow-2xl p-4 border-t md:hidden z-50 ">
             <div className="">
@@ -308,6 +319,12 @@ const DetailProdukPage = () => {
               </div>
             </div>
             <div className="flex gap-x-2 mt-4">
+              <div
+                onClick={() => setOpenModal(true)}
+                className="p-2 border-black border-2 rounded-xl hover:text-[#EE6D3F] hover:border-[#EE6D3F] cursor-pointer transition-all duration-200"
+              >
+                <FaShareNodes className="hover:scale-125 transition-transform duration-300" />
+              </div>
               <div className="bg-[#E1DDDD] w-fit p-2 text-xl rounded-lg">
                 <AiOutlineShoppingCart />
               </div>
@@ -387,6 +404,12 @@ const DetailProdukPage = () => {
           </div>
         </div>
       </div>
+      <ModalShare
+        isOpen={openModal}
+        onClose={() => setOpenModal(false)}
+        url={shareUrl}
+        text={shareText}
+      />
     </>
   );
 };
