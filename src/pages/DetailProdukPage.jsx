@@ -6,6 +6,7 @@ import { AiOutlineShoppingCart } from "react-icons/ai";
 import { IoChatboxEllipsesOutline } from "react-icons/io5";
 import { MdOutlineStoreMallDirectory } from "react-icons/md";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { FaShareNodes } from "react-icons/fa6";
 
 import Navbar from "../Component/Navbar";
 import ModalShare from "../Component/ShareModal";
@@ -282,15 +283,15 @@ const DetailProdukPage = () => {
                 </div>
               </div>
               <div className="flex gap-x-2 mt-4">
+                <button
+                  onClick={() => setOpenModal(true)}
+                  className="p-2 border-black border-2 rounded-xl hover:text-[#EE6D3F] hover:border-[#EE6D3F] cursor-pointer transition-all duration-200"
+                >
+                  <FaShareNodes className="hover:scale-125 transition-transform duration-300" />
+                </button>
                 <div className="bg-[#E1DDDD] hover:bg-gray-300 w-fit p-2 text-xl rounded-lg cursor-pointer">
                   <AiOutlineShoppingCart />
                 </div>
-                <button
-                  onClick={() => setOpenModal(true)}
-                  className="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600"
-                >
-                  Share
-                </button>
                 <div className="flex bg-[#EE6D3F] hover:bg-[#cf582d] font-semibold text-white justify-center items-center w-full rounded-lg cursor-pointer">
                   Beli
                 </div>
@@ -318,15 +319,15 @@ const DetailProdukPage = () => {
               </div>
             </div>
             <div className="flex gap-x-2 mt-4">
+              <div
+                onClick={() => setOpenModal(true)}
+                className="p-2 border-black border-2 rounded-xl hover:text-[#EE6D3F] hover:border-[#EE6D3F] cursor-pointer transition-all duration-200"
+              >
+                <FaShareNodes className="hover:scale-125 transition-transform duration-300" />
+              </div>
               <div className="bg-[#E1DDDD] w-fit p-2 text-xl rounded-lg">
                 <AiOutlineShoppingCart />
               </div>
-              <button
-                onClick={() => setOpenModal(true)}
-                className="bg-orange-500 text-white px-4 py-2 rounded hover:bg-orange-600"
-              >
-                Share
-              </button>
               <div className="flex bg-[#EE6D3F] font-semibold text-white justify-center items-center w-full rounded-lg cursor-pointer">
                 Beli
               </div>

@@ -1,12 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import fotoToko from "../assets/img/market foto.png";
 import { IoChatboxEllipsesOutline } from "react-icons/io5";
 import { FaLocationDot, FaShareNodes } from "react-icons/fa6";
 
-
 import Navbar from "../Component/Navbar";
+import ModalShare from "../Component/ShareModal";
 import produk1 from "../assets/img/produk/kursi 1.jpg";
 import produk2 from "../assets/img/produk/kursi 2.jpg";
 import produk3 from "../assets/img/produk/kursi 3.jpg";
@@ -80,9 +80,12 @@ const produkList = [
 ];
 
 const TokoPage = () => {
-  const Toko = { namaToko: "Nama Toko", Kabupaten: "Majene" };
   const navigate = useNavigate();
+  const Toko = { namaToko: "Nama Toko", Kabupaten: "Majene" };
 
+  const [openModal, setOpenModal] = useState(false);
+  const shareUrl = `${window.location.origin}${location.pathname}`;
+  const shareText = `Cek Toko ${Toko.namaToko}, cuma di sini!`;
   return (
     <>
       <Navbar />
@@ -122,7 +125,10 @@ const TokoPage = () => {
                 >
                   <IoChatboxEllipsesOutline /> Chat Penjual
                 </div>
-                <div className="text-xs flex items-center gap-x-1 p-2 border-2 border-gray-600 rounded-full bg-white text-gray-600 hover:bg-gray-100 cursor-pointer">
+                <div
+                  onClick={() => setOpenModal(true)}
+                  className="text-xs flex items-center gap-x-1 p-2 border-2 border-gray-600 rounded-xl bg-white text-gray-600 hover:bg-gray-100 cursor-pointer"
+                >
                   <FaShareNodes className="hover:scale-125 transition-transform duration-300" />
                 </div>
               </div>
@@ -178,6 +184,12 @@ const TokoPage = () => {
           </div>
         </div>
       </div>
+      <ModalShare
+        isOpen={openModal}
+        onClose={() => setOpenModal(false)}
+        url={shareUrl}
+        text={shareText}
+      />
     </>
   );
 };

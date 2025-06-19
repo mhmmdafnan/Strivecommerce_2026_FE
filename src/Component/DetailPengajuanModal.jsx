@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 // import { useCookies } from "react-cookie";
 import PDFViewer from "./PDFViewer.jsx";
 // import LoadingModal from "../Component/LoadingModal.jsx";
-const DetailPengajuanModal = ({ isOpen, onClose, idUmkm }) => {
+const DetailPengajuanModal = ({ isOpen, onClose, idUmkm, isPengajuan }) => {
   // const backendUrl = import.meta.env.VITE_API_URL;
   const ngrokURL = "";
   const [pengajuan, setPengajuan] = useState([
@@ -121,17 +121,17 @@ const DetailPengajuanModal = ({ isOpen, onClose, idUmkm }) => {
         <div>
           <p className="font-medium mb-2">Berkas :</p>
           <div className="flex gap-4 overflow-x-auto">
-            <p className="text-xs text-gray-600 underline">
+            <div className="text-xs text-gray-600 underline">
               <a href={pengajuan[0]?.berkas} target="#">
                 Berkas 1
               </a>
               <PDFViewer fileUrl={pengajuan[0]?.berkas} />
-            </p>
+            </div>
           </div>
         </div>
 
         {/* Tombol Aksi */}
-        {pengajuan[0].status == 0 && (
+        {isPengajuan && pengajuan[0].status == 0 && (
           <div className="flex justify-end gap-x-2 items-center mt-6">
             <button
               onClick={handleTolak}

@@ -204,6 +204,7 @@ function MainPage() {
         isOpen={isDetailPengajuanModalOpen}
         onClose={() => setIsDetailPengajuanModalOpen(false)}
         idPengajuan={idPengajuan}
+        isPengajuan={true}
       />
     </>
   );

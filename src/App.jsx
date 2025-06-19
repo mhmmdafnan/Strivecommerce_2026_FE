@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import "keen-slider/keen-slider.min.css";
+import "react-toastify/dist/ReactToastify.css";
 
 import HomePage from "./pages/HomePage.jsx";
 import SignupPage from "./pages/SignupPage.jsx";

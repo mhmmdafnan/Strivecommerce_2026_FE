@@ -4,6 +4,7 @@ import foto from "../assets/img/picture1.jpeg";
 import kursi from "../assets/img/produk/kursi 1.jpg";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
+import DetailPengajuanModal from "../Component/DetailPengajuanModal.jsx";
 // import { useCookies } from "react-cookie";
 
 function MainPage() {
@@ -12,6 +13,9 @@ function MainPage() {
   // const [cookies] = useCookies();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
+  const [idPengajuan, setIdPengajuan] = useState();
+  const [isDetailPengajuanModalOpen, setIsDetailPengajuanModalOpen] =
+    useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -46,11 +50,6 @@ function MainPage() {
     },
   ]);
 
-  // Navigate to the add property page
-  const ontambahClick = () => {
-    navigate("/super/properti/tambah");
-  };
-
   // Handle next page
   const handleNextPage = () => {
     if (currentPage * totalPerPage < totalItems) {
@@ -64,7 +63,14 @@ function MainPage() {
       setCurrentPage(currentPage - 1);
     }
   };
-  // Handle Delete Properti
+  const handleAksiClick = (id) => {
+    // console.log("id dalam fungsi", id);
+    setIdPengajuan(id);
+    setIsDetailPengajuanModalOpen(true);
+    // setTrigger(!trigger)
+  };
+
+  // Handle Delete
   const handleDelete = (id) => {};
 
   // Fetch data when page changes
@@ -153,9 +159,7 @@ function MainPage() {
                   <div className="items-center justify-center flex">
                     <span
                       className="material-symbols-outlined p-1 cursor-pointer hover:text-[#EE6D3F] transition duration-300"
-                      onClick={() =>
-                        navigate("/super/properti/edit/" + item.id)
-                      }
+                      onClick={() => handleAksiClick(item.id)}
                     >
                       info
                     </span>
@@ -208,26 +212,15 @@ function MainPage() {
               </div>
             </div>
           )}
-
-          {/* <div className="pagination flex justify-center items-center mt-10 space-x-2">
-            <button
-              onClick={handlePrevPage}
-              disabled={currentPage === 1}
-              className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
-            >
-              Prev
-            </button>
-            <span className="mx-2">Page {currentPage}</span>
-            <button
-              onClick={handleNextPage}
-              disabled={currentPage * totalPerPage >= totalItems}
-              className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
-            >
-              Next
-            </button>
-          </div> */}
         </div>
       </div>
+      {/* Modal  */}
+      <DetailPengajuanModal
+        isOpen={isDetailPengajuanModalOpen}
+        onClose={() => setIsDetailPengajuanModalOpen(false)}
+        idPengajuan={idPengajuan}
+        isPengajuan={false} // Set to false since this is for UMKM
+      />
     </>
   );
 }
