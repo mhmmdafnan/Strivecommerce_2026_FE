@@ -7,12 +7,14 @@ import DetailProdukPage from "./pages/DetailProdukPage.jsx";
 import AkunSayaPage from "./pages/AkunSayaPage.jsx";
 import TokoPage from "./pages/TokoPage.jsx";
 import TokoSayaPage from "./pages/TokoSayaPage.jsx";
-
+import AdminUmkmPage from "./pages/AdminUmkmPage.jsx";
+import AdminPengajuanPage from "./pages/AdminPengajuanPage.jsx";
 import KeranjangPage from "./pages/KeranjangPage.jsx";
 import CheckoutPage from "./pages/CheckoutPage.jsx";
 import FormUMKMPage from "./pages/FormUMKMPage.jsx";
 import LoadingAcc from "./pages/LoadingACC.jsx";
 import LoginRoutes from "./Component/LoginRoutes.jsx";
+import TambahProdukPage from "./Component/TambahProduk.jsx";
 
 function App() {
   return (
@@ -31,6 +33,8 @@ function App() {
             <Route path="/loading" element={<LoadingAcc />} />
             <Route path="/formUMKM" element={<FormUMKMPage />} />
             <Route path="/toko" element={<TokoPage />} />
+            <Route path="/tambahProduk" element={<TambahProdukPage />} />
+            <Route path="/editProduk/:idProduk" element={<TambahProdukPage />} />
 
             <Route path="/adminUmkmList" element={<AdminUmkmPage />} />
             <Route path="/adminPengajuan" element={<AdminPengajuanPage />} />

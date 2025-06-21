@@ -8,7 +8,7 @@ import produk2 from "../assets/img/produk/kursi 2.jpg";
 import produk3 from "../assets/img/produk/kursi 3.jpg";
 import { useNavigate } from "react-router-dom";
 import cookies from "react-cookies";
-import cookies from "react-cookies";
+// import cookies from "react-cookies";
 
 const HomePage = () => {
   const navigate = useNavigate();
