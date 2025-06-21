@@ -3,9 +3,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ava from "../assets/img/picture1.jpeg";
 import { MdOutlineEdit, MdOutlineDeleteOutline } from "react-icons/md";
-import { IoMdAddCircle } from "react-icons/io";
 
-import produk from '../assets/img/produk/kursi 1.jpg';
+import produk from "../assets/img/produk/kursi 1.jpg";
 import Navbar from "../Component/Navbar";
 
 const TokoSayaPage = () => {
@@ -18,7 +17,6 @@ const TokoSayaPage = () => {
       terjual: 25,
       harga: 100000,
       gambar: produk,
-      
     },
     {
       id: 2,
@@ -129,6 +127,14 @@ const TokoSayaPage = () => {
     );
     setProdukList(updatedList);
   };
+  const handleTambahKlik = () => {
+    // open new page
+    window.open("/tambahProduk", "_blank");
+  };
+  const handleEditKlik = (idProduk) => {
+    // buka tab baru ke halaman /tambahProduk dengan query parameter
+    window.open(`/editProduk/${idProduk}`, "_blank");
+  };
 
   return (
     <>
@@ -214,8 +220,11 @@ const TokoSayaPage = () => {
         <div className="bg-[#E9E9E9] shadow-lg border-[1px]  rounded-lg px-10 py-6 mt-4 max-w-5xl mx-auto">
           <div className="flex mb-4 justify-between">
             <h1 className="font-semibold">Daftar Produk</h1>
-            <div className="bg-[#EE6D3F] text-white px-4 rounded-lg cursor-pointer hover:bg-[#d25f35] transition-colors duration-300 flex items-center gap-2">
-              <IoMdAddCircle /> Tambah
+            <div
+              onClick={handleTambahKlik}
+              className="bg-[#EE6D3F] text-white px-4 rounded-lg cursor-pointer hover:bg-[#d25f35] transition-colors duration-300 flex items-center gap-2"
+            >
+              Tambah
             </div>
           </div>
           <div className="w-full overflow-x-auto">
@@ -258,7 +267,11 @@ const TokoSayaPage = () => {
                     </div>
                     <div className="flex justify-start items-center gap-2">
                       <div>
-                        <img className="h-10 w-10 rounded-xl border-2 border-gray-400 object-contain" src={item.gambar} alt="" />
+                        <img
+                          className="h-10 w-10 rounded-xl border-2 border-gray-400 object-contain"
+                          src={item.gambar}
+                          alt=""
+                        />
                       </div>
                       <div>{item.nama}</div>
                     </div>
@@ -268,7 +281,7 @@ const TokoSayaPage = () => {
                     <div>Rp {item.harga.toLocaleString("id-ID")}</div>
                     <div className="flex justify-center gap-2">
                       <div
-                        onClick={() => navigate("/ubahProduk")}
+                        onClick={() => handleEditKlik(item.id)}
                         className="text-gray-800 hover:text-[#EE6D3F] cursor-pointer"
                       >
                         <MdOutlineEdit className="text-xl" />

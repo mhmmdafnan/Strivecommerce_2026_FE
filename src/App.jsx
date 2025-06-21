@@ -14,6 +14,7 @@ import KeranjangPage from "./pages/KeranjangPage.jsx";
 import CheckoutPage from "./pages/CheckoutPage.jsx";
 import FormUMKMPage from "./pages/FormUMKMPage.jsx";
 import LoadingAcc from "./pages/LoadingACC.jsx";
+import TambahProdukPage from "./Component/TambahProduk.jsx";
 
 function App() {
   return (
@@ -27,6 +28,9 @@ function App() {
           <Route path="/formUMKM" element={<FormUMKMPage />} />
           <Route path="/toko" element={<TokoPage />} />
           <Route path="/tokoSaya" element={<TokoSayaPage />} />
+          <Route path="/tambahProduk" element={<TambahProdukPage />} />
+          <Route path="/editProduk/:idProduk" element={<TambahProdukPage />} />
+          {/* <Route path="/editProduk" element={<TambahProdukPage />} /> */}
           <Route path="/keranjang" element={<KeranjangPage />} />
           <Route path="/checkout" element={<CheckoutPage />} />
           <Route path="/adminPengajuan" element={<AdminPengajuanPage />} />

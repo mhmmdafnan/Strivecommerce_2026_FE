@@ -1,12 +1,18 @@
 import React from "react";
+import { useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
+import { useKeenSlider } from "keen-slider/react";
+import "keen-slider/keen-slider.min.css";
+
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { MdOutlineStoreMallDirectory } from "react-icons/md";
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+
 import Navbar from "../Component/Navbar";
 import fotoToko from "../assets/img/produk/toko olahraga1.jpeg";
 import produk1 from "../assets/img/produk/kursi 1.jpg";
 import produk2 from "../assets/img/produk/kursi 2.jpg";
 import produk3 from "../assets/img/produk/kursi 3.jpg";
-import { useNavigate } from "react-router-dom";
 
 const HomePage = () => {
   const navigate = useNavigate();
@@ -77,6 +83,30 @@ const HomePage = () => {
     // dan seterusnya
   ];
 
+  const [sliderRef, instanceRef] = useKeenSlider({
+    slides: {
+      perView: 2,
+      spacing: 10,
+    },
+    breakpoints: {
+      "(min-width: 768px)": {
+        slides: { perView: 4, spacing: 15 },
+      },
+      "(min-width: 1024px)": {
+        slides: { perView: 5, spacing: 20 },
+      },
+    },
+    loop: true,
+  });
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      instanceRef.current?.next();
+    }, 3000); // ganti slide tiap 3 detik
+
+    return () => clearInterval(interval); // bersihkan saat unmount
+  }, [instanceRef]);
+
   return (
     <>
       <Navbar />
@@ -136,32 +166,80 @@ const HomePage = () => {
           </div>
         </div>
         {/* List Produk rekomendasi Karousel */}
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2 md:gap-4 lg:gap-6">
-          {produkList.map((produk) => (
-            <div
-              onClick={() => navigate("/detailProduk")}
-              key={produk.id}
-              className="h-34 cursor-pointer hover:shadow-md rounded-xl p-2"
-            >
-              <img
-                src={produk.gambar}
-                className="w-full h-30 object-cover rounded-3xl border-2 border-gray-200 hover:scale-105 transition-all duration-300"                     
-                alt={produk.nama}
-              />
-              <div className="p-2">
-                <div className="text-sm font-extralight text-black">
-                  {produk.harga}
+
+        <div className="relative mt-10">
+          <h2 className="text-xl mb-4">Produk Terlaris</h2>
+
+          {/* Panah Kiri */}
+          <button
+            onClick={() => instanceRef?.current?.prev()}
+            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white p-2 rounded-full shadow hover:bg-gray-100"
+          >
+            <FaChevronLeft />
+          </button>
+
+          {/* Panah Kanan */}
+          <button
+            onClick={() => instanceRef?.current?.next()}
+            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white p-2 rounded-full shadow hover:bg-gray-100"
+          >
+            <FaChevronRight />
+          </button>
+
+          {/* Slider */}
+          <div ref={sliderRef} className="keen-slider pb-4 mb-4">
+            {produkList.map((item) => (
+              <div
+                key={item.id}
+                className="keen-slider__slide p-2 hover:shadow-md rounded-xl cursor-pointer"
+              >
+                <img
+                  src={item.gambar}
+                  alt={item.nama}
+                  className="w-full h-40 object-contain rounded-xl border-[1px] border-gray-600 hover:scale-105 transition-all duration-300"
+                />
+                <div className="mt-2 text-sm text-black font-light">
+                  {item.harga}
                 </div>
                 <div className="text-md font-medium text-black truncate">
-                  {produk.nama}
+                  {item.nama}
                 </div>
-                <div className="flex items-center gap-x-1 text-sm font-extralight text-gray-500">
-                  <MdOutlineStoreMallDirectory />
-                  {produk.toko}
+                <div className="text-sm text-gray-500">{item.toko}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+        {/* List Produk  */}
+        <div>
+          <h2 className="text-xl mb-4">Daftar Produk</h2>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2 md:gap-4 lg:gap-6">
+            {produkList.map((produk) => (
+              <div
+                onClick={() => navigate("/detailProduk")}
+                key={produk.id}
+                className="h-34 cursor-pointer hover:shadow-md rounded-xl p-2"
+              >
+                <img
+                  src={produk.gambar}
+                  className="w-full h-30 object-cover rounded-3xl border-2 border-gray-200 hover:scale-105 transition-all duration-300"
+                  alt={produk.nama}
+                />
+                <div className="p-2">
+                  <div className="text-sm font-extralight text-black">
+                    {produk.harga}
+                  </div>
+                  <div className="text-md font-medium text-black truncate">
+                    {produk.nama}
+                  </div>
+                  <div className="flex items-center gap-x-1 text-sm font-extralight text-gray-500">
+                    <MdOutlineStoreMallDirectory />
+                    {produk.toko}
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     </>
