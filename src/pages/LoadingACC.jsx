@@ -16,7 +16,7 @@ const LoadingAcc = () => {
                         Pembukaan Toko UMKM anda sedang menunggu persetujuan admin, mohon tunggu sebentar
                     </div>
                     <div className="mt-10">
-                        <Loading/>
+                    <Loading w={10} h={10}/>
                     </div>
                     <div className="mt-20 text-center text-[10px] relative bottom-0">
                         Jika anda telah menunggu terlalu lama, silahkan hubungi admin STRIVE

@@ -7,12 +7,23 @@ import { MdOutlineEdit, MdOutlineStore } from "react-icons/md";
 import Navbar from "../Component/Navbar";
 import EditAccountModal from "../Component/EditAccountModal";
 import GantiPasswordModal from "../Component/GantiPasswordModal";
+import { useCookies } from "react-cookie";
 
 const AkunSayaPage = () => {
   const navigate = useNavigate();
   const [isEditProfileModalOpen, setIsEditProfileModalOpen] = useState(false);
   const [isGantiPasswordOpen, setGantiPasswordOpen] = useState(false);
   const idUser = "10";
+  const [cookies, setCookie, deleteCookie] = useCookies(["isLoggedIn", "token"]);
+
+  const logout = () => {
+    // Implement logout logic here
+    console.log("User logged out");
+    deleteCookie("isLoggedIn");
+    deleteCookie("token");
+    // Optionally, redirect to home or login page]
+    navigate("/");
+  }
 
   return (
     <>
@@ -72,6 +83,7 @@ const AkunSayaPage = () => {
                     <MdOutlineStore className="inline-block mr-2 text-xl" />
                     Buka Toko
                   </div>
+                  
                 </div>
               </div>
 
@@ -110,7 +122,7 @@ const AkunSayaPage = () => {
                 <div className="mt-4 space-y-2">
                   <div
                     onClick={() => setIsEditProfileModalOpen(true)}
-                    className="flex w-fit items-center justify-center text-[#EE6D3F] border-2 border-[#EE6D3F] px-4 rounded-md hover:bg-[#EE6D3F] hover:text-white cursor-pointer transition-colors duration-300"
+                    className="flex items-center justify-center w-44 text-[#EE6D3F] border-2 border-[#EE6D3F] px-4 rounded-md hover:bg-[#EE6D3F] hover:text-white cursor-pointer transition-colors duration-300"
                   >
                     <MdOutlineEdit className="inline-block mr-1" />
                     Ubah Data Diri
@@ -118,9 +130,15 @@ const AkunSayaPage = () => {
 
                   <div
                     onClick={() => setGantiPasswordOpen(true)}
-                    className="flex w-fit items-center justify-center bg-[#4B4B4A] text-white px-5 border-2 border-[#4B4B4A] rounded-md hover:bg-[#242323] cursor-pointer transition-colors duration-300"
+                    className="flex items-center justify-center w-44 bg-[#4B4B4A] text-white px-5 border-2 border-[#4B4B4A] rounded-md hover:bg-[#242323] cursor-pointer transition-colors duration-300"
                   >
                     Ubah Password
+                  </div>
+                  <div 
+                    className="flex items-center justify-center w-44 bg-red-500 text-white px-5 border-2 border-red-500 rounded-md hover:bg-red-600 cursor-pointer transition-colors duration-300"
+                    onClick={logout}
+                  >
+                    logout
                   </div>
                 </div>
               </div>

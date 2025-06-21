@@ -14,7 +14,7 @@ import KeranjangPage from "./pages/KeranjangPage.jsx";
 import CheckoutPage from "./pages/CheckoutPage.jsx";
 import FormUMKMPage from "./pages/FormUMKMPage.jsx";
 import LoadingAcc from "./pages/LoadingACC.jsx";
-
+import LoginRoutes from "./Component/LoginRoutes.jsx";
 
 function App() {
   return (
@@ -24,15 +24,21 @@ function App() {
           {/* Halaman publik */}
           <Route path="/" element={<HomePage />} />
           <Route path="/detailProduk" element={<DetailProdukPage />} />
-          <Route path="/akunSaya" element={<AkunSayaPage />} />
-          <Route path="/formUMKM" element={<FormUMKMPage />} />
-          <Route path="/toko" element={<TokoPage />} />
-          <Route path="/tokoSaya" element={<TokoSayaPage />} />
-          <Route path="/keranjang" element={<KeranjangPage />} />
-          <Route path="/checkout" element={<CheckoutPage />} />
-          <Route path="/adminPengajuan" element={<AdminPengajuanPage />} />
-          <Route path="/adminUmkmList" element={<AdminUmkmPage />} />
-          <Route path="/loading" element={<LoadingAcc />} />
+          
+          <Route element={<LoginRoutes />}>
+            <Route path="/akunSaya" element={<AkunSayaPage />} />
+            <Route path="/tokoSaya" element={<TokoSayaPage />} />
+            <Route path="/keranjang" element={<KeranjangPage />} />
+            <Route path="/checkout" element={<CheckoutPage />} />
+            <Route path="/loading" element={<LoadingAcc />} />
+            <Route path="/formUMKM" element={<FormUMKMPage />} />
+            <Route path="/toko" element={<TokoPage />} />
+
+            <Route path="/adminUmkmList" element={<AdminUmkmPage />} />
+            <Route path="/adminPengajuan" element={<AdminPengajuanPage />} />
+
+          </Route>
+
           <Route path="/register" element={<SignupPage />} />
         </Routes>
       </BrowserRouter>

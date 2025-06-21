@@ -37,12 +37,12 @@ export default function Navbar() {
     setCookie("isLoggedIn", true);
     setCookie("token", data.token);
     
-    setLoginModalOpen(false);
+    setLoginModalOpen(false)
     console.log(cookies["token"]);
   }
 
   return (
-    <main>
+    <main className="relative">
       <LoginModal
         isOpen={isLoginModalOpen}
         onClose={() => setLoginModalOpen(false)}
@@ -57,7 +57,7 @@ export default function Navbar() {
           />
           <Link
             className="hidden lg:block  text-gray-400 hover:text-black"
-            to="/home"
+            to="/"
           >
             Produk
           </Link>
@@ -69,7 +69,7 @@ export default function Navbar() {
           </Link>
         </div>
         {/* logo */}
-        <div className="">
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
           <img src={Logo} alt="Logo" className="mx-auto h-10" />
         </div>
         {/* sidebar mobile menu */}
@@ -88,7 +88,7 @@ export default function Navbar() {
                 className="text-3xl items-center hover:text-red-600 cursor-pointer"
               />
             </div>
-            <Link className="font-bold text-gray-500" to="/home">
+            <Link className="font-bold text-gray-500" to="/">
               Produk
             </Link>
             <Link className="font-bold text-gray-500" to="">
@@ -100,7 +100,7 @@ export default function Navbar() {
         {/* last section */}
         <div className="flex items-center gap-4">
           {/* cart icon */}
-          <div onClick={handleCartClick} className="cursor-pointer group w-6 hover:w-12 transition-all flex duration-500">
+          <div  className="cursor-pointer group w-6 hover:w-12 transition-all flex duration-500">
             <AiOutlineMoon className="text-xl hidden md:flex group-hover:hidden" />
             {/* <AiOutlineShoppingCart className="text-xl hidden md:flex " /> */}
             <div className="hidden ml-2 group-hover:flex opacity-0 group-hover:opacity-100 transition-all duration-500 whitespace-nowrap text-sm">

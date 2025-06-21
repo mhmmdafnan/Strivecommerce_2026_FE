@@ -5,6 +5,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import Logo from "../assets/img/logo.png";
 import LogoGoogle from "../assets/img/googleIcon.png";
 import axios from "axios";
+import Loading from "./Loading";
 
 import { useCookies } from "react-cookie";
 
@@ -27,42 +28,32 @@ const LoginModal = ({ isOpen, onClose, onSuccess }) => {
   });
 
   const sendData = async (e) => {
-    e.preventDefault(); // mencegah reload halaman saat submit form
-    setLoading(true); // set loading true saat proses pengiriman data 
-    if(!check_empty()) {
+    e.preventDefault();
+    setLoading(true);
+    if (!check_empty()) {
       setShowEmptyError(true);
       setLoading(false);
       return;
     }
 
     try {
-      axios
-        .post(`${apiUrl}/api/v1/login`, {
-          email: formData.email,
-          password: formData.pass,
-        })
-        .then((response) => {
-          console.log(response);
-          setLoading(false);
-          if (response.data.success) {
-                // console.log(data);
-            setCookie("isLoggedIn", true);
-            setCookie("token", response.data.token);
-            onSuccess(response); // panggil fungsi onSuccess jika login berhasil
-          } else {
-            // const msg_div = document.getElementById("message-div");
-            // msg_div.classList.remove("hidden");
-            // msg_div.innerHTML = response.data.message;
-          }
-        })
+      const response = await axios.post(`${apiUrl}/api/v1/login`, {
+        email: formData.email,
+        password: formData.pass,
+      });
+      if (response.data.success) {
+        setCookie("isLoggedIn", true);
+        setCookie("token", response.data.token);
+        onSuccess(response);
+      } else {
+        setShowLoginError(true);
+      }
     } catch (error) {
-      console.error("Error during login:", error);
-      setShowLoginError(true); // tampilkan pesan error jika terjadi kesalahan
-      setLoading(false);  
+      setShowLoginError(true);
     } finally {
-      setLoading(false); // set loading false setelah proses selesai
+      setLoading(false);
     }
-  }
+  };
 
   const check_empty = () => {
     if (formData.email === "") {
@@ -121,7 +112,7 @@ const LoginModal = ({ isOpen, onClose, onSuccess }) => {
           </span>
         </p>
 
-        <div className="space-y-3 ">
+        <form onSubmit={sendData} className="space-y-3 ">
           <input
             ref={firstInputRef}
             className="bg-[#d8d8d8] text-xs px-3 py-2 mb-3 block rounded-lg w-full focus:ring-1 focus:ring-[#ff8052] focus:outline-none"
@@ -135,7 +126,7 @@ const LoginModal = ({ isOpen, onClose, onSuccess }) => {
 
           <div className="relative">
             <input
-              className="bg-[#d8d8d8] text-xs px-3 mb-8 py-2 block rounded-lg w-full focus:ring-1 focus:ring-[#ff8052] focus:outline-none"
+              className={`bg-[#d8d8d8] text-xs ${showLoginError ? 'mb-0' : 'mb-8'} px-3 py-2 block rounded-lg w-full focus:ring-1 focus:ring-[#ff8052] focus:outline-none`}
               name="pass"
               required
               type={showPassword ? "text" : "password"}
@@ -154,31 +145,34 @@ const LoginModal = ({ isOpen, onClose, onSuccess }) => {
           </div>
 
           {showLoginError && (
-            <div className="text-red-500 text-xs mb-3" id="message-div">
+            <div className="text-red-500 text-xs " id="message-div">
               *email atau password tidak sesuai
             </div>
           )}
-          {showLoginError && (
-            <div
-              className="text-red-500 text-xs hidden mb-3"
-              id="message-div-ksg"
-            >
-              *silahkan isi form terlebih dahulu
-            </div>
-          )}
+
 
           <button
-            className="w-full bg-[#EE6D3F] hover:bg-[#ff8052] transition duration-150 px-3 py-2 rounded-lg text-white text-xs md:text-sm"
+            className="w-full bg-[#EE6D3F] hover:bg-[#ff8052] h-10 transition duration-150 px-3 py-2 rounded-lg text-white text-xs md:text-sm"
             type="submit"
-            onClick={sendData}
+            // onClick={sendData}
           >
-            Sign In
+            {
+              loading ? (
+                <div className="flex justify-center  items-center gap-2">
+                  <Loading w={4} h={4} />
+                </div>
+              ) : (
+                <>
+                  Sign In
+                </>
+              )
+            }
           </button>
           <button className="flex justify-center items-center mt-3 w-full  border border-gray-300 hover:bg-gray-200 text-xs px-3 py-2 rounded-lg gap-2">
             <img src={LogoGoogle} alt="Google" className="w-4 h-4" />
             Sign In with Google
           </button>
-        </div>
+        </form>
       </div>
     </div>
   );
