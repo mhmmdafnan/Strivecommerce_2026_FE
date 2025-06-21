@@ -12,7 +12,7 @@ import cookies from "react-cookies";
 
 const HomePage = () => {
   const navigate = useNavigate();
-  const cookie = cookies;
+  // const cookie = cookies;
   const cookie = cookies;
   const produkList = [
     {
