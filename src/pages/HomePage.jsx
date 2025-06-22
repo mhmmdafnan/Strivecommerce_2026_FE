@@ -199,15 +199,15 @@ const HomePage = () => {
                       alt={produk.nama}
                     />
                     <div className="p-2">
-                      <div className="text-sm font-extralight text-black">
+                      <div className="text-xs font-extralight text-black">
                         Rp. {(produk.variasi[0].harga).toLocaleString("id-ID")}
                       </div>
                       <div className="text-md font-medium text-black truncate">
                         {produk.nama}
                       </div>
-                      <div className="flex items-center gap-x-1 text-sm font-extralight text-gray-500">
+                      <div className="flex items-center gap-x-1 text-sm font-extralight text-gray-500 truncate">
                         <MdOutlineStoreMallDirectory />
-                        {produk.toko}
+                        {produk.user.nama_toko}
                       </div>
                     </div>
                   </div>
