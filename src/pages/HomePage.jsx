@@ -128,26 +128,24 @@ const HomePage = () => {
           },
         });
         console.log(response.data.data);
-        
+
         if (response.data.success) {
           setDataProduk(response.data.data);
-          
+
           if (cookies["token"]) {
             setCookie("isLoggedIn", true, { path: "/" });
             setCookie("token", cookies["token"], { path: "/" });
           }
-          
         } else {
           setShowLoginError(true);
         }
       } catch (error) {
         // setShowLoginError(true);
         console.log(error);
-        
       } finally {
         setLoading(false);
       }
-    }
+    };
     fetchData();
   }, []);
 
@@ -270,7 +268,7 @@ const HomePage = () => {
                 />
                 <div className="p-2">
                   <div className="text-sm font-extralight text-black">
-                    {produk.harga}
+                    Rp. {produk.variasi[0].harga.toLocaleString("id-ID")}
                   </div>
                   <div className="text-md font-medium text-black truncate">
                     {produk.nama}
