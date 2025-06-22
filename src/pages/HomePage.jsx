@@ -1,4 +1,4 @@
-import React from "react";
+import { React, useEffect, useState } from "react";
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { MdOutlineStoreMallDirectory } from "react-icons/md";
 import Navbar from "../Component/Navbar";
@@ -7,13 +7,18 @@ import produk1 from "../assets/img/produk/kursi 1.jpg";
 import produk2 from "../assets/img/produk/kursi 2.jpg";
 import produk3 from "../assets/img/produk/kursi 3.jpg";
 import { useNavigate } from "react-router-dom";
-import cookies from "react-cookies";
+import { useCookies } from "react-cookie";
+import Loading from "../Component/Loading";
+import axios from "axios";
 // import cookies from "react-cookies";
 
 const HomePage = () => {
   const navigate = useNavigate();
-  // const cookie = cookies;
-  const cookie = cookies;
+  const [dataProduk, setDataProduk] = useState([]);
+  const [cookies, setCookie, removeCookie] = useCookies();
+  const [loading, setLoading] = useState(false);
+  const apiUrl = import.meta.env.VITE_API_URL;
+
   const produkList = [
     {
       id: 1,
@@ -81,6 +86,40 @@ const HomePage = () => {
     // dan seterusnya
   ];
 
+  useEffect(() => {
+    // Simulasi pengambilan data produk dari API
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.get(`${apiUrl}/api/v1/product`, {
+          params: {
+            total: 24,
+          },
+        });
+        console.log(response.data.data);
+        
+        if (response.data.success) {
+          setDataProduk(response.data.data);
+          
+          if (cookies["token"]) {
+            setCookie("isLoggedIn", true, { path: "/" });
+            setCookie("token", cookies["token"], { path: "/" });
+          }
+          
+        } else {
+          setShowLoginError(true);
+        }
+      } catch (error) {
+        // setShowLoginError(true);
+        console.log(error);
+        
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchData();
+  }, []);
+
   return (
     <>
       <Navbar />
@@ -141,31 +180,42 @@ const HomePage = () => {
         </div>
         {/* List Produk rekomendasi Karousel */}
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2 md:gap-4 lg:gap-6">
-          {produkList.map((produk) => (
-            <div
-              onClick={() => navigate("/detailProduk")}
-              key={produk.id}
-              className="h-34 cursor-pointer hover:shadow-md rounded-xl p-2"
-            >
-              <img
-                src={produk.gambar}
-                className="w-full h-30 object-cover rounded-3xl border-2 border-gray-200 hover:scale-105 transition-all duration-300"                     
-                alt={produk.nama}
-              />
-              <div className="p-2">
-                <div className="text-sm font-extralight text-black">
-                  {produk.harga}
-                </div>
-                <div className="text-md font-medium text-black truncate">
-                  {produk.nama}
-                </div>
-                <div className="flex items-center gap-x-1 text-sm font-extralight text-gray-500">
-                  <MdOutlineStoreMallDirectory />
-                  {produk.toko}
-                </div>
+          {
+            loading ? (
+              <div className="col-span-6 flex justify-center items-center h-80">
+                <Loading w={10} h={10} />
               </div>
-            </div>
-          ))}
+            ) : (
+              <>
+                {dataProduk.map((produk) => (
+                  <div
+                    onClick={() => navigate("/detailProduk")}
+                    key={produk.id}
+                    className="h-34 cursor-pointer hover:shadow-md rounded-xl p-2"
+                  >
+                    <img
+                      src={ apiUrl + "/pict/" + produk.id + produk.path}
+                      className="w-full h-30 object-cover rounded-3xl border-2 border-gray-200 hover:scale-105 transition-all duration-300"                     
+                      alt={produk.nama}
+                    />
+                    <div className="p-2">
+                      <div className="text-sm font-extralight text-black">
+                        Rp. {(produk.variasi[0].harga).toLocaleString("id-ID")}
+                      </div>
+                      <div className="text-md font-medium text-black truncate">
+                        {produk.nama}
+                      </div>
+                      <div className="flex items-center gap-x-1 text-sm font-extralight text-gray-500">
+                        <MdOutlineStoreMallDirectory />
+                        {produk.toko}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </>
+            )
+          }
+          
         </div>
       </div>
     </>
