@@ -1,4 +1,4 @@
-import React from "react";
+import { React, useEffect, useState } from "react";
 import { useEffect, useRef } from "react";
 import { useKeenSlider } from "keen-slider/react";
 import "keen-slider/keen-slider.min.css";
@@ -14,13 +14,18 @@ import produk1 from "../assets/img/produk/kursi 1.jpg";
 import produk2 from "../assets/img/produk/kursi 2.jpg";
 import produk3 from "../assets/img/produk/kursi 3.jpg";
 import { useNavigate } from "react-router-dom";
-import cookies from "react-cookies";
+import { useCookies } from "react-cookie";
+import Loading from "../Component/Loading";
+import axios from "axios";
 // import cookies from "react-cookies";
 
 const HomePage = () => {
   const navigate = useNavigate();
-  // const cookie = cookies;
-  const cookie = cookies;
+  const [dataProduk, setDataProduk] = useState([]);
+  const [cookies, setCookie, removeCookie] = useCookies();
+  const [loading, setLoading] = useState(false);
+  const apiUrl = import.meta.env.VITE_API_URL;
+
   const produkList = [
     {
       id: 1,
@@ -111,6 +116,40 @@ const HomePage = () => {
 
     return () => clearInterval(interval); // bersihkan saat unmount
   }, [instanceRef]);
+
+  useEffect(() => {
+    // Simulasi pengambilan data produk dari API
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.get(`${apiUrl}/api/v1/product`, {
+          params: {
+            total: 24,
+          },
+        });
+        console.log(response.data.data);
+        
+        if (response.data.success) {
+          setDataProduk(response.data.data);
+          
+          if (cookies["token"]) {
+            setCookie("isLoggedIn", true, { path: "/" });
+            setCookie("token", cookies["token"], { path: "/" });
+          }
+          
+        } else {
+          setShowLoginError(true);
+        }
+      } catch (error) {
+        // setShowLoginError(true);
+        console.log(error);
+        
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchData();
+  }, []);
 
   return (
     <>
