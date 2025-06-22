@@ -1,5 +1,5 @@
-import React, { useRef, useState } from "react";
 import Slider from "react-slick"; // tambahkan import ini
+import React, { useEffect, useRef, useState } from "react";
 
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { IoChatboxEllipsesOutline } from "react-icons/io5";
@@ -13,7 +13,10 @@ import produk1 from "../assets/img/produk/kursi 1.jpg";
 import produk2 from "../assets/img/produk/kursi 2.jpg";
 import produk3 from "../assets/img/produk/kursi 3.jpg";
 import fotoToko from "../assets/img/market foto.png";
-import { useLocation, useNavigate } from "react-router-dom";
+import { data, useLocation, useNavigate } from "react-router-dom";
+import axios from "axios";
+
+import Loading from "../Component/Loading";
 
 const produkList = [
   {
@@ -81,6 +84,7 @@ const produkList = [
   },
   // dan seterusnya
 ];
+
 const produk = {
   nama: "Kursi Gaming Ergonomis",
   harga: 100000,
@@ -93,9 +97,15 @@ const produk = {
 };
 
 const DetailProdukPage = () => {
+  const apiUrl = import.meta.env.VITE_API_URL;
+  const [indexStok, setIndexStok] = useState(0);
   const location = useLocation();
+  const idProduk = location.pathname.split("/").pop();
   const navigate = useNavigate();
+  const [fotoProduk, setFotoProduk] = useState([]);
   const [fotoUtama, setFotoUtama] = useState(produk.fotoProduk[0]);
+  const [loadingProduk, setLoadingProduk] = useState(false);
+  const [dataProduk, setDataProduk] = useState();
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [zoom, setZoom] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0 });
@@ -172,6 +182,42 @@ const DetailProdukPage = () => {
     ],
   };
 
+  useEffect(() => {
+    
+    // Simulasi pengambilan data produk berdasarkan idProduk
+    const fetchProduk = async () => {
+      setLoadingProduk(true);
+      try {
+        const response = await axios.get(`${apiUrl}/api/v1/product/` + idProduk, {});
+        console.log(response.data.data);
+        
+        if (response.data.success) {
+          setDataProduk(response.data.data);
+          // const fotolist = response.data.data.path.split(",");
+          // setFotoProduk(fotolist);
+
+          const fotoList = response.data.data.path.split(",");
+          const fotoObj = fotoList.map((item, i) => ({ [`item${i+1}`]: item }));
+          setFotoProduk(fotoObj);
+
+        } else {
+          setShowLoginError(true);
+        }
+      } catch (error) {
+        // setShowLoginError(true);
+        console.log(error);
+        
+      } finally {
+        setLoadingProduk(false);
+      }
+    }
+
+    fetchProduk();
+
+  }, []);
+
+
+
   return (
     <>
       <Navbar />
@@ -185,82 +231,168 @@ const DetailProdukPage = () => {
             Nama Toko /
           </div>
           <div className="text-sm text-[#EE6D3F] hover:text-[#bc5b38] cursor-pointer">
-            {produk.nama}
+            {
+              !loadingProduk && (
+                <>
+                  {dataProduk ? dataProduk.nama : "-"}
+                </>
+              )
+            }
           </div>
         </div>
         {/* Konten Pembelian Produk  */}
         <div className="mb-10">
           <div className="flex flex-col md:flex-row gap-10">
-            {/* Gambar Utama */}
-            <div className="basis-1/2 max-w-4xl">
-              <div
-                className="flex rounded-xl border-[1px] border-gray-500 max-h-[400px] h-[350px] items-center justify-center overflow-hidden"
-                onMouseMove={handleMouseMove}
-                onMouseEnter={() => setZoom(true)}
-                onMouseLeave={() => setZoom(false)}
-              >
-                <img
-                  src={fotoUtama}
-                  className="h-full w-full object-contain rounded-xl transition-transform duration-300 cursor-zoom-in"
-                  style={
-                    zoom
-                      ? {
-                          transform: "scale(2)",
-                          transformOrigin: "center",
-                          transformOrigin: `${position.x}% ${position.y}%`,
-                          transition: "transform 0.2s ease-in-out",
-                        }
-                      : { transform: "scale(1)" }
-                  }
-                  alt={produk.nama}
-                />
-              </div>
-              {/* foto lainnya - desktop */}
-              <div className="flex md:hidden gap-2 p-2">
-                {produk.fotoProduk.map((foto, index) => (
-                  <div
-                    key={index}
-                    onClick={() => {
-                      setFotoUtama(foto);
-                      setSelectedIndex(index);
-                    }}
-                    className={`h-20 w-20 rounded-xl cursor-pointer transition-all duration-200 
-                 border-[1px] hover:border-[#EE6D3F] ${
-                   selectedIndex === index
-                     ? "border-[#EE6D3F] ring-2 ring-[#EE6D3F]"
-                     : "border-gray-500"
-                 }`}
-                  >
-                    <img
-                      src={foto}
-                      className="rounded-xl h-full w-full object-cover"
-                      alt={`foto-${index}`}
-                    />
-                  </div>
-                ))}
-              </div>
-            </div>
+            {
+              loadingProduk ? (
+                <div className="col-span-6 flex justify-center items-center w-full">
+                  <Loading w={10} h={10} />
+                </div>
+              ) : (
+                  <>
+                      
+                      {/* Gambar Utama */}
+                      <div className="basis-1/2 max-w-4xl">
+                        <div
+                          className="flex rounded-xl border-[1px] border-gray-500 max-h-[400px] h-[350px] items-center justify-center overflow-hidden"
+                          onMouseMove={handleMouseMove}
+                          onMouseEnter={() => setZoom(true)}
+                          onMouseLeave={() => setZoom(false)}
+                        >
+                          <img
+                            src={fotoUtama}
+                            className="h-full w-full object-contain rounded-xl transition-transform duration-300 cursor-zoom-in"
+                            style={
+                              zoom
+                                ? {
+                                    transform: "scale(2)",
+                                    transformOrigin: "center",
+                                    transformOrigin: `${position.x}% ${position.y}%`,
+                                    transition: "transform 0.2s ease-in-out",
+                                  }
+                                : { transform: "scale(1)" }
+                            }
+                            alt={produk.nama}
+                          />
+                        </div>
+                        {/* foto lainnya - desktop */}
+                        <div className="flex md:hidden gap-2 p-2">
+                          {fotoProduk.map((foto, index) => (
+                            <div
+                              key={index}
+                              onClick={() => {
+                                setFotoUtama(foto);
+                                setSelectedIndex(index);
+                              }}
+                              className={`h-20 w-20 rounded-xl cursor-pointer transition-all duration-200 
+                          border-[1px] hover:border-[#EE6D3F] ${
+                            selectedIndex === index
+                              ? "border-[#EE6D3F] ring-2 ring-[#EE6D3F]"
+                              : "border-gray-500"
+                          }`}
+                            >
+                              <img
+                                src={foto}
+                                className="rounded-xl h-full w-full object-cover"
+                                alt={`foto-${index}`}
+                              />
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                  </>
+              )
+            }
 
             {/* Detail Produk */}
             <div className="basis-1/2 px-2 max-w-4xl">
-              <div className="mb-2 text-3xl">{produk.nama}</div>
+              <div className="mb-2 text-3xl">
+                  {
+                    loadingProduk ? (
+                      <div className="col-span-6 flex justify-center items-center h-full">
+                        <Loading w={10} h={10} />
+                      </div>
+                    ) : (
+                        <div className="flex items-end">
+                          <div>
+                           {dataProduk ? dataProduk.nama  : ""}
+                          </div>
+                          <div className="text-sm text-gray-500 ml-2">
+                           {dataProduk ? "(" +  dataProduk.variasi[indexStok].nama + ")"  : ""}
+                          </div>
+                           {/* " (" + dataProduk.variasi[indexStok].nama + ")" */}
+
+                        </div>
+                    )
+                  }
+              </div>
               <div className="text-xl font-extralight">
-                Rp. {produk.harga.toLocaleString("id-ID")}
+                {
+                    loadingProduk ? (
+                      <></>
+                    ) : (
+                        <>
+                           Rp. {dataProduk ? dataProduk.variasi[indexStok].harga.toLocaleString("id-ID") : "-"}
+                        </>
+                    )
+                  }
+                
               </div>
               <div className="border-b-2 rounded-xl border-[#D2D0D0] mt-4" />
 
               {/* Deskripsi */}
               <div className="">
                 <h1 className="mt-4 text-xl">Deskripsi</h1>
-                <div className="text-sm font-extralight text-black overflow-hidden transition-all duration-300 h-[175px] overflow-y-auto">
-                  {produk.deskripsi}
+                <div className="text-sm font-extralight text-black overflow-hidden transition-all duration-300 md:h-[150px] h-[50px] overflow-y-auto">
+                  {
+                    loadingProduk ? (
+                      <div className="col-span-6 flex justify-center items-center h-full">
+                        <Loading w={10} h={10} />
+                      </div>
+                    ) : (
+                        <>
+                           {dataProduk ? dataProduk.desc : "-"}
+                        </>
+                    )
+                  }
+                </div>
+              </div>
+              <div className="variasi mb-4">
+                <div className="variasi flex gap-3">
+                  {
+                    !loadingProduk && dataProduk && dataProduk.variasi.length > 1 && Array.isArray(dataProduk.variasi) && (
+                      <>
+                        {dataProduk.variasi.map((variasi, index) => (
+                          <div
+                            onClick={() => {
+                              setIndexStok(index);
+                            }} 
+                            key={index} 
+                            className={`${index == indexStok ? 'bg-[#EE6D3F] text-white' : 'bg-gray-200'} px-2 py-1 rounded-lg cursor-pointer hover:bg-[#EE6D3F]  hover:text-white transition-colors duration-300`}>
+                            {variasi.nama} {/* tampilkan nama variasi, atau info lain */}
+                          </div>
+                        ))}
+                      </>
+                    )
+                  }
                 </div>
               </div>
               <div className="mt-4 hidden md:block">
                 <span className="text-[#EE6D3F] text-sm font-semibold">
                   Stok Produk :{" "}
                 </span>
-                <span className="text-sm font-semibold">{stokProduk} </span>
+                <span className="text-sm font-semibold">
+                  {
+                    loadingProduk ? (
+                      <>
+                      </>
+                    ) : (
+                        <>
+                           {dataProduk ? dataProduk.variasi[0].stok : "-"}
+                        </>
+                    )
+                  }
+                </span>
               </div>
               <div className="border-b-2 rounded-xl border-[#D2D0D0] " />
             </div>
@@ -269,7 +401,7 @@ const DetailProdukPage = () => {
           {/* Galeri dan Tombol Beli */}
           <div className="hidden md:flex flex-col md:flex-row mt-2 gap-4 ">
             <div className="md:basis-1/2 flex gap-2 p-2 max-w-4xl">
-              {produk.fotoProduk.map((foto, index) => (
+              {fotoProduk.map((foto, index) => (
                 <div
                   key={index}
                   onClick={() => {
@@ -293,78 +425,86 @@ const DetailProdukPage = () => {
             </div>
 
             {/* Jumlah & Beli — untuk Desktop */}
-            <div className="basis-1/2 hidden md:block md:max-w-4xl md:px-4">
-              <div className="flex justify-between">
-                <h1 className="text-xl">Jumlah</h1>
-                <div className="flex gap-x-2 items-center">
-                  <div
-                    onClick={() => jumlahProdukHandler("kurang")}
-                    className="bg-[#E1DDDD] px-2 rounded-md cursor-pointer hover:bg-[#cac8c8]"
-                  >
-                    -
+            {
+              !loadingProduk && (
+                <div className="basis-1/2 hidden md:block md:max-w-4xl md:px-4">
+                  <div className="flex justify-between">
+                    <h1 className="text-xl">Jumlah</h1>
+                    <div className="flex gap-x-2 items-center">
+                      <div
+                        onClick={() => jumlahProdukHandler("kurang")}
+                        className="bg-[#E1DDDD] px-2 rounded-md cursor-pointer hover:bg-[#cac8c8]"
+                      >
+                        -
+                      </div>
+                      <div className="bg-[#E1DDDD] px-5 rounded-md">
+                        {jumlahProduk}
+                      </div>
+                      <div
+                        onClick={() => jumlahProdukHandler("tambahkan")}
+                        className="bg-[#E1DDDD] px-2 rounded-md cursor-pointer hover:bg-[#cac8c8]"
+                      >
+                        +
+                      </div>
+                    </div>
                   </div>
-                  <div className="bg-[#E1DDDD] px-5 rounded-md">
-                    {jumlahProduk}
-                  </div>
-                  <div
-                    onClick={() => jumlahProdukHandler("tambahkan")}
-                    className="bg-[#E1DDDD] px-2 rounded-md cursor-pointer hover:bg-[#cac8c8]"
-                  >
-                    +
+                  <div className="flex gap-x-2 mt-4">
+                    <button
+                      onClick={() => setOpenModal(true)}
+                      className="p-2 border-black border-2 rounded-xl hover:text-[#EE6D3F] hover:border-[#EE6D3F] cursor-pointer transition-all duration-200"
+                    >
+                      <FaShareNodes className="hover:scale-125 transition-transform duration-300" />
+                    </button>
+                    <div className="bg-[#E1DDDD] hover:bg-gray-300 w-fit p-2 text-xl rounded-lg cursor-pointer">
+                      <AiOutlineShoppingCart />
+                    </div>
+                    <div className="flex bg-[#EE6D3F] hover:bg-[#cf582d] font-semibold text-white justify-center items-center w-full rounded-lg cursor-pointer">
+                      Beli
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div className="flex gap-x-2 mt-4">
-                <button
-                  onClick={() => setOpenModal(true)}
-                  className="p-2 border-black border-2 rounded-xl hover:text-[#EE6D3F] hover:border-[#EE6D3F] cursor-pointer transition-all duration-200"
-                >
-                  <FaShareNodes className="hover:scale-125 transition-transform duration-300" />
-                </button>
-                <div className="bg-[#E1DDDD] hover:bg-gray-300 w-fit p-2 text-xl rounded-lg cursor-pointer">
-                  <AiOutlineShoppingCart />
-                </div>
-                <div className="flex bg-[#EE6D3F] hover:bg-[#cf582d] font-semibold text-white justify-center items-center w-full rounded-lg cursor-pointer">
-                  Beli
-                </div>
-              </div>
-            </div>
+              )
+            }
           </div>
           {/* Jumlah & Beli — Fixed Bottom di hp */}
-          <div className="fixed bottom-0 left-0 right-0 bg-white shadow-black shadow-2xl p-4 border-t md:hidden z-50 ">
-            <div className="">
-              <span className="text-[#EE6D3F] text-xs font-semibold">
-                Stok Produk :
-              </span>
-              <span className="text-xs font-semibold">10 </span>
-            </div>
-            <div className="flex justify-between items-center">
-              <h1 className="text-base font-medium">Jumlah</h1>
-              <div className="flex gap-x-2 items-center">
-                <div className="bg-[#E1DDDD] px-2 rounded-md cursor-pointer hover:bg-[#cac8c8]">
-                  -
+          {
+            !loadingProduk && (
+              <div className="fixed bottom-0 left-0 right-0 bg-white shadow-black shadow-2xl p-4 border-t md:hidden z-50 ">
+                <div className="">
+                  <span className="text-[#EE6D3F] text-xs font-semibold">
+                    Stok Produk :
+                  </span>
+                  <span className="text-xs font-semibold">10 </span>
                 </div>
-                <div className="bg-[#E1DDDD] px-5 rounded-md">0</div>
-                <div className="bg-[#E1DDDD] px-2 rounded-md cursor-pointer hover:bg-[#cac8c8]">
-                  +
+                <div className="flex justify-between items-center">
+                  <h1 className="text-base font-medium">Jumlah</h1>
+                  <div className="flex gap-x-2 items-center">
+                    <div className="bg-[#E1DDDD] px-2 rounded-md cursor-pointer hover:bg-[#cac8c8]">
+                      -
+                    </div>
+                    <div className="bg-[#E1DDDD] px-5 rounded-md">0</div>
+                    <div className="bg-[#E1DDDD] px-2 rounded-md cursor-pointer hover:bg-[#cac8c8]">
+                      +
+                    </div>
+                  </div>
+                </div>
+                <div className="flex gap-x-2 mt-4">
+                  <div
+                    onClick={() => setOpenModal(true)}
+                    className="p-2 border-black border-2 rounded-xl hover:text-[#EE6D3F] hover:border-[#EE6D3F] cursor-pointer transition-all duration-200"
+                  >
+                    <FaShareNodes className="hover:scale-125 transition-transform duration-300" />
+                  </div>
+                  <div className="bg-[#E1DDDD] w-fit p-2 text-xl rounded-lg">
+                    <AiOutlineShoppingCart />
+                  </div>
+                  <div className="flex bg-[#EE6D3F] font-semibold text-white justify-center items-center w-full rounded-lg cursor-pointer">
+                    Beli
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="flex gap-x-2 mt-4">
-              <div
-                onClick={() => setOpenModal(true)}
-                className="p-2 border-black border-2 rounded-xl hover:text-[#EE6D3F] hover:border-[#EE6D3F] cursor-pointer transition-all duration-200"
-              >
-                <FaShareNodes className="hover:scale-125 transition-transform duration-300" />
-              </div>
-              <div className="bg-[#E1DDDD] w-fit p-2 text-xl rounded-lg">
-                <AiOutlineShoppingCart />
-              </div>
-              <div className="flex bg-[#EE6D3F] font-semibold text-white justify-center items-center w-full rounded-lg cursor-pointer">
-                Beli
-              </div>
-            </div>
-          </div>
+            )
+          }
         </div>
         {/* Bagian Toko  */}
         <div className="flex justify-between items-center px-4 py-2 border-[1px] border-[#ADB0B6] shadow-xl rounded-xl">
