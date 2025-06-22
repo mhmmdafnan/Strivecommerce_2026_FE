@@ -189,7 +189,7 @@ const HomePage = () => {
               <>
                 {dataProduk.map((produk) => (
                   <div
-                    onClick={() => navigate("/detailProduk")}
+                    onClick={() => navigate("/detailProduk/" + produk.id)}
                     key={produk.id}
                     className="h-34 cursor-pointer hover:shadow-md rounded-xl p-2"
                   >

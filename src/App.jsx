@@ -23,7 +23,7 @@ function App() {
         <Routes>
           {/* Halaman publik */}
           <Route path="/" element={<HomePage />} />
-          <Route path="/detailProduk" element={<DetailProdukPage />} />
+          <Route path="/detailProduk/:id" element={<DetailProdukPage />} />
           
           <Route element={<LoginRoutes />}>
             <Route path="/akunSaya" element={<AkunSayaPage />} />
