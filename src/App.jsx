@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import "keen-slider/keen-slider.min.css";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 import HomePage from "./pages/HomePage.jsx";
 import SignupPage from "./pages/SignupPage.jsx";
@@ -24,7 +25,7 @@ function App() {
           {/* Halaman publik */}
           <Route path="/" element={<HomePage />} />
           <Route path="/detailProduk" element={<DetailProdukPage />} />
-          
+
           <Route element={<LoginRoutes />}>
             <Route path="/akunSaya" element={<AkunSayaPage />} />
             <Route path="/tokoSaya" element={<TokoSayaPage />} />
@@ -34,11 +35,13 @@ function App() {
             <Route path="/formUMKM" element={<FormUMKMPage />} />
             <Route path="/toko" element={<TokoPage />} />
             <Route path="/tambahProduk" element={<TambahProdukPage />} />
-            <Route path="/editProduk/:idProduk" element={<TambahProdukPage />} />
+            <Route
+              path="/editProduk/:idProduk"
+              element={<TambahProdukPage />}
+            />
 
             <Route path="/adminUmkmList" element={<AdminUmkmPage />} />
             <Route path="/adminPengajuan" element={<AdminPengajuanPage />} />
-
           </Route>
 
           <Route path="/register" element={<SignupPage />} />

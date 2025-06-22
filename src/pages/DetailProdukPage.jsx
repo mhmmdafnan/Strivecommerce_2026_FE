@@ -1,6 +1,5 @@
 import React, { useRef, useState } from "react";
-import { useKeenSlider } from "keen-slider/react";
-import "keen-slider/keen-slider.min.css";
+import Slider from "react-slick"; // tambahkan import ini
 
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { IoChatboxEllipsesOutline } from "react-icons/io5";
@@ -125,20 +124,53 @@ const DetailProdukPage = () => {
     }
   };
 
-  const [sliderRef, instanceRef] = useKeenSlider({
-    slides: {
-      perView: 2,
-      spacing: 10,
-    },
-    breakpoints: {
-      "(min-width: 768px)": {
-        slides: { perView: 4, spacing: 15 },
+  const CustomPrev = (props) => (
+    <div
+      className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white p-2 rounded-full shadow hover:bg-gray-100 cursor-pointer"
+      onClick={props.onClick}
+    >
+      <FaChevronLeft />
+    </div>
+  );
+
+  const CustomNext = (props) => (
+    <div
+      className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white p-2 rounded-full shadow hover:bg-gray-100 cursor-pointer"
+      onClick={props.onClick}
+    >
+      <FaChevronRight />
+    </div>
+  );
+
+  const sliderSettings = {
+    dots: false,
+    infinite: true,
+    speed: 500,
+    slidesToShow: 6,
+    slidesToScroll: 1,
+    autoplay: true,
+    autoplaySpeed: 3000,
+    responsive: [
+      {
+        breakpoint: 1024,
+        settings: {
+          slidesToShow: 6,
+        },
       },
-      "(min-width: 1024px)": {
-        slides: { perView: 5, spacing: 20 },
+      {
+        breakpoint: 768,
+        settings: {
+          slidesToShow: 4,
+        },
       },
-    },
-  });
+      {
+        breakpoint: 480,
+        settings: {
+          slidesToShow: 2,
+        },
+      },
+    ],
+  };
 
   return (
     <>
@@ -364,33 +396,20 @@ const DetailProdukPage = () => {
         <div className="relative mt-10">
           <h2 className="text-xl mb-4">Produk lainnya di toko ini</h2>
 
-          {/* Panah Kiri */}
-          <button
-            onClick={() => instanceRef?.current?.prev()}
-            className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white p-2 rounded-full shadow hover:bg-gray-100"
+          <Slider
+            {...sliderSettings}
+            prevArrow={<CustomPrev />}
+            nextArrow={<CustomNext />}
           >
-            <FaChevronLeft />
-          </button>
-
-          {/* Panah Kanan */}
-          <button
-            onClick={() => instanceRef?.current?.next()}
-            className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white p-2 rounded-full shadow hover:bg-gray-100"
-          >
-            <FaChevronRight />
-          </button>
-
-          {/* Slider */}
-          <div ref={sliderRef} className="keen-slider pb-4">
             {produkList.map((item) => (
               <div
                 key={item.id}
-                className="keen-slider__slide p-2 hover:shadow-md rounded-xl cursor-pointer"
+                className="p-2 hover:shadow-md rounded-xl cursor-pointer"
               >
                 <img
                   src={item.gambar}
                   alt={item.nama}
-                  className="w-full h-40 object-contain rounded-xl border-[1px] border-gray-600 hover:scale-105 transition-all duration-300"
+                  className="w-full h-40 object-contain rounded-xl border border-gray-600 hover:scale-105 transition-all duration-300"
                 />
                 <div className="mt-2 text-sm text-black font-light">
                   {item.harga}
@@ -401,7 +420,7 @@ const DetailProdukPage = () => {
                 <div className="text-sm text-gray-500">{item.toko}</div>
               </div>
             ))}
-          </div>
+          </Slider>
         </div>
       </div>
       <ModalShare
