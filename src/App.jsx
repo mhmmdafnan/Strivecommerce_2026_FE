@@ -16,15 +16,21 @@ import FormUMKMPage from "./pages/FormUMKMPage.jsx";
 import LoadingAcc from "./pages/LoadingACC.jsx";
 import LoginRoutes from "./Component/LoginRoutes.jsx";
 import TambahProdukPage from "./Component/TambahProduk.jsx";
+import Navbar from "./Component/Navbar.jsx";
+import { useState } from "react";
 
 function App() {
+
+  const [isLoginModal, setIsLoginModal] = useState(false);
+
   return (
     <>
       <BrowserRouter>
+        <Navbar isLoginModal={isLoginModal} setIsLoginModal={setIsLoginModal}/>
         <Routes>
           {/* Halaman publik */}
           <Route path="/" element={<HomePage />} />
-          <Route path="/detailProduk/:id" element={<DetailProdukPage />} />
+          <Route path="/detailProduk/:id" element={<DetailProdukPage isLoginModal={isLoginModal} setIsLoginModal={setIsLoginModal} />}  />
           
           <Route element={<LoginRoutes />}>
             <Route path="/akunSaya" element={<AkunSayaPage />} />
@@ -38,6 +44,7 @@ function App() {
             <Route
               path="/editProduk/:idProduk"
               element={<TambahProdukPage />}
+              
             />
 
             <Route path="/adminUmkmList" element={<AdminUmkmPage />} />

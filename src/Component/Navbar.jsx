@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 // import { FaAlignJustify } from "react-icons/fa6";
 import {
@@ -18,12 +18,13 @@ import Logo from "../assets/img/logo.png";
 import ToggleDarkMode from "../Component/ToggleDarkMode.jsx"
 import LoginModal from "./LoginModal.jsx";
 
-export default function Navbar() {
+export default function Navbar({isLoginModal, setIsLoginModal}) {
   const [isSideMenuOpen, setMenu] = useState(false);
-  const [isLoginModalOpen, setLoginModalOpen] = useState(false);
+  // const [isLoginModalOpen, setLoginModalOpen] = useState(false);
   const navigate = useNavigate();
+  
   const showLoginModal = () => {
-    setLoginModalOpen(true);
+    setIsLoginModal(true);
   };
 
   const [cookies, setCookie, removeCookie] = useCookies();
@@ -35,17 +36,20 @@ export default function Navbar() {
   const onSuccessLogin = (data) => {
     console.log(data);
     setCookie("isLoggedIn", true);
-    setCookie("token", data.token);
+    setCookie("token", data.data.token);
+    setCookie("user_id", data.data.id_user)
     
-    setLoginModalOpen(false)
-    console.log(cookies["token"]);
+    setIsLoginModal(false)
+    // console.log(cookies["token"], data.data.token);
   }
+
+
 
   return (
     <main className="relative">
       <LoginModal
-        isOpen={isLoginModalOpen}
-        onClose={() => setLoginModalOpen(false)}
+        isOpen={isLoginModal}
+        onClose={() => setIsLoginModal(false)}
         onSuccess={(data) => onSuccessLogin(data)}
       />
       <nav className="flex justify-between px-8 items-center py-4">

@@ -15,8 +15,10 @@ import produk3 from "../assets/img/produk/kursi 3.jpg";
 import fotoToko from "../assets/img/market foto.png";
 import { data, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
-
+import { useCookies } from "react-cookie";
+import LoginModal from "../Component/LoginModal";
 import Loading from "../Component/Loading";
+
 
 const produkList = [
   {
@@ -96,7 +98,7 @@ const produk = {
   fotoProduk: [produk1, produk2, produk3],
 };
 
-const DetailProdukPage = () => {
+const DetailProdukPage = ({isLoginModal, setIsLoginModal}) => {
   const apiUrl = import.meta.env.VITE_API_URL;
   const [indexStok, setIndexStok] = useState(0);
   const location = useLocation();
@@ -114,6 +116,8 @@ const DetailProdukPage = () => {
   const [openModal, setOpenModal] = useState(false);
   const shareUrl = `${window.location.origin}${location.pathname}`;
   const shareText = `Cek produk ${produk.nama}, cuma di sini!`;
+  const [loadingKeranjang, setLoadingKeranjang] = useState();
+  const [cookies, setCookie, removeCookie] = useCookies(["isLoggedIn"]);
 
   const handleMouseMove = (e) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -142,6 +146,19 @@ const DetailProdukPage = () => {
       <FaChevronLeft />
     </div>
   );
+  
+  const onSuccessLogin = (data) => {
+    console.log(data);
+    setCookie("isLoggedIn", true);
+    setCookie("token", data.data.token);
+    console.log(data.data.id_user);
+    
+    setCookie("id_user", data.data.id_user)
+    
+    setIsLoginModal(false)
+    // console.log(cookies["token"], data.data.token);
+  }
+
 
   const CustomNext = (props) => (
     <div
@@ -182,6 +199,33 @@ const DetailProdukPage = () => {
     ],
   };
 
+  const onKeranjangClick = () => {
+    if (!cookies.isLoggedIn){
+      setIsLoginModal(true);
+    }else{
+      setLoadingKeranjang(true);
+      
+      console.log(cookies.id_user);      
+      console.log(dataProduk.variasi[indexStok].id);
+      console.log(dataProduk.id)
+      
+      axios.post(`${apiUrl}/api/v1/add_to_cart`, {
+        productId : dataProduk.id,
+        userId : cookies.id_user,
+        variasiId : dataProduk.variasi[indexStok].id,
+        quantity : jumlahProduk,
+      })
+      .then((res) => {
+          console.log("berhasil: ", res);
+      }).catch(() => {
+        alert("Gagal menambahkan ke keranjang!");
+        console.error(err);
+      }).finally(() => {
+        setLoadingKeranjang(false);
+      });
+    }
+  }
+
   useEffect(() => {
     
     // Simulasi pengambilan data produk berdasarkan idProduk
@@ -220,7 +264,12 @@ const DetailProdukPage = () => {
 
   return (
     <>
-      <Navbar />
+      <LoginModal
+        isOpen={isLoginModal}
+        onClose={() => setIsLoginModal(false)}
+        onSuccess={(data) => onSuccessLogin(data)}
+      />
+      
       <div className="max-w-7xl mx-auto px-5 md:px-20 py-5 mb-20 md:mt-0">
         {/* Navigation */}
         <div className="flex gap-x-1 p-1 my-2">
@@ -455,8 +504,20 @@ const DetailProdukPage = () => {
                     >
                       <FaShareNodes className="hover:scale-125 transition-transform duration-300" />
                     </button>
-                    <div className="bg-[#E1DDDD] hover:bg-gray-300 w-fit p-2 text-xl rounded-lg cursor-pointer">
-                      <AiOutlineShoppingCart />
+                    <div className="bg-[#E1DDDD] hover:bg-gray-300 w-10 p-2 text-xl rounded-lg cursor-pointer" onClick={onKeranjangClick}>
+                      {
+                        loadingKeranjang ? (
+                          <>
+                            <div className="col-span-6 flex  justify-center items-center h-full">
+                              <Loading w={4} h={4} />
+                            </div>
+                          </>
+                        ) : (
+                          <>
+                            <AiOutlineShoppingCart />
+                          </>
+                        )
+                      }
                     </div>
                     <div className="flex bg-[#EE6D3F] hover:bg-[#cf582d] font-semibold text-white justify-center items-center w-full rounded-lg cursor-pointer">
                       Beli
@@ -495,8 +556,20 @@ const DetailProdukPage = () => {
                   >
                     <FaShareNodes className="hover:scale-125 transition-transform duration-300" />
                   </div>
-                  <div className="bg-[#E1DDDD] w-fit p-2 text-xl rounded-lg">
-                    <AiOutlineShoppingCart />
+                  <div className="bg-[#E1DDDD] w-10 p-2 text-xl rounded-lg" onClick={onKeranjangClick}>
+                    {
+                      loadingKeranjang ? (
+                        <>
+                          <div className="col-span-6 flex justify-center items-center h-full">
+                            <Loading w={4} h={4} />
+                          </div>
+                        </>
+                      ) : (
+                        <>
+                          <AiOutlineShoppingCart />
+                        </>
+                      )
+                    }
                   </div>
                   <div className="flex bg-[#EE6D3F] font-semibold text-white justify-center items-center w-full rounded-lg cursor-pointer">
                     Beli
@@ -508,29 +581,46 @@ const DetailProdukPage = () => {
         </div>
         {/* Bagian Toko  */}
         <div className="flex justify-between items-center px-4 py-2 border-[1px] border-[#ADB0B6] shadow-xl rounded-xl">
-          <div className="flex items-center gap-x-5 ">
-            <div className="h-16 w-16 bg-slate-300 rounded-full ">
-              <img
-                src={fotoToko}
-                className="object-contain h-full w-full p-2"
-                alt=""
-              />
-            </div>
-            <div onClick={() => navigate("/toko")} className="cursor-pointer">
-              <div className="text-xl font-semibold hover:text-[#EE6D3F]">
-                Toko
-              </div>
-              <div className="text-xs ">XX barang terjual</div>
-            </div>
-          </div>
-          <div
-            onClick={() => {
-              window.open("https://wa.me/6281225759764", "_blank");
-            }}
-            className="text-xl p-1 hover:scale-125  cursor-pointer"
-          >
-            <IoChatboxEllipsesOutline />
-          </div>
+          
+          {
+            loadingProduk ? (
+              <>
+                <div className="col-span-6 flex justify-center items-center h-full">
+                  <Loading w={7} h={7} />
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="flex items-center gap-x-5 ">
+                  <div className="h-16 w-16 bg-slate-300 rounded-full ">
+                    <img
+                      src={fotoToko}
+                      className="object-contain h-full w-full p-2"
+                      alt=""
+                    />
+                  </div>
+                  <div onClick={() => navigate("/toko")} className="cursor-pointer">
+                    <div className="text-xl font-semibold hover:text-[#EE6D3F]">
+                      {dataProduk ? dataProduk.user.nama_toko : ""}
+                    </div>
+                    <div className="text-xs ">XX barang terjual</div>
+                  </div>
+                </div>
+
+                <div
+                  onClick={() => {
+                    window.open(`https://wa.me/62${dataProduk ? dataProduk.user.telp.replace(/^0/,"") : ``}`, "_blank");
+                  }}
+                  className="text-xl p-1 hover:scale-125  cursor-pointer"
+                >
+                  <IoChatboxEllipsesOutline />
+                </div>
+              </>
+
+
+            )
+          }
+          
         </div>
         {/* Rekomendasi Produk  */}
         <div className="relative mt-10">

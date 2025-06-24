@@ -120,7 +120,7 @@ const HomePage = () => {
 
   return (
     <>
-      <Navbar />
+
       {/* container */}
       <div className="max-w-7xl mx-auto font-bold h-screen px-5 md:px-20 py-5">
         {/* Produk Utama */}
