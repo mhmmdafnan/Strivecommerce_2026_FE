@@ -31,38 +31,38 @@ const FormUMKMPage = () => {
 
     return (
         <>
-            <Navbar/>
+            {/* <Navbar/> */}
 
 
             <div className="flex justify-center bg-white lg:h-[calc(100vh-72px)] ">
                 <div className="pembungkus-utama mt-4 lg:mt-10 w-full md:max-w-[800px] lg:max-w-[1000px]">
 
-                    <div className="mx-4 md:mx-8 lg:mx-0">
-                        <h1 className="font-semibold text-md">Anda Pemilik Usaha UMKM? Buka Toko anda sekarang!</h1>
+                    <div className="mx-4 md:mx-8 lg:mx-0 text-center mb-28">
+                        <h1 className="font-semibold text-3xl">Anda Pemilik Usaha UMKM? Buka Toko anda sekarang!</h1>
                         <p className="text-[10px]">Dengan membuka toko anda di STRIVE anda bisa memasarkan produk UMKM anda secara Online</p>
                     </div>
 
                     <div className="form-dan-alur lg:flex justify-between mt-6 gap-4 mx-4 md:mx-8 lg:mx-0 lg:h-[calc(100vh-180px)]">
-                        <div className="div-kiri hidden lg:block lg:relative w-full lg:w-fit">
+                        <div className="div-kiri hidden text-gray-700 lg:block lg:relative w-full lg:w-fit">
 
                             
                             <form action="text-sm">
-                                <div className="font-semibold">Informasi UMKM</div>
-                                <div className="ml-4">
-                                    <label htmlFor="nama_umkm">Nama UMKM</label>
-                                    <div>
+                                <div className="font-semibold mb-4">Informasi UMKM</div>
+                                <div className="">
+                                    <label htmlFor="nama_umkm" className="">Nama UMKM</label>
+                                    <div className="mb-2">
                                         <input className="border-2 min-w-80 px-2 py-1 bg-gray-200 rounded-xl" type="text" id="nama_umkm" name="nama_umkm" value={data.nama_umkm} onChange={handleChange} />
                                     </div>
 
                                     <label htmlFor="no_telp">No. Telepon</label>
-                                    <div>
+                                    <div className="mb-2">
                                         <input className="border-2 px-2 py-1 min-w-80 bg-gray-200 rounded-xl" type="text" id="no_telp" name="no_telp" value={data.no_telp} onChange={handleChange} />
                                     </div>
                                     <label htmlFor="kategori">Kategori</label>
                                     <div>
                                         
                                         <select
-                                            className="appearance-none hover:placeholder-shown:bg-emerald-500 relative  bg-transparent ring-0 outline-none border border-neutral-500 text-neutral-900  text-sm font-bold rounded-lg block p-2.5"
+                                            className="appearance-none hover:placeholder-shown:bg-emerald-500 relative w-48 bg-transparent ring-0 outline-none border border-neutral-500 text-neutral-900  text-sm font-bold rounded-lg block p-2.5"
                                             value={data.kategori}
                                             onChange={handleChange} 
                                             name="kategori"
@@ -76,8 +76,8 @@ const FormUMKMPage = () => {
                                     </div>
                                 </div>
 
-                                <div className="font-semibold mt-4">Dokumen Terkait</div>
-                                <div className="ml-4">
+                                <div className="font-semibold mt-4 mb-4">Dokumen Terkait</div>
+                                <div className="">
                                     <label htmlFor="file">KTP Pemilik UMKM</label>
                                     <div>
                                         <input

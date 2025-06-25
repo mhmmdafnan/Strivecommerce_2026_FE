@@ -199,7 +199,7 @@ const KeranjangPage = () => {
 
   return (
     <div className="w-full  ">
-        <Navbar />
+        {/* <Navbar /> */}
         
         <div className="header p-4">
             <h1>Keranjang</h1>

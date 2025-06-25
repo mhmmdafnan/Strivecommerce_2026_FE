@@ -27,7 +27,7 @@ const AkunSayaPage = () => {
 
   return (
     <>
-      <Navbar />
+      {/* <Navbar /> */}
       <div className="max-w-7xl mx-auto px-5 md:px-10 py-5 mb-20 md:mt-0">
         <h1 className="text-sm text-gray-600 cursor-pointer">Akun Saya</h1>
 
@@ -35,7 +35,7 @@ const AkunSayaPage = () => {
           <div className="flex flex-col md:flex-row gap-5 md:gap-10 mb-6 justify-center">
             <div className="flex justify-end">
               <div
-                // onClick={() => navigate("/ubahDataDiri")}
+                onClick={() => navigate("/formUMKM")}
                 className="md:hidden flex w-fit items-center justify-center text-white py-1 px-8 rounded-md bg-[#EE6D3F] hover:bg-[#d25f35] cursor-pointer transition-colors duration-300"
               >
                 <MdOutlineStore className="inline-block mr-2 text-xl" />
@@ -77,7 +77,7 @@ const AkunSayaPage = () => {
                 <h1 className="text-xl font-bold text-gray-800">Data Diri</h1>
                 <div className="hidden md:flex justify-end">
                   <div
-                    // onClick={() => navigate("/ubahDataDiri")}
+                    onClick={() => navigate("/formUMKM")}
                     className="flex w-fit items-center justify-center text-white  px-8 py-1 rounded-md bg-[#EE6D3F] hover:bg-[#d25f35] cursor-pointer transition-colors duration-300"
                   >
                     <MdOutlineStore className="inline-block mr-2 text-xl" />

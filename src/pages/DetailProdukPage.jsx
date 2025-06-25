@@ -263,7 +263,7 @@ const DetailProdukPage = ({isLoginModal, setIsLoginModal}) => {
 
 
   return (
-    <>
+    <div className="dark:bg-[#393E41]">
       <LoginModal
         isOpen={isLoginModal}
         onClose={() => setIsLoginModal(false)}
@@ -279,7 +279,7 @@ const DetailProdukPage = ({isLoginModal, setIsLoginModal}) => {
           <div className="text-sm text-gray-400 hover:text-gray-800 cursor-pointer">
             Nama Toko /
           </div>
-          <div className="text-sm text-[#EE6D3F] hover:text-[#bc5b38] cursor-pointer">
+          <div className="text-sm text-[#EE6D3F] dark:text-white hover:text-[#bc5b38] cursor-pointer">
             {
               !loadingProduk && (
                 <>
@@ -290,7 +290,7 @@ const DetailProdukPage = ({isLoginModal, setIsLoginModal}) => {
           </div>
         </div>
         {/* Konten Pembelian Produk  */}
-        <div className="mb-10">
+        <div className="mb-10 dark:text-white">
           <div className="flex flex-col md:flex-row gap-10">
             {
               loadingProduk ? (
@@ -392,7 +392,7 @@ const DetailProdukPage = ({isLoginModal, setIsLoginModal}) => {
               {/* Deskripsi */}
               <div className="">
                 <h1 className="mt-4 text-xl">Deskripsi</h1>
-                <div className="text-sm font-extralight text-black overflow-hidden transition-all duration-300 md:h-[150px] h-[50px] overflow-y-auto">
+                <div className="text-sm font-extralight text-black dark:text-gray-100 overflow-hidden transition-all duration-300 md:h-[150px] h-[50px] overflow-y-auto">
                   {
                     loadingProduk ? (
                       <div className="col-span-6 flex justify-center items-center h-full">
@@ -417,7 +417,7 @@ const DetailProdukPage = ({isLoginModal, setIsLoginModal}) => {
                               setIndexStok(index);
                             }} 
                             key={index} 
-                            className={`${index == indexStok ? 'bg-[#EE6D3F] text-white' : 'bg-gray-200'} px-2 py-1 rounded-lg cursor-pointer hover:bg-[#EE6D3F]  hover:text-white transition-colors duration-300`}>
+                            className={`${index == indexStok ? 'bg-[#EE6D3F] text-white dark:bg-[#4b5563] ' : 'bg-gray-200'} px-2 py-1 dark:bg-[#222831] dark:hover:dark:bg-[#4b5563] rounded-lg cursor-pointer hover:bg-[#EE6D3F]  hover:text-white transition-colors duration-300`}>
                             {variasi.nama} {/* tampilkan nama variasi, atau info lain */}
                           </div>
                         ))}
@@ -427,7 +427,7 @@ const DetailProdukPage = ({isLoginModal, setIsLoginModal}) => {
                 </div>
               </div>
               <div className="mt-4 hidden md:block">
-                <span className="text-[#EE6D3F] text-sm font-semibold">
+                <span className="text-[#EE6D3F] dark:text-gray-400 text-sm font-semibold">
                   Stok Produk :{" "}
                 </span>
                 <span className="text-sm font-semibold">
@@ -482,16 +482,16 @@ const DetailProdukPage = ({isLoginModal, setIsLoginModal}) => {
                     <div className="flex gap-x-2 items-center">
                       <div
                         onClick={() => jumlahProdukHandler("kurang")}
-                        className="bg-[#E1DDDD] px-2 rounded-md cursor-pointer hover:bg-[#cac8c8]"
+                        className="bg-[#E1DDDD] dark:bg-[#222831] dark:hover:dark:bg-[#4b5563] px-2 rounded-md cursor-pointer hover:bg-[#cac8c8]"
                       >
                         -
                       </div>
-                      <div className="bg-[#E1DDDD] px-5 rounded-md">
+                      <div className="bg-[#E1DDDD] dark:bg-[#222831] px-5 rounded-md">
                         {jumlahProduk}
                       </div>
                       <div
                         onClick={() => jumlahProdukHandler("tambahkan")}
-                        className="bg-[#E1DDDD] px-2 rounded-md cursor-pointer hover:bg-[#cac8c8]"
+                        className="bg-[#E1DDDD] dark:bg-[#222831] dark:hover:dark:bg-[#4b5563] px-2 rounded-md cursor-pointer hover:bg-[#cac8c8]"
                       >
                         +
                       </div>
@@ -500,11 +500,11 @@ const DetailProdukPage = ({isLoginModal, setIsLoginModal}) => {
                   <div className="flex gap-x-2 mt-4">
                     <button
                       onClick={() => setOpenModal(true)}
-                      className="p-2 border-black border-2 rounded-xl hover:text-[#EE6D3F] hover:border-[#EE6D3F] cursor-pointer transition-all duration-200"
+                      className="p-2 border-black dark:bg-[#222831] dark:border-[#222831] border-2 dark:hover:dark:bg-[#4b5563] rounded-xl hover:text-[#EE6D3F] dark:hover:text-white dark:hover:border-[#4b5563] hover:border-[#EE6D3F] cursor-pointer transition-all duration-200"
                     >
-                      <FaShareNodes className="hover:scale-125 transition-transform duration-300" />
+                      <FaShareNodes className="hover:scale-125 transition-transform duration-500" />
                     </button>
-                    <div className="bg-[#E1DDDD] hover:bg-gray-300 w-10 p-2 text-xl rounded-lg cursor-pointer" onClick={onKeranjangClick}>
+                    <div className="bg-[#E1DDDD] dark:bg-[#222831] hover:bg-gray-300 dark:hover:dark:bg-[#4b5563] w-10 p-2 text-xl rounded-lg cursor-pointer" onClick={onKeranjangClick}>
                       {
                         loadingKeranjang ? (
                           <>
@@ -514,12 +514,12 @@ const DetailProdukPage = ({isLoginModal, setIsLoginModal}) => {
                           </>
                         ) : (
                           <>
-                            <AiOutlineShoppingCart />
+                            <AiOutlineShoppingCart className="hover:scale-125 transition-transform duration-500"/>
                           </>
                         )
                       }
                     </div>
-                    <div className="flex bg-[#EE6D3F] hover:bg-[#cf582d] font-semibold text-white justify-center items-center w-full rounded-lg cursor-pointer">
+                    <div className="flex bg-[#EE6D3F] dark:bg-[#222831] dark:hover:dark:bg-[#4b5563] hover:bg-[#cf582d] font-semibold text-white justify-center items-center w-full rounded-lg cursor-pointer">
                       Beli
                     </div>
                   </div>
@@ -530,21 +530,32 @@ const DetailProdukPage = ({isLoginModal, setIsLoginModal}) => {
           {/* Jumlah & Beli — Fixed Bottom di hp */}
           {
             !loadingProduk && (
-              <div className="fixed bottom-0 left-0 right-0 bg-white shadow-black shadow-2xl p-4 border-t md:hidden z-50 ">
+              <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-[#393E46] dark:border-0 shadow-black shadow-2xl p-4 border-t md:hidden z-50 ">
                 <div className="">
-                  <span className="text-[#EE6D3F] text-xs font-semibold">
+                  <span className="text-[#EE6D3F] text-xs font-semibold dark:text-gray-400">
                     Stok Produk :
                   </span>
-                  <span className="text-xs font-semibold">10 </span>
+                  <span className="text-xs font-semibold">
+                    {
+                      loadingProduk ? (
+                        <>
+                        </>
+                      ) : (
+                          <>
+                            {dataProduk ? dataProduk.variasi[0].stok : "-"}
+                          </>
+                      )
+                    }
+                  </span>
                 </div>
                 <div className="flex justify-between items-center">
                   <h1 className="text-base font-medium">Jumlah</h1>
                   <div className="flex gap-x-2 items-center">
-                    <div className="bg-[#E1DDDD] px-2 rounded-md cursor-pointer hover:bg-[#cac8c8]">
+                    <div className="bg-[#E1DDDD] dark:bg-[#222831] px-2 rounded-md cursor-pointer hover:bg-[#cac8c8]">
                       -
                     </div>
-                    <div className="bg-[#E1DDDD] px-5 rounded-md">0</div>
-                    <div className="bg-[#E1DDDD] px-2 rounded-md cursor-pointer hover:bg-[#cac8c8]">
+                    <div className="bg-[#E1DDDD] dark:bg-[#222831] px-5 rounded-md">0</div>
+                    <div className="bg-[#E1DDDD] dark:bg-[#222831] px-2 rounded-md cursor-pointer hover:bg-[#cac8c8]">
                       +
                     </div>
                   </div>
@@ -552,11 +563,11 @@ const DetailProdukPage = ({isLoginModal, setIsLoginModal}) => {
                 <div className="flex gap-x-2 mt-4">
                   <div
                     onClick={() => setOpenModal(true)}
-                    className="p-2 border-black border-2 rounded-xl hover:text-[#EE6D3F] hover:border-[#EE6D3F] cursor-pointer transition-all duration-200"
+                    className="p-2 border-black border-2 dark:bg-[#222831] dark:border-[#222831] rounded-xl hover:text-[#EE6D3F] hover:border-[#EE6D3F] cursor-pointer transition-all duration-200"
                   >
                     <FaShareNodes className="hover:scale-125 transition-transform duration-300" />
                   </div>
-                  <div className="bg-[#E1DDDD] w-10 p-2 text-xl rounded-lg" onClick={onKeranjangClick}>
+                  <div className="bg-[#E1DDDD] dark:bg-[#222831] w-10 p-2 text-xl rounded-lg" onClick={onKeranjangClick}>
                     {
                       loadingKeranjang ? (
                         <>
@@ -571,7 +582,7 @@ const DetailProdukPage = ({isLoginModal, setIsLoginModal}) => {
                       )
                     }
                   </div>
-                  <div className="flex bg-[#EE6D3F] font-semibold text-white justify-center items-center w-full rounded-lg cursor-pointer">
+                  <div className="flex bg-[#EE6D3F] dark:bg-[#222831] font-semibold text-white justify-center items-center w-full rounded-lg cursor-pointer">
                     Beli
                   </div>
                 </div>
@@ -591,7 +602,7 @@ const DetailProdukPage = ({isLoginModal, setIsLoginModal}) => {
               </>
             ) : (
               <>
-                <div className="flex items-center gap-x-5 ">
+                <div className="flex items-center gap-x-5 dark:text-white">
                   <div className="h-16 w-16 bg-slate-300 rounded-full ">
                     <img
                       src={fotoToko}
@@ -623,7 +634,7 @@ const DetailProdukPage = ({isLoginModal, setIsLoginModal}) => {
           
         </div>
         {/* Rekomendasi Produk  */}
-        <div className="relative mt-10">
+        <div className="relative mt-10 dark:text-white">
           <h2 className="text-xl mb-4">Produk lainnya di toko ini</h2>
 
           <Slider
@@ -659,7 +670,7 @@ const DetailProdukPage = ({isLoginModal, setIsLoginModal}) => {
         url={shareUrl}
         text={shareText}
       />
-    </>
+    </div>
   );
 };
 

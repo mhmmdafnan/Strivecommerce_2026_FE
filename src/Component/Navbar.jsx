@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { useTheme } from "./ThemeContext.jsx";
 // import { FaAlignJustify } from "react-icons/fa6";
 import {
   AiOutlineMenuFold,
@@ -22,6 +23,7 @@ export default function Navbar({isLoginModal, setIsLoginModal}) {
   const [isSideMenuOpen, setMenu] = useState(false);
   // const [isLoginModalOpen, setLoginModalOpen] = useState(false);
   const navigate = useNavigate();
+  const { darkMode, setDarkMode } = useTheme();
   
   const showLoginModal = () => {
     setIsLoginModal(true);
@@ -46,7 +48,7 @@ export default function Navbar({isLoginModal, setIsLoginModal}) {
 
 
   return (
-    <main className="relative">
+    <main className="relative dark:bg-[#3b3b3b]">
       <LoginModal
         isOpen={isLoginModal}
         onClose={() => setIsLoginModal(false)}
@@ -60,13 +62,13 @@ export default function Navbar({isLoginModal, setIsLoginModal}) {
             className="text-3xl cursor-pointer lg:hidden"
           />
           <Link
-            className="hidden lg:block  text-gray-400 hover:text-black"
+            className="hidden lg:block  text-gray-400 dark:text-gray-300 dark:hover:text-gray-100 hover:text-black"
             to="/"
           >
             Produk
           </Link>
           <Link
-            className="hidden lg:block  text-gray-400 hover:text-black"
+            className="hidden lg:block  text-gray-400 dark:text-gray-300 dark:hover:text-gray-100 hover:text-black"
             to=""
           >
             Tentang
@@ -104,12 +106,10 @@ export default function Navbar({isLoginModal, setIsLoginModal}) {
         {/* last section */}
         <div className="flex items-center gap-4">
           {/* cart icon */}
-          <div  className="cursor-pointer group w-6 hover:w-12 transition-all flex duration-500">
-            <AiOutlineMoon className="text-xl hidden md:flex group-hover:hidden" />
-            {/* <AiOutlineShoppingCart className="text-xl hidden md:flex " /> */}
-            <div className="hidden ml-2 group-hover:flex opacity-0 group-hover:opacity-100 transition-all duration-500 whitespace-nowrap text-sm">
-              <ToggleDarkMode/>
-            </div>
+          <div  className="cursor-pointer group w-12 transition-all flex duration-500"
+            // onClick={() => setDarkMode(!darkMode)}
+          >
+              <ToggleDarkMode darkMode={darkMode} setDarkMode={setDarkMode}/>
           </div>
           {/* <div onClick={handleCartClick} className="cursor-pointer group w-6 hover:w-32 transition-all flex items-center duration-500">
             <AiOutlineSearch className="text-xl hidden md:flex" /> */}
@@ -123,8 +123,8 @@ export default function Navbar({isLoginModal, setIsLoginModal}) {
           {
             (cookies.isLoggedIn) ? (
               <div onClick={handleCartClick} className="cursor-pointer group w-6 hover:w-24 transition-all flex duration-500">
-                <AiOutlineShoppingCart className="text-xl hidden md:flex " />
-                <span className="ml-2 hidden group-hover:flex opacity-0 group-hover:opacity-100 transition-all duration-500 whitespace-nowrap text-sm">
+                <AiOutlineShoppingCart className="text-xl hidden md:flex dark:text-white" />
+                <span className="ml-2 hidden dark:text-white group-hover:flex opacity-0 group-hover:opacity-100 transition-all duration-500 whitespace-nowrap text-sm">
                   Keranjang
                 </span>
               </div>
@@ -148,7 +148,7 @@ export default function Navbar({isLoginModal, setIsLoginModal}) {
               </>
             ) : (
               <>
-              <div className="cursor-pointer group ml-4 justify-center hover:border-b-2 border-[#FE5D26] transition-all flex duration-500" onClick={showLoginModal}>
+              <div className="cursor-pointer dark:text-white group ml-4 justify-center hover:border-b-2 border-[#FE5D26] dark:border-white transition-all flex duration-500" onClick={showLoginModal}>
                 Login
               </div>
               </>

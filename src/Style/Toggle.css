@@ -8,7 +8,8 @@
   --switch-height: 20px;
   /* circle */
   --circle-diameter: 32px;
-  --circle-bg: rgb(255,128,82);
+  --circle-bg-2: rgb(0, 0, 0);
+  --circle-bg: rgb(238, 109, 63);
   --circle-inset: calc((var(--circle-diameter) - var(--switch-height)) / 2);
 }
 
@@ -82,4 +83,13 @@
   opacity: 1;
   width: 0;
   height: 0;
+}
+
+.ui-switch input:checked + .slider .circle {
+  background: var(--circle-bg-2); /* atau warna lain sesuai kebutuhan */
+  left: calc(100% - var(--circle-diameter));
+
+  background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iMjAiIHdpZHRoPSIyMCIgdmlld0JveD0iMCAwIDIwIDIwIj4KICAgIDxwYXRoIGZpbGw9IiNmZmYiCiAgICAgICAgZD0iTTQuMiAyLjVsLS43IDEuOC0xLjguNyAxLjguNy43IDEuOC42LTEuOEw2LjcgNWwtMS45LS43LS42LTEuOHptMTUgOC4zYTYuNyA2LjcgMCAxMS02LjYtNi42IDUuOCA1LjggMCAwMDYuNiA2LjZ6IiAvPgo8L3N2Zz4=");
+  background-repeat: no-repeat;
+  background-position: center center;
 }
