@@ -260,8 +260,6 @@ const DetailProdukPage = ({isLoginModal, setIsLoginModal}) => {
 
   }, []);
 
-
-
   return (
     <div className="dark:bg-[#393E41]">
       <LoginModal
@@ -591,7 +589,7 @@ const DetailProdukPage = ({isLoginModal, setIsLoginModal}) => {
           }
         </div>
         {/* Bagian Toko  */}
-        <div className="flex justify-between items-center px-4 py-2 border-[1px] border-[#ADB0B6] shadow-xl rounded-xl">
+        <div className="flex justify-between dark:bg-[#222831] items-center px-4 py-2 border-[1px] border-[#ADB0B6] dark:border-0 shadow-xl rounded-xl">
           
           {
             loadingProduk ? (
@@ -624,7 +622,7 @@ const DetailProdukPage = ({isLoginModal, setIsLoginModal}) => {
                   }}
                   className="text-xl p-1 hover:scale-125  cursor-pointer"
                 >
-                  <IoChatboxEllipsesOutline />
+                  <IoChatboxEllipsesOutline className="dark:text-white"/>
                 </div>
               </>
 

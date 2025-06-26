@@ -20,7 +20,7 @@ const LoginModal = ({ isOpen, onClose, onSuccess }) => {
   const location = useLocation();
   const firstInputRef = useRef(null);
   const [cookies, setCookie, removeCookie] = useCookies(["isLoggedIn"]);
-
+ 
   const [formData, setFormData] = useState({
     // inisialisasi state untuk menyimpan data form
     email: "",
@@ -44,6 +44,7 @@ const LoginModal = ({ isOpen, onClose, onSuccess }) => {
       if (response.data.success) {
         setCookie("isLoggedIn", true);
         setCookie("token", response.data.token);
+        setCookie("user_id", response.data.id_user);
         onSuccess(response);
       } else {
         setShowLoginError(true);
@@ -82,7 +83,7 @@ const LoginModal = ({ isOpen, onClose, onSuccess }) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white w-full max-w-md rounded-lg shadow-lg px-12 pt-6 pb-12 relative">
+      <div className="bg-white dark:bg-black w-full max-w-md rounded-lg shadow-lg px-12 pt-6 pb-12 relative">
         <div
           onClick={onClose}
           className="absolute top-3 right-3 text-gray-600 hover:text-red-600 text-xl cursor-pointer"

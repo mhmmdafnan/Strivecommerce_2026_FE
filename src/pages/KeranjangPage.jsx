@@ -2,10 +2,15 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../Component/Navbar";
 import produk from "../assets/img/produk/kursi 1.jpg";
-
+import { useCookies } from "react-cookie";
+import axios from "axios";
 
 const KeranjangPage = () => {
 
+    const [cookies, setCookie, removeCookie] = useCookies();
+    const apiUrl = import.meta.env.VITE_API_URL; // URL API
+    const [dataKeranjang, setDataKeranjang] = useState([]);
+    const [loading,setLoading] = useState(false);
     const [dbKeranjang, setDbKeranjang] = useState([
         {
             toko: "Toko Mebelesia",
@@ -197,6 +202,59 @@ const KeranjangPage = () => {
     navigate("/checkout", { state: { keranjang: checkedKeranjang } });
     };
 
+  function groupByToko(data) {
+    const grouped = {};
+    data.forEach((item) => {
+      const namaToko = item.product.user.nama_toko;
+      if (!grouped[namaToko]) {
+        grouped[namaToko] = [];
+      }
+      grouped[namaToko].push(item);
+    });
+    // Ubah ke array of object { toko, product: [...] }
+    return Object.entries(grouped).map(([toko, products], idx) => ({
+      toko,
+      id: idx,
+      product: products,
+    }));
+  }
+
+  useEffect(() => {
+    // Simulasi pengambilan data produk berdasarkan idProduk
+    const fetchKeranjang = async () => {
+      setLoading(true);
+      try {
+        console.log(cookies.user_id);
+        
+        const response = await axios.get(`${apiUrl}/api/v1/cart`, {
+          params : {
+            userId : cookies.user_id
+          }
+        });
+        console.log(response.data.data);
+        
+        if (response.data.success) {
+          const grouped = groupByToko(response.data.data);
+          console.log(grouped);
+          
+          setDataKeranjang(grouped);
+
+        } else {
+          setShowLoginError(true);
+        }
+      } catch (error) {
+        // setShowLoginError(true);
+        console.log(error);
+        
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchKeranjang();
+
+  }, []);
+
   return (
     <div className="w-full  ">
         {/* <Navbar /> */}
@@ -210,48 +268,66 @@ const KeranjangPage = () => {
                 <div className="keranjang-header lg:min-w-[650px] lg:bg-gray-100 p-4 w-full flex justify-center lg:justify-start "> 
                     <div className="keranjang-list mb-28 w-full lg:max-w-[900px] mx-auto lg:mx-0 ">
                         {
-                            dbKeranjang.map((toko) => (
-                                <div className="bg-gray-100 lg:bg-white mb-4 py-1 w-full shadow-sm md:mx-auto mlg:max-w-[700px] rounded-xl" key={toko.id}>
-                                    <div className="nama-toko p-2" key={toko.id}>
-                                        <h2 className="ml-2 font-semibold"> <input className="pt-2  mr-2" type="checkbox" name="toko" id="" onClick={() => handleSelectAll(toko.id)} /> {toko.toko}</h2>
+                          loading ? (
+                            <>
+                            </>
+                          ) : (
+                            <>
+                            {
+                              dataKeranjang && (
+                                dataKeranjang.map((toko,id) => {
+                                  return (
+                                    <div key={id}>
+                                      <div className="bg-gray-100 lg:bg-white mb-4 py-1 w-full shadow-sm md:mx-auto mlg:max-w-[700px] rounded-xl" key={toko.id}>
+                                        <div className="nama-toko p-2">
+                                            <h2 className="ml-2 font-semibold"> <input className="pt-2  mr-2" type="checkbox" name="toko" id="" onClick={() => handleSelectAll(toko.id)} />{toko.toko}</h2>
+                                        </div>
+                                      {
+                                        toko.product.map((produk,idd) => {
+                                          return (
+                                          <div className="produk-list p-2 flex items-center" key={idd}>
+                                              <input className="pt-2 ml-2 mr-2 " type="checkbox" name="produk" id="" onClick={() => handleCheckboxChange(toko.id, produk.id)} checked={produk.isChecked} />
+                                              <label htmlFor="produk" className="ml-2 flex  justify-between w-full">
+                                                  <div className="flex items-center">
+                                                      <img src={`${apiUrl}/pict/${produk.product.id}${produk.product.path}`} className="w-16 rounded-xl h-16 object-cover" alt="" />
+                                                      <div className="ml-2">
+                                                          <h3 className="text-sm ">{produk.product.nama}</h3>
+                                                          <p className="text-xs text-gray-500">Rp. {produk.variasi.harga.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</p>
+                                                      </div>
+                                                  </div>
+                                                  <div className={`encounter justify-end items-center flex flex-1 `}>
+                                                      <div className={`bg-gray-200 mr-2 rounded-full px-2 py-1 text-xs text-gray-700 transition-all duration-500 ${produk.isChecked ? "opacity-100" : "opacity-40"}`} onClick={() => subtractTotal(toko.id, produk.id)}>
+                                                          -
+                                                      </div>
+                                                      <p className="text-xs text-gray-500">
+                                                          {produk.quantity}
+                                                      </p>
+                                                      <div className={`bg-gray-200 mx-2 rounded-full px-2 py-1 text-xs text-gray-700 transition-all duration-500 ${produk.isChecked ? "opacity-100" : "opacity-40"}`} onClick={() => addTotal(toko.id, produk.id)}>
+                                                          +
+                                                      </div>
+                                                  </div>
+                                              </label>
+                                          </div>
+
+                                          )
+                                        })
+                                      }
+                                      </div>
                                     </div>
-                                    {
-                                        toko.product.map((produk) => (
-                                            <div className="produk-list p-2 flex items-center" key={produk.id}>
-                                                <input className="pt-2 ml-2 mr-2 " type="checkbox" name="produk" id="" onClick={() => handleCheckboxChange(toko.id, produk.id)} checked={produk.isChecked} />
-                                                <label htmlFor="produk" className="ml-2 flex  justify-between w-full">
-                                                    <div className="flex items-center">
-                                                        <img src={produk.gambar} className="w-16 rounded-xl h-16 object-cover" alt="" />
-                                                        <div className="ml-2">
-                                                            <h3 className="text-sm ">{produk.nama}</h3>
-                                                            <p className="text-xs text-gray-500">Rp. {produk.harga.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</p>
-                                                        </div>
-                                                    </div>
-                                                    <div className={`encounter justify-end items-center flex flex-1 `}>
-                                                        <div className={`bg-gray-200 mr-2 rounded-full px-2 py-1 text-xs text-gray-700 transition-all duration-500 ${produk.isChecked ? "opacity-100" : "opacity-40"}`} onClick={() => subtractTotal(toko.id, produk.id)}>
-                                                            -
-                                                        </div>
-                                                        <p className="text-xs text-gray-500">
-                                                            {produk.total}
-                                                        </p>
-                                                        <div className={`bg-gray-200 mx-2 rounded-full px-2 py-1 text-xs text-gray-700 transition-all duration-500 ${produk.isChecked ? "opacity-100" : "opacity-40"}`} onClick={() => addTotal(toko.id, produk.id)}>
-                                                            +
-                                                        </div>
-                                                    </div>
-                                                </label>
-                                            </div>
-                                        ))
-                                    }
-                                    
-                                </div>
-                                
-                            ))
+                                  )
+                                })
+
+                              )
+                            }
+                            </>
+                          )
+                          
                         }
 
                     </div>    
 
                     <div className="checkout ml-4 hidden lg:block p-4 max-w-[500px] h-fit rounded-md w-full  bg-white shadow-md">
-                {
+                  {
                     dbKeranjang.map((toko) => {
                         // Filter produk yang isChecked = true
                         const checkedProducts = toko.product.filter((produk) => produk.isChecked);
@@ -287,6 +363,7 @@ const KeranjangPage = () => {
                         );
                     })
                     }
+                        
                         <div className="flex justify-between items-center">
                             <h2 className="text-lg font-semibold"><p className="font-light text-sm">Total:</p> Rp. { calculateTotal() > 0 ? calculateTotal().toLocaleString().toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") : '-'}</h2>
                             <button 
