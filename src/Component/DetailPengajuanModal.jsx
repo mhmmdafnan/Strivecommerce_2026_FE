@@ -64,7 +64,7 @@ const DetailPengajuanModal = ({ isOpen, onClose, idUmkm, isPengajuan }) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white w-fit max-w-2xl rounded-lg shadow-lg p-6 relative">
+      <div className="bg-white w-fit max-w-2xl rounded-lg shadow-lg p-6 relative overflow-y-auto h-96">
         {/* Tombol Close */}
         <div
           onClick={onClose}
@@ -74,7 +74,7 @@ const DetailPengajuanModal = ({ isOpen, onClose, idUmkm, isPengajuan }) => {
         </div>
 
         <h2 className="text-center text-xl font-semibold mb-6">
-          Detail Pengajuan
+          {isPengajuan ? "Detail Pengajuan" : "Detail UMKM"}
         </h2>
 
         {/* Data Pengajuan */}

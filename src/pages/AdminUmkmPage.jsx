@@ -1,16 +1,19 @@
 import { useState, useEffect } from "react";
+import axios from "axios";
+import { useCookies } from "react-cookie";
+import { jwtDecode } from "jwt-decode"; 
+
 import Sidebar from "../Component/Sidebar";
 import foto from "../assets/img/picture1.jpeg";
 import kursi from "../assets/img/produk/kursi 1.jpg";
 import { useNavigate, useSearchParams } from "react-router-dom";
-
+import Loading from "../Component/Loading.jsx";
 import DetailPengajuanModal from "../Component/DetailPengajuanModal.jsx";
-// import { useCookies } from "react-cookie";
 
 function MainPage() {
   const navigate = useNavigate();
-  // const backendUrl = import.meta.env.VITE_API_URL;
-  // const [cookies] = useCookies();
+  const apiUrl = import.meta.env.VITE_API_URL;
+  const [cookies] = useCookies();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedId, setSelectedId] = useState(null);
   const [idPengajuan, setIdPengajuan] = useState();
@@ -19,36 +22,8 @@ function MainPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const [data, setData] = useState([
-    {
-      id: 1,
-      nama: "UMKM 1",
-      alamat: "Alamat UMKM 1",
-      emailUser: "user1@example.com",
-      status: 1,
-    },
-    {
-      id: 3,
-      nama: "UMKM 3",
-      alamat: "Alamat UMKM 1",
-      emailUser: "user3@example.com",
-      status: 1,
-    },
-    {
-      id: 5,
-      nama: "UMKM 5",
-      alamat: "Alamat UMKM 1",
-      emailUser: "user5@example.com",
-      status: 1,
-    },
-    {
-      id: 6,
-      nama: "UMKM 6",
-      alamat: "Alamat UMKM 1",
-      emailUser: "user6@example.com",
-      status: 1,
-    },
-  ]);
+  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState([]);
 
   // Handle next page
   const handleNextPage = () => {
@@ -73,9 +48,6 @@ function MainPage() {
   // Handle Delete
   const handleDelete = (id) => {};
 
-  // Fetch data when page changes
-  useEffect(() => {});
-
   useEffect(() => {
     if (searchParams.get("success-add") === "true") {
       setSuccessMessage("Data berhasil ditambahkan!");
@@ -95,6 +67,29 @@ function MainPage() {
       setSearchParams(searchParams);
     }
   }, [searchParams]);
+
+  // Fetch data when page changes
+  useEffect(() => {
+    if (cookies["token"]) {
+      const decoded = jwtDecode(cookies["token"]);
+      console.log(decoded.firstName); 
+      console.log(decoded.email);
+    }
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.get(`${apiUrl}/api/v1/toko`);
+        // console.log(response.data.data[0]);
+        setData(response.data.data);
+      } catch (error) {
+        console.error("Gagal fetch data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <>
@@ -137,36 +132,49 @@ function MainPage() {
 
               <div>Aksi</div>
             </div>
-
-            {data.map((item, index) => {
-              return (
-                <div
-                  key={index}
-                  className="grid grid-cols-4 md:grid-cols-5 text-center mb-2 hover:bg-[#f9dcd2] rounded-lg transition duration-300 "
-                >
-                  <div className="items-center justify-center hidden md:flex">
-                    <p>P-{item.id}</p>
-                  </div>
-                  <div className="items-center justify-center flex">
-                    <p>{item.nama}</p>
-                  </div>
-                  <div className="items-center justify-center flex">
-                    <p>{item.alamat}</p>
-                  </div>
-                  <div className="items-center justify-center hidden md:flex">
-                    <p>{item.emailUser}</p>
-                  </div>
-                  <div className="items-center justify-center flex">
-                    <span
-                      className="material-symbols-outlined p-1 cursor-pointer hover:text-[#EE6D3F] transition duration-300"
-                      onClick={() => handleAksiClick(item.id)}
+            {loading ? (
+              <div className="items-center justify-center hidden md:flex h-80">
+                <Loading w={10} h={10} />
+              </div>
+            ) : (
+              <>
+                {data.map((item, index) => {
+                  return (
+                    <div
+                      key={index}
+                      className="grid grid-cols-4 md:grid-cols-5 text-center mb-2 hover:bg-[#f9dcd2] rounded-lg transition duration-300 "
                     >
-                      info
-                    </span>
-                  </div>
-                </div>
-              );
-            })}
+                      <div className="items-center justify-center hidden md:flex">
+                        <p>P-{item.id}</p>
+                      </div>
+                      <div className="items-center justify-center flex">
+                        <p>{item.nama_toko}</p>
+                      </div>
+                      <div className="items-center justify-center flex">
+                        {item.alamat[0] ? (
+                          <p className="text-gray-700">
+                            {item.alamat[0].kabupaten}
+                          </p>
+                        ) : (
+                          <p className="text-red-500">Alamat belum tersedia</p>
+                        )}
+                      </div>
+                      <div className="items-center justify-center hidden md:flex">
+                        <p>{item.email}</p>
+                      </div>
+                      <div className="items-center justify-center flex">
+                        <span
+                          className="material-symbols-outlined p-1 cursor-pointer hover:text-[#EE6D3F] transition duration-300"
+                          onClick={() => handleAksiClick(item.id)}
+                        >
+                          info
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </>
+            )}
           </div>
 
           {/* Modal Delete */}

@@ -1,16 +1,18 @@
 import { useState, useEffect } from "react";
+import axios from "axios";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { useCookies } from "react-cookie";
+
 import Sidebar from "../Component/Sidebar";
 import foto from "../assets/img/picture1.jpeg";
 import kursi from "../assets/img/produk/kursi 1.jpg";
-import { useNavigate, useSearchParams } from "react-router-dom";
-
 import DetailPengajuanModal from "../Component/DetailPengajuanModal.jsx";
-// import { useCookies } from "react-cookie";
+import Loading from "../Component/Loading.jsx";
 
 function MainPage() {
+  const apiUrl = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
-  // const backendUrl = import.meta.env.VITE_API_URL;
-  // const [cookies] = useCookies();
+  const [cookies] = useCookies();
   const [selectedId, setSelectedId] = useState(null);
   const [idPengajuan, setIdPengajuan] = useState();
   const [isDetailPengajuanModalOpen, setIsDetailPengajuanModalOpen] =
@@ -18,56 +20,22 @@ function MainPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const [data, setData] = useState([
-    {
-      id: 1,
-      nama: "UMKM 1",
-      tanggalPengajuan: "2023-01-01",
-      emailUser: "user1@example.com",
-      status: 1,
-    },
-    {
-      id: 2,
-      nama: "UMKM 2",
-      tanggalPengajuan: "2023-01-02",
-      emailUser: "user2@example.com",
-      status: 0,
-    },
-    {
-      id: 3,
-      nama: "UMKM 3",
-      tanggalPengajuan: "2023-01-03",
-      emailUser: "user3@example.com",
-      status: 1,
-    },
-    {
-      id: 4,
-      nama: "UMKM 4",
-      tanggalPengajuan: "2023-01-04",
-      emailUser: "user4@example.com",
-      status: 99,
-    },
-    {
-      id: 5,
-      nama: "UMKM 5",
-      tanggalPengajuan: "2023-01-05",
-      emailUser: "user5@example.com",
-      status: 1,
-    },
-    {
-      id: 6,
-      nama: "UMKM 6",
-      tanggalPengajuan: "2023-01-06",
-      emailUser: "user6@example.com",
-      status: 1,
-    },
-  ]);
+  const [loading, setLoading] = useState(false);
+  const [data, setData] = useState([]);
 
   const handleAksiClick = (id) => {
     // console.log("id dalam fungsi", id);
     setIdPengajuan(id);
     setIsDetailPengajuanModalOpen(true);
     // setTrigger(!trigger)
+  };
+
+  const formatTanggal = (tanggal) => {
+    return new Date(tanggal).toLocaleDateString("id-ID", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    });
   };
 
   // Handle next page
@@ -87,7 +55,25 @@ function MainPage() {
   const handleDelete = (id) => {};
 
   // Fetch data when page changes
-  useEffect(() => {});
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.get(`${apiUrl}/api/v1/pengajuan`, {
+          headers: {
+            token: cookies["token"],
+          },
+        });
+        setData(response.data.data);
+      } catch (error) {
+        console.error("Gagal fetch data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   useEffect(() => {
     if (searchParams.get("success-add") === "true") {
@@ -151,51 +137,59 @@ function MainPage() {
               <div>Aksi</div>
             </div>
 
-            {data.map((item, index) => {
-              return (
-                <div
-                  key={index}
-                  className="grid grid-cols-4 md:grid-cols-6 text-center mb-2 hover:bg-[#f9dcd2] rounded-lg transition duration-300 "
-                >
-                  <div className="items-center justify-center hidden md:flex">
-                    <p>P-{item.id}</p>
-                  </div>
-                  <div className="items-center justify-center flex">
-                    <p>{item.nama}</p>
-                  </div>
-                  <div className="items-center justify-center flex">
-                    <p>{item.tanggalPengajuan}</p>
-                  </div>
-                  <div className="items-center justify-center hidden md:flex">
-                    <p>{item.emailUser}</p>
-                  </div>
-                  <div className="items-center justify-center flex">
-                    {/* <p className="bg-[#00E92B] text-white px-2 py-1 rounded-lg"> */}
-                    <p
-                      className={`px-2 rounded-lg ${
-                        item.status == 0
-                          ? "bg-gray-300 text-black"
-                          : item.status == 1
-                          ? "bg-blue-600 text-white"
-                          : "bg-red-600 text-white"
-                      }`}
+            {loading ? (
+              <div className="items-center justify-center hidden md:flex h-80">
+                <Loading w={10} h={10} />
+              </div>
+            ) : (
+              <>
+                {data.map((item, index) => {
+                  return (
+                    <div
+                      key={index}
+                      className="grid grid-cols-4 md:grid-cols-6 text-center mb-2 hover:bg-[#f9dcd2] rounded-lg transition duration-300 "
                     >
-                      {item.status == 0 && "Diajuan"}
-                      {item.status == 1 && "Diterima"}
-                      {item.status == 99 && "Ditolak"}
-                    </p>
-                  </div>
-                  <div className="items-center justify-center flex">
-                    <span
-                      className="material-symbols-outlined p-1 cursor-pointer hover:text-[#EE6D3F] transition duration-300"
-                      onClick={() => handleAksiClick(item.id)}
-                    >
-                      info
-                    </span>
-                  </div>
-                </div>
-              );
-            })}
+                      <div className="items-center justify-center hidden md:flex">
+                        <p>P-{item.id}</p>
+                      </div>
+                      <div className="items-center justify-center flex">
+                        <p>{item.nama_toko}</p>
+                      </div>
+                      <div className="items-center justify-center flex">
+                        <p>{formatTanggal(item.time_pengajuan)}</p>
+                      </div>
+                      <div className="items-center justify-center hidden md:flex">
+                        <p>{item.email}</p>
+                      </div>
+                      <div className="items-center justify-center flex">
+                        {/* <p className="bg-[#00E92B] text-white px-2 py-1 rounded-lg"> */}
+                        <p
+                          className={`px-2 rounded-lg ${
+                            item.status_pengajuan == 0
+                              ? "bg-gray-300 text-black"
+                              : item.status == 1
+                              ? "bg-blue-600 text-white"
+                              : "bg-red-600 text-white"
+                          }`}
+                        >
+                          {item.status_pengajuan == 0 && "Diajuan"}
+                          {item.status_pengajuan == 1 && "Diterima"}
+                          {item.status_pengajuan == 99 && "Ditolak"}
+                        </p>
+                      </div>
+                      <div className="items-center justify-center flex">
+                        <span
+                          className="material-symbols-outlined p-1 cursor-pointer hover:text-[#EE6D3F] transition duration-300"
+                          onClick={() => handleAksiClick(item.id)}
+                        >
+                          info
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </>
+            )}
           </div>
         </div>
       </div>
