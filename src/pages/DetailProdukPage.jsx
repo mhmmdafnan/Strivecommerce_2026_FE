@@ -261,7 +261,7 @@ const DetailProdukPage = ({isLoginModal, setIsLoginModal}) => {
   }, []);
 
   return (
-    <div className="dark:bg-[#393E41]">
+    <div className="dark:bg-[#393E41] transition-all duration-500">
       <LoginModal
         isOpen={isLoginModal}
         onClose={() => setIsLoginModal(false)}
