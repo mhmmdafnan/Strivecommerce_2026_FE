@@ -4,6 +4,7 @@ import Navbar from "../Component/Navbar";
 import produk from "../assets/img/produk/kursi 1.jpg";
 import { useCookies } from "react-cookie";
 import axios from "axios";
+import Loading from "../Component/Loading";
 
 const KeranjangPage = () => {
 
@@ -231,7 +232,7 @@ const KeranjangPage = () => {
             userId : cookies.user_id
           }
         });
-        console.log(response.data.data);
+        // console.log(response.data.data);
         
         if (response.data.success) {
           const grouped = groupByToko(response.data.data);
@@ -263,14 +264,15 @@ const KeranjangPage = () => {
             <h1>Keranjang</h1>
         </div>
 
-        <div className="flex justify-center bg-gray-100 ">
+        <div className="flex justify-center bg-gray-100 min-h-[calc(100vh-130px)]">
             <div className="lg:max-w-[1000px] w-full">
                 <div className="keranjang-header lg:min-w-[650px] lg:bg-gray-100 p-4 w-full flex justify-center lg:justify-start "> 
                     <div className="keranjang-list mb-28 w-full lg:max-w-[900px] mx-auto lg:mx-0 ">
                         {
                           loading ? (
-                            <>
-                            </>
+                            <div className="col-span-6 flex justify-center items-center h-80">
+                              <Loading w={10} h={10} />
+                            </div>
                           ) : (
                             <>
                             {
@@ -278,7 +280,7 @@ const KeranjangPage = () => {
                                 dataKeranjang.map((toko,id) => {
                                   return (
                                     <div key={id}>
-                                      <div className="bg-gray-100 lg:bg-white mb-4 py-1 w-full shadow-sm md:mx-auto mlg:max-w-[700px] rounded-xl" key={toko.id}>
+                                      <div className="bg-white mb-4 py-1 w-full md:shadow-sm md:mx-auto mlg:max-w-[700px] rounded-xl" key={toko.id}>
                                         <div className="nama-toko p-2">
                                             <h2 className="ml-2 font-semibold"> <input className="pt-2  mr-2" type="checkbox" name="toko" id="" onClick={() => handleSelectAll(toko.id)} />{toko.toko}</h2>
                                         </div>

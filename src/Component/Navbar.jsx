@@ -106,7 +106,7 @@ export default function Navbar({isLoginModal, setIsLoginModal}) {
         {/* last section */}
         <div className="flex items-center gap-4">
           {/* cart icon */}
-          <div  className="cursor-pointer group w-12 transition-all flex duration-500"
+          <div  className="cursor-pointer group w-4 md:w-12 transition-all flex duration-500"
             // onClick={() => setDarkMode(!darkMode)}
           >
               <ToggleDarkMode darkMode={darkMode} setDarkMode={setDarkMode}/>
@@ -123,8 +123,8 @@ export default function Navbar({isLoginModal, setIsLoginModal}) {
           {
             (cookies.isLoggedIn) ? (
               <div onClick={handleCartClick} className="cursor-pointer group w-6 hover:w-24 transition-all flex duration-500">
-                <AiOutlineShoppingCart className="text-xl hidden md:flex dark:text-white" />
-                <span className="ml-2 hidden dark:text-white group-hover:flex opacity-0 group-hover:opacity-100 transition-all duration-500 whitespace-nowrap text-sm">
+                <AiOutlineShoppingCart className="text-xl hidden md:flex dark:text-white"/>
+                <span className="md:ml-2 hidden dark:text-white group-hover:flex opacity-0 group-hover:opacity-100 transition-all duration-500 whitespace-nowrap text-sm">
                   Keranjang
                 </span>
               </div>

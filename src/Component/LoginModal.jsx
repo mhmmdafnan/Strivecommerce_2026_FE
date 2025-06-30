@@ -94,10 +94,10 @@ const LoginModal = ({ isOpen, onClose, onSuccess }) => {
         <div className="flex justify-center mb-5">
           <img src={Logo} alt="Logo" className="mx-auto h-10" />
         </div>
-        <h2 className="text-center text-2xl font-semibold text-gray-700 ">
+        <h2 className="text-center text-2xl font-semibold text-gray-700 dark:text-white">
           Selamat Datang
         </h2>
-        <p className="text-center text-xs text-gray-500 mb-10">
+        <p className="text-center text-xs text-gray-500 mb-10 dark:text-gray-300">
           Belum punya akun?
           <span
             onClick={() => {

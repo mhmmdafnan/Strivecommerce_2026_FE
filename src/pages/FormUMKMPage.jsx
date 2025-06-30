@@ -119,7 +119,7 @@ const FormUMKMPage = () => {
                                 <div className="garis-vertikal bg-black w-px h-20 block"></div>
                                 <div className="lingkaran-orange rounded-full w-3 h-3 bg-orange-500"></div>
                                 <div>
-                                    Anda bisa mulai berjualan di STRIVE!
+                                    Anda bisa mulai berjualan di <p className="font-bold">STRIVE!</p>
                                 </div>
                             </div>
                             <div className="w-full mt-32 lg:hidden text-center font-semibold ">
