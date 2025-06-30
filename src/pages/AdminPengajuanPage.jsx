@@ -99,7 +99,7 @@ function MainPage() {
     <>
       <div className="flex md:bg-[#FFA485] h-screen w-screen overflow-hidden">
         <Sidebar />
-        <div className="flex-1 md:shadow-xl border-2 border-r-emerald-600 ml-0 md:ml-6 md:mt-4 mt-16 bg-white md:p-4 md:rounded-3xl md:mr-4 md:mb-4 overflow-hidden">
+        <div className="flex-1 md:shadow-xl ml-0 md:ml-6 md:mt-4 mt-16 bg-white md:p-4 md:rounded-3xl md:mr-4 md:mb-4 overflow-hidden">
           {/* Display Success Alert */}
           {successMessage && (
             <div className="bg-green-100 text-green-800 p-4 my-2 rounded-md flex justify-between items-center">
