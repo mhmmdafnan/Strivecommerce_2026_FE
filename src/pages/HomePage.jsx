@@ -92,16 +92,16 @@ const HomePage = () => {
           }),
         ]);
 
-        console.log(sliderProdukRes.data.data);
+        // console.log(sliderProdukRes.data.data);
 
         // Set data produk umum
         if (allProdukRes.data.success) {
           setDataProduk(allProdukRes.data.data);
 
-          if (cookies["token"]) {
-            setCookie("isLoggedIn", true, { path: "/" });
-            setCookie("token", cookies["token"], { path: "/" });
-          }
+          // if (cookies["token"]) {
+          //   setCookie("isLoggedIn", true, { path: "/" });
+          //   setCookie("token", cookies["token"], { path: "/" });
+          // }
         }
 
         // Set produk slider
@@ -114,13 +114,13 @@ const HomePage = () => {
         setLoading(false);
       }
     };
+    // console.log(cookies);
 
     fetchData();
   }, []);
 
   return (
     <>
-
       {/* container */}
       <div className="max-w-7xl mx-auto font-bold h-screen dark:bg-[#121212] bg-white px-5 md:px-20 py-5">
         {/* Produk Utama */}
@@ -192,11 +192,15 @@ const HomePage = () => {
                 nextArrow={<CustomNext />}
               >
                 {produkSlider.map((item) => (
-                  <div key={item.id} className="p-2">
+                  <div
+                    key={item.id}
+                    className="p-2 hover:scale-105 transition-all duration-300 cursor-pointer" 
+                    onClick={() => navigate("/detailProduk/" + item.id)}
+                  >
                     <img
                       src={apiUrl + "/pict/" + item.id + item.path}
                       alt={item.nama}
-                      className="w-full h-40 object-contain rounded-xl border border-gray-600 hover:scale-105 transition-all duration-300"
+                      className="w-full h-40 object-contain rounded-xl border border-gray-600 "
                     />
                     <div className="mt-2 text-sm text-black font-light">
                       {item.variasi?.[0]?.harga
@@ -238,7 +242,7 @@ const HomePage = () => {
                     />
                     <div className="p-2">
                       <div className="text-xs font-extralight text-black">
-                        Rp. {(produk.variasi[0].harga).toLocaleString("id-ID")}
+                        Rp. {produk.variasi[0].harga.toLocaleString("id-ID")}
                       </div>
                       <div className="text-md font-medium text-black truncate">
                         {produk.nama}

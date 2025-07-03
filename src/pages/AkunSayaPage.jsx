@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
-import ava from "../assets/img/picture1.jpeg";
+// import ava from "../assets/img/picture1.jpeg";
 import { MdOutlineEdit, MdOutlineStore } from "react-icons/md";
 
 import Navbar from "../Component/Navbar";
@@ -10,20 +10,83 @@ import GantiPasswordModal from "../Component/GantiPasswordModal";
 import { useCookies } from "react-cookie";
 
 const AkunSayaPage = () => {
+  const apiUrl = import.meta.env.VITE_API_URL; // URL API
   const navigate = useNavigate();
   const [isEditProfileModalOpen, setIsEditProfileModalOpen] = useState(false);
   const [isGantiPasswordOpen, setGantiPasswordOpen] = useState(false);
   const idUser = "10";
-  const [cookies, setCookie, deleteCookie] = useCookies(["isLoggedIn", "token"]);
+  const [cookies, setCookie, deleteCookie] = useCookies();
+  const inputRef = useRef(null);
 
   const logout = () => {
     // Implement logout logic here
     console.log("User logged out");
     deleteCookie("isLoggedIn");
     deleteCookie("token");
+    deleteCookie("user_id");
+    deleteCookie("role");
+    deleteCookie("firstName");
+    deleteCookie("lastName");
+    deleteCookie("email");
+    deleteCookie("telp");
+    deleteCookie("nama_toko");
+    deleteCookie("buka_toko");
+    deleteCookie("klasifikasi_toko");
+    deleteCookie("rating_toko");
+    deleteCookie("gender");
+    deleteCookie("path_file");
+    deleteCookie("tanggal_lahir");
     // Optionally, redirect to home or login page]
     navigate("/");
-  }
+  };
+
+  const handleUbahFoto = () => {
+    inputRef.current.click(); // buka file picker
+  };
+
+  const handleFileChange = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("foto", file);
+    // console.log(formData);
+
+    // try {
+    //   const response = await axios.post(
+    //     "http://localhost:3000/api/edit-foto",
+    //     formData,
+    //     {
+    //       headers: {
+    //         "Content-Type": "multipart/form-data",
+    //         // Authorization: `Bearer ${token}`, // jika pakai token
+    //       },
+    //     }
+    //   );
+
+    //   console.log("Foto berhasil diubah:", response.data);
+    //   // refresh data user atau tampilkan notifikasi
+    // } catch (error) {
+    //   console.error("Gagal upload foto:", error.response || error);
+    // }
+  };
+
+  const formatTanggal = (dateString) => {
+    if (!dateString) return "";
+
+    const tanggal = new Date(dateString);
+
+    return tanggal.toLocaleDateString("id-ID", {
+      day: "2-digit",
+      month: "long",
+      year: "numeric",
+    });
+  };
+
+  // Fetch data when page changes
+  useEffect(() => {
+    console.log(cookies);
+  }, []);
 
   return (
     <>
@@ -47,12 +110,22 @@ const AkunSayaPage = () => {
               <div className="bg-[#E9E9E9] rounded-lg p-4 border-2 border-[#EE6D3F] shadow-md">
                 <div className="w-full h-50 relative">
                   <img
-                    src={ava}
+                    src={apiUrl + "/img/profile_image/" + cookies["path_file"]}
                     alt="Profile"
                     className="w-full h-full object-cover rounded-lg cursor-pointer"
                   />
+                  <input
+                    type="file"
+                    accept="image/*"
+                    ref={inputRef}
+                    style={{ display: "none" }}
+                    onChange={handleFileChange}
+                  />
                   {/* Overlay Ubah Foto */}
-                  <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-[90%] text-[#EE6D3F] hover:scale-105 font-semibold text-lg px-2 py-1 border-2 border-[#EE6D3F] rounded-lg text-center cursor-pointer transition-transform duration-300">
+                  <div
+                    onClick={handleUbahFoto}
+                    className="absolute bottom-2 left-1/2 -translate-x-1/2 w-[90%] text-[#EE6D3F] hover:scale-105 font-semibold text-lg px-2 py-1 border-2 border-[#EE6D3F] rounded-lg text-center cursor-pointer transition-transform duration-300"
+                  >
                     Ubah Foto
                   </div>
                 </div>
@@ -83,7 +156,6 @@ const AkunSayaPage = () => {
                     <MdOutlineStore className="inline-block mr-2 text-xl" />
                     Buka Toko
                   </div>
-                  
                 </div>
               </div>
 
@@ -91,31 +163,31 @@ const AkunSayaPage = () => {
                 <div>
                   <h2>Nama Pengguna</h2>
                   <p className="text-xs font-extralight text-gray-500">
-                    John Doe
+                    {cookies["firstname"] + " " + cookies["lastname"]}
                   </p>
                 </div>
                 <div>
                   <h2>Email</h2>
                   <p className="text-xs font-extralight text-gray-500">
-                    johndoe@example.com
+                    {cookies["email"]}
                   </p>
                 </div>
                 <div>
                   <h2>Nomor Telepon</h2>
                   <p className="text-xs font-extralight text-gray-500">
-                    +62 812-3456-7890
+                    {cookies["telp"]}
                   </p>
                 </div>
                 <div>
                   <h2>Tanggal Lahir</h2>
                   <p className="text-xs font-extralight text-gray-500">
-                    1 Januari 1990
+                    {formatTanggal(cookies["tanggal_lahir"])}
                   </p>
                 </div>
                 <div>
                   <h2>Jenis Kelamin</h2>
                   <p className="text-xs font-extralight text-gray-500">
-                    Laki-laki
+                    {cookies["gender"] == 1 ? "Laki-laki" : "Perempuan"}
                   </p>
                 </div>
                 {/* Tombol Aksi */}
@@ -134,7 +206,7 @@ const AkunSayaPage = () => {
                   >
                     Ubah Password
                   </div>
-                  <div 
+                  <div
                     className="flex items-center justify-center w-44 bg-red-500 text-white px-5 border-2 border-red-500 rounded-md hover:bg-red-600 cursor-pointer transition-colors duration-300"
                     onClick={logout}
                   >

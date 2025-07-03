@@ -2,20 +2,33 @@ import React from "react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { MdOutlineEdit } from "react-icons/md";
+import { useCookies } from "react-cookie";
 
 const EditAccountModal = ({ isOpen, onClose, onGantiPassword, idUser }) => {
   const navigate = useNavigate();
   // const backendUrl = import.meta.env.VITE_API_URL;
-  // const [cookies, setCookie] = useCookies();
+  const [cookies, setCookie] = useCookies();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [formData, setFormData] = useState({
-    nama: "",
-    email: "",
-    jenisKelamin: "",
-    tanggalLahir: "",
-    telepon: "",
+    firstName: cookies["firstName"],
+    lastName: cookies["lastName"],
+    email: cookies["email"],
+    jenisKelamin: cookies["gender"],
+    tanggalLahir: cookies["tanggal_lahir"],
+    telepon: cookies["telp"],
   });
+
+  const formatDateForInput = (dateString) => {
+    if (!dateString) return "";
+
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = `0${date.getMonth() + 1}`.slice(-2); // bulan dimulai dari 0
+    const day = `0${date.getDate()}`.slice(-2);
+
+    return `${year}-${month}-${day}`; // format YYYY-MM-DD
+  };
 
   // Handler untuk setiap perubahan input
   const handleChange = (e) => {
@@ -48,32 +61,37 @@ const EditAccountModal = ({ isOpen, onClose, onGantiPassword, idUser }) => {
         {/* Form */}
         <div className="space-y-4">
           <div>
-            <label className="text-sm font-medium">Nama Lengkap</label>
+            <label className="text-sm font-medium">Nama Awal</label>
             <input
               type="text"
-              name="nama"
-              value={formData.nama}
+              name="firstName"
+              value={formData.firstName}
               onChange={handleChange}
               className="w-full mt-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#EE6D3F] text-gray-600"
             />
           </div>
-
           <div>
-            <label className="text-sm font-medium">
-              Jenis Kelamin<span className="text-red-500">*</span>
-            </label>
-            <select
-              name="jenisKelamin"
+            <label className="text-sm font-medium">Nama Akhir</label>
+            <input
+              type="text"
+              name="lastName"
+              value={formData.lastName}
               onChange={handleChange}
               className="w-full mt-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#EE6D3F] text-gray-600"
-            >
-              <option value="" className="text-gray-300">
-                -- Pilih Jenis Kelamin --
-              </option>
-              <option value="1">Laki-laki</option>
-              <option value="2">Perempuan</option>
-            </select>
+            />
           </div>
+          <select
+            name="jenisKelamin"
+            onChange={handleChange}
+            value={formData.gender} // ✅ ini kuncinya
+            className="w-full mt-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#EE6D3F] text-gray-600"
+          >
+            <option value="" disabled>
+              -- Pilih Jenis Kelamin --
+            </option>
+            <option value="1">Laki-laki</option>
+            <option value="2">Perempuan</option>
+          </select>
 
           <div>
             <label className="text-sm font-medium">
@@ -82,6 +100,7 @@ const EditAccountModal = ({ isOpen, onClose, onGantiPassword, idUser }) => {
             <input
               type="date"
               name="tanggalLahir"
+              value={formatDateForInput(formData.tanggalLahir)}
               onChange={handleChange}
               className="w-full mt-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#EE6D3F] text-gray-600"
             />
@@ -105,6 +124,7 @@ const EditAccountModal = ({ isOpen, onClose, onGantiPassword, idUser }) => {
             <input
               type="text"
               name="telepon"
+              value={formData.telepon}
               required
               // value={formData.telepon == "undefined" ? "-" : formData.telepon}
               onChange={handleChange}

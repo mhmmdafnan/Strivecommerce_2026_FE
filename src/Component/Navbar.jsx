@@ -14,17 +14,18 @@ import {
 // import { Cookies } from "react-cookie";
 import { useCookies } from "react-cookie";
 
-import ava from "../assets/img/picture1.jpeg";
+// import ava from "../assets/img/picture1.jpeg";
 import Logo from "../assets/img/logo.png";
-import ToggleDarkMode from "../Component/ToggleDarkMode.jsx"
+import ToggleDarkMode from "../Component/ToggleDarkMode.jsx";
 import LoginModal from "./LoginModal.jsx";
 
-export default function Navbar({isLoginModal, setIsLoginModal}) {
+export default function Navbar({ isLoginModal, setIsLoginModal }) {
+  const apiUrl = import.meta.env.VITE_API_URL; // URL API
   const [isSideMenuOpen, setMenu] = useState(false);
   // const [isLoginModalOpen, setLoginModalOpen] = useState(false);
   const navigate = useNavigate();
   const { darkMode, setDarkMode } = useTheme();
-  
+
   const showLoginModal = () => {
     setIsLoginModal(true);
   };
@@ -39,13 +40,28 @@ export default function Navbar({isLoginModal, setIsLoginModal}) {
     console.log(data);
     setCookie("isLoggedIn", true);
     setCookie("token", data.data.token);
-    setCookie("user_id", data.data.id_user)
-    
-    setIsLoginModal(false)
+    setCookie("user_id", data.data.id_user);
+    setCookie("role", data.data.role);
+    setCookie("firstName", data.data.firstname);
+    setCookie("lastName", data.data.lastname);
+    setCookie("gender", data.data.gender);
+    setCookie("email", data.data.email);
+    setCookie("tanggal_lahir", data.data.tanggal_lahir);
+    setCookie("telp", data.data.telp);
+    setCookie("path_file", data.data.path_file);
+    setCookie("nama_toko", data.data.nama_toko);
+    setCookie("buka_toko", data.data.buka_toko);
+    setCookie("klasifikasi_toko", data.data.klasifikasi_toko);
+    setCookie("rating_toko", data.data.rating_toko);
+
+    if (data.data.role == 10) {
+      navigate("/adminPengajuan");
+      setIsLoginModal(false);
+    }
+    setIsLoginModal(false);
+
     // console.log(cookies["token"], data.data.token);
-  }
-
-
+  };
 
   return (
     <main className="relative dark:bg-[#3b3b3b]">
@@ -106,56 +122,57 @@ export default function Navbar({isLoginModal, setIsLoginModal}) {
         {/* last section */}
         <div className="flex items-center gap-4">
           {/* cart icon */}
-          <div  className="cursor-pointer group w-4 md:w-12 transition-all flex duration-500"
+          <div
+            className="cursor-pointer group w-4 md:w-12 transition-all flex duration-500"
             // onClick={() => setDarkMode(!darkMode)}
           >
-              <ToggleDarkMode darkMode={darkMode} setDarkMode={setDarkMode}/>
+            <ToggleDarkMode darkMode={darkMode} setDarkMode={setDarkMode} />
           </div>
           {/* <div onClick={handleCartClick} className="cursor-pointer group w-6 hover:w-32 transition-all flex items-center duration-500">
             <AiOutlineSearch className="text-xl hidden md:flex" /> */}
-            {/* <AiOutlineShoppingCart className="text-xl hidden md:flex " /> */}
-            {/* <div className="ml-2 hidden group-hover:flex opacity-0 group-hover:opacity-100 transition-all duration-500 whitespace-nowrap text-sm">
+          {/* <AiOutlineShoppingCart className="text-xl hidden md:flex " /> */}
+          {/* <div className="ml-2 hidden group-hover:flex opacity-0 group-hover:opacity-100 transition-all duration-500 whitespace-nowrap text-sm">
               <input type="text" className="border-2 rounded-lg w-24 px-2"/>
             </div> */}
 
           {/* </div> */}
 
-          {
-            (cookies.isLoggedIn) ? (
-              <div onClick={handleCartClick} className="cursor-pointer group w-6 hover:w-24 transition-all flex duration-500">
-                <AiOutlineShoppingCart className="text-xl hidden md:flex dark:text-white"/>
-                <span className="md:ml-2 hidden dark:text-white group-hover:flex opacity-0 group-hover:opacity-100 transition-all duration-500 whitespace-nowrap text-sm">
-                  Keranjang
-                </span>
-              </div>
-            ) : null
-          }
-
-          
+          {cookies.isLoggedIn ? (
+            <div
+              onClick={handleCartClick}
+              className="cursor-pointer group w-6 hover:w-24 transition-all flex duration-500"
+            >
+              <AiOutlineShoppingCart className="text-xl hidden md:flex dark:text-white" />
+              <span className="md:ml-2 hidden dark:text-white group-hover:flex opacity-0 group-hover:opacity-100 transition-all duration-500 whitespace-nowrap text-sm">
+                Keranjang
+              </span>
+            </div>
+          ) : null}
 
           {/* <AiOutlineUser className="text-xl hidden md:flex" /> */}
-          {
-            (cookies["isLoggedIn"]) ? (
-              <>
-                <img
+          {cookies["isLoggedIn"] ? (
+            <>
+              <img
                 onClick={() => navigate("/akunSaya")}
                 width={40}
                 height={40}
                 className="h-8 w-8 rounded-full cursor-pointer "
-                src={ava}
+                // src={ava}
+                src={apiUrl + "/img/profile_image/" + cookies["path_file"]}
                 alt="avatar-img"
               />
-              </>
-            ) : (
-              <>
-              <div className="cursor-pointer dark:text-white group ml-4 justify-center hover:border-b-2 border-[#FE5D26] dark:border-white transition-all flex duration-500" onClick={showLoginModal}>
+            </>
+          ) : (
+            <>
+              <div
+                className="cursor-pointer dark:text-white group ml-4 justify-center hover:border-b-2 border-[#FE5D26] dark:border-white transition-all flex duration-500"
+                onClick={showLoginModal}
+              >
                 Login
               </div>
-              </>
-            )
-            
-          }
-          
+            </>
+          )}
+
           {/* avtar img */}
         </div>
       </nav>

@@ -1,6 +1,8 @@
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import HomePage from "./pages/HomePage.jsx";
 import SignupPage from "./pages/SignupPage.jsx";
@@ -24,11 +26,26 @@ import { ThemeProvider } from "./Component/ThemeContext.jsx";
 const AppRoutes = ({ isLoginModal, setIsLoginModal }) => {
   const location = useLocation();
   const isAdminRoute = location.pathname.startsWith("/admin");
+  const isRegisterRoute = location.pathname === "/register";
 
   return (
     <>
-      {!isAdminRoute && (
-        <Navbar isLoginModal={isLoginModal} setIsLoginModal={setIsLoginModal} />
+      <ToastContainer
+        position="top-center"
+        autoClose={2000}
+        hideProgressBar={true}
+        newestOnTop={false}
+        closeOnClick
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
+      {!(isAdminRoute || isRegisterRoute) && (
+        <Navbar
+          isLoginModal={isLoginModal}
+          setIsLoginModal={setIsLoginModal}
+        />
       )}
       <Routes>
         {/* Halaman publik */}
@@ -50,7 +67,7 @@ const AppRoutes = ({ isLoginModal, setIsLoginModal }) => {
           <Route path="/checkout" element={<CheckoutPage />} />
           <Route path="/loading" element={<LoadingAcc />} />
           <Route path="/formUMKM" element={<FormUMKMPage />} />
-          <Route path="/toko" element={<TokoPage />} />
+          <Route path="/toko/:userId" element={<TokoPage />} />
           <Route path="/tambahProduk" element={<TambahProdukPage />} />
           <Route path="/editProduk/:idProduk" element={<TambahProdukPage />} />
           <Route path="/adminUmkmList" element={<AdminUmkmPage />} />

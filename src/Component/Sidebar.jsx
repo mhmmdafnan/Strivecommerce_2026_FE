@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from "react";
 import Logo from "../assets/img/logo.png";
-import userLogo from "../assets/img/picture1.jpeg";
 import { NavLink, useNavigate } from "react-router-dom";
 import { IoLogOutOutline } from "react-icons/io5";
 import { FaUserCircle } from "react-icons/fa";
 
-// import { useCookies } from "react-cookie";
+import { useCookies } from "react-cookie";
 
 const Sidebar = () => {
-  // const backendUrl = import.meta.env.VITE_API_URL;
+  const apiUrl = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
+  const [cookies, setCookie, deleteCookie] = useCookies();
   const [isOpen, setIsOpen] = useState(false);
   const toggleSidebar = () => setIsOpen(!isOpen);
 
@@ -17,6 +17,24 @@ const Sidebar = () => {
 
   // Fungsi Logout
   const removeAllCookie = () => {
+    // Implement logout logic here
+    console.log("User logged out");
+    deleteCookie("isLoggedIn");
+    deleteCookie("token");
+    deleteCookie("user_id");
+    deleteCookie("role");
+    deleteCookie("firstName");
+    deleteCookie("lastName");
+    deleteCookie("email");
+    deleteCookie("telp");
+    deleteCookie("nama_toko");
+    deleteCookie("buka_toko");
+    deleteCookie("klasifikasi_toko");
+    deleteCookie("rating_toko");
+    deleteCookie("gender");
+    deleteCookie("path_file");
+    deleteCookie("tanggal_lahir");
+    // Optionally, redirect to home or login page]
     navigate("/");
   };
 
@@ -42,8 +60,7 @@ const Sidebar = () => {
 
         <div className="mt-12">
           <img
-            // src={backendUrl + cookies.profilePath}
-            src={userLogo}
+            src={apiUrl + "/img/profile_image/" + cookies.path_file}
             alt="Logo"
             className="mx-auto h-24 w-24 object-cover shadow-xl rounded-full"
           />
@@ -81,7 +98,7 @@ const Sidebar = () => {
         <div className="absolute bottom-0 w-full pb-4">
           <div
             className="flex justify-center items-center gap-x-2 w-full cursor-pointer hover:bg-gray-200 py-2"
-            onClick={() => navigate("/home")}
+            onClick={() => navigate("/")}
           >
             <FaUserCircle />
             <span className="text-sm">Halaman User</span>
