@@ -51,7 +51,7 @@ const AppRoutes = ({ isLoginModal, setIsLoginModal }) => {
         {/* Halaman publik */}
         <Route path="/" element={<HomePage />} />
         <Route
-          path="/detailProduk/:id"
+          path="/detailProduk/:idProduk"
           element={
             <DetailProdukPage
               isLoginModal={isLoginModal}

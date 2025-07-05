@@ -13,88 +13,98 @@ import produk1 from "../assets/img/produk/kursi 1.jpg";
 import produk2 from "../assets/img/produk/kursi 2.jpg";
 import produk3 from "../assets/img/produk/kursi 3.jpg";
 import fotoToko from "../assets/img/market foto.png";
-import { data, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { useCookies } from "react-cookie";
 import LoginModal from "../Component/LoginModal";
 import Loading from "../Component/Loading";
 
-// const produkList = [
-//   {
-//     id: 1,
-//     nama: "Nama Barang wkwkwkwkwkkwkwkw",
-//     harga: "Rp. 100.000",
-//     toko: "Toko",
-//     gambar: produk1,
-//   },
-//   {
-//     id: 2,
-//     nama: "Nama Barang wkwkwkwkwkkwkwkw",
-//     harga: "Rp. 100.000",
-//     toko: "Toko",
-//     gambar: produk2,
-//   },
-//   {
-//     id: 3,
-//     nama: "Nama Barang wkwkwkwkwkkwkwkw",
-//     harga: "Rp. 100.000",
-//     toko: "Toko",
-//     gambar: produk3,
-//   },
-//   {
-//     id: 4,
-//     nama: "Nama Barang wkwkwkwkwkkwkwkw",
-//     harga: "Rp. 100.000",
-//     toko: "Toko",
-//     gambar: produk1,
-//   },
-//   {
-//     id: 5,
-//     nama: "Nama Barang wkwkwkwkwkkwkwkw",
-//     harga: "Rp. 100.000",
-//     toko: "Toko",
-//     gambar: produk2,
-//   },
-//   {
-//     id: 6,
-//     nama: "Nama Barang wkwkwkwkwkkwkwkw",
-//     harga: "Rp. 100.000",
-//     toko: "Toko",
-//     gambar: produk3,
-//   },
-//   {
-//     id: 7,
-//     nama: "Nama Barang wkwkwkwkwkkwkwkw",
-//     harga: "Rp. 100.000",
-//     toko: "Toko",
-//     gambar: produk1,
-//   },
-//   {
-//     id: 8,
-//     nama: "Nama Barang wkwkwkwkwkkwkwkw",
-//     harga: "Rp. 100.000",
-//     toko: "Toko",
-//     gambar: produk2,
-//   },
-//   {
-//     id: 9,
-//     nama: "Nama Barang wkwkwkwkwkkwkwkw",
-//     harga: "Rp. 100.000",
-//     toko: "Toko",
-//     gambar: produk3,
-//   },
-//   // dan seterusnya
-// ];
+const produkList = [
+  {
+    id: 1,
+    nama: "Nama Barang wkwkwkwkwkkwkwkw",
+    harga: "Rp. 100.000",
+    toko: "Toko",
+    gambar: produk1,
+  },
+  {
+    id: 2,
+    nama: "Nama Barang wkwkwkwkwkkwkwkw",
+    harga: "Rp. 100.000",
+    toko: "Toko",
+    gambar: produk2,
+  },
+  {
+    id: 3,
+    nama: "Nama Barang wkwkwkwkwkkwkwkw",
+    harga: "Rp. 100.000",
+    toko: "Toko",
+    gambar: produk3,
+  },
+  {
+    id: 4,
+    nama: "Nama Barang wkwkwkwkwkkwkwkw",
+    harga: "Rp. 100.000",
+    toko: "Toko",
+    gambar: produk1,
+  },
+  {
+    id: 5,
+    nama: "Nama Barang wkwkwkwkwkkwkwkw",
+    harga: "Rp. 100.000",
+    toko: "Toko",
+    gambar: produk2,
+  },
+  {
+    id: 6,
+    nama: "Nama Barang wkwkwkwkwkkwkwkw",
+    harga: "Rp. 100.000",
+    toko: "Toko",
+    gambar: produk3,
+  },
+  {
+    id: 7,
+    nama: "Nama Barang wkwkwkwkwkkwkwkw",
+    harga: "Rp. 100.000",
+    toko: "Toko",
+    gambar: produk1,
+  },
+  {
+    id: 8,
+    nama: "Nama Barang wkwkwkwkwkkwkwkw",
+    harga: "Rp. 100.000",
+    toko: "Toko",
+    gambar: produk2,
+  },
+  {
+    id: 9,
+    nama: "Nama Barang wkwkwkwkwkkwkwkw",
+    harga: "Rp. 100.000",
+    toko: "Toko",
+    gambar: produk3,
+  },
+  // dan seterusnya
+];
 
+const produk = {
+  nama: "Kursi Gaming Ergonomis",
+  harga: 100000,
+  deskripsi: `Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam, dolore? 
+  Nulla fugiat vero minima corporis, totam iste error adipisci, rem incidunt esse nam! 
+  Voluptates, eaque nesciunt ratione quia praesentium nihil! Lorem ipsum dolor sit amet consectetur,
+  adipisicing elit. Repudiandae soluta ad cumque ex impedit. Quia enim, numquam ut ea natus quaerat 
+  sunt minus accusamus eaque voluptatibus. Dolorem nostrum culpa iusto..`,
+  fotoProduk: [produk1, produk2, produk3],
+};
 
 const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
   const apiUrl = import.meta.env.VITE_API_URL;
   const [indexStok, setIndexStok] = useState(0);
   const location = useLocation();
-  const idProduk = location.pathname.split("/").pop();
+  const { idProduk } = useParams();
   const navigate = useNavigate();
   const [fotoProduk, setFotoProduk] = useState([]);
-  const [fotoUtama, setFotoUtama] = useState(produk.fotoProduk[0]);
+  const [fotoUtama, setFotoUtama] = useState();
   const [loadingProduk, setLoadingProduk] = useState(false);
   const [dataProduk, setDataProduk] = useState();
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -218,6 +228,8 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
   };
 
   useEffect(() => {
+    // console.log(idProduk);
+
     // Simulasi pengambilan data produk berdasarkan idProduk
     const fetchProduk = async () => {
       setLoadingProduk(true);
@@ -230,14 +242,12 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
 
         if (response.data.success) {
           setDataProduk(response.data.data);
-          // const fotolist = response.data.data.path.split(",");
-          // setFotoProduk(fotolist);
+          // console.log(response.data.data);
 
-          const fotoList = response.data.data.path.split(",");
-          const fotoObj = fotoList.map((item, i) => ({
-            [`item${i + 1}`]: item,
-          }));
-          setFotoProduk(fotoObj);
+          // Ubah string JSON menjadi array
+          const fotoArray = JSON.parse(response.data.data.path);
+          setFotoUtama(fotoArray[0]);
+          setFotoProduk(fotoArray);
         } else {
           setShowLoginError(true);
         }
@@ -251,6 +261,11 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
 
     fetchProduk();
   }, []);
+
+  useEffect(() => {
+    console.log(fotoProduk);
+    // console.log(fotoUtama);
+  }, [fotoProduk]);
 
   return (
     <div className="dark:bg-[#393E41] transition-all duration-500">
@@ -291,7 +306,10 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
                     onMouseLeave={() => setZoom(false)}
                   >
                     <img
-                      src={fotoUtama}
+                      src={`${apiUrl}/img/product/${idProduk}${fotoUtama}`}
+                      // src={
+                      //   fotoUtama ? apiUrl + idProduk + "/" + fotoUtama : "-"
+                      // }
                       className="h-full w-full object-contain rounded-xl transition-transform duration-300 cursor-zoom-in"
                       style={
                         zoom
@@ -303,7 +321,7 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
                             }
                           : { transform: "scale(1)" }
                       }
-                      alt={dataProduk.nama}
+                      alt={dataProduk ? dataProduk.nama : "-"}
                     />
                   </div>
                   {/* foto lainnya - desktop */}
@@ -316,14 +334,14 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
                           setSelectedIndex(index);
                         }}
                         className={`h-20 w-20 rounded-xl cursor-pointer transition-all duration-200 
-                          border-[1px] hover:border-[#EE6D3F] ${
-                            selectedIndex === index
-                              ? "border-[#EE6D3F] ring-2 ring-[#EE6D3F]"
-                              : "border-gray-500"
-                          }`}
+      border-[1px] hover:border-[#EE6D3F] ${
+        selectedIndex === index
+          ? "border-[#EE6D3F] ring-2 ring-[#EE6D3F]"
+          : "border-gray-500"
+      }`}
                       >
                         <img
-                          src={foto}
+                          src={`${apiUrl}/img/product/${idProduk}${foto}`}
                           className="rounded-xl h-full w-full object-cover"
                           alt={`foto-${index}`}
                         />
@@ -443,7 +461,7 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
               }`}
                 >
                   <img
-                    src={foto}
+                    src={apiUrl + foto[index]}
                     className="rounded-xl h-full w-full object-cover"
                     alt={`foto-${index}`}
                   />
@@ -582,7 +600,7 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
                   />
                 </div>
                 <div
-                  onClick={() => navigate("/toko/" + dataProduk.userId)}
+                  onClick={() => navigate("/toko")}
                   className="cursor-pointer"
                 >
                   <div className="text-xl font-semibold hover:text-[#EE6D3F]">

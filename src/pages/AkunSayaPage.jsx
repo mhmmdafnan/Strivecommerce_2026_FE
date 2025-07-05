@@ -98,11 +98,15 @@ const AkunSayaPage = () => {
           <div className="flex flex-col md:flex-row gap-5 md:gap-10 mb-6 justify-center">
             <div className="flex justify-end">
               <div
-                onClick={() => navigate("/formUMKM")}
+                onClick={() => {
+                  cookies.buka_toko == 0
+                    ? navigate("/formUMKM")
+                    : navigate("/tokoSaya");
+                }}
                 className="md:hidden flex w-fit items-center justify-center text-white py-1 px-8 rounded-md bg-[#EE6D3F] hover:bg-[#d25f35] cursor-pointer transition-colors duration-300"
               >
                 <MdOutlineStore className="inline-block mr-2 text-xl" />
-                Buka Toko
+                {cookies.buka_toko == 0 ? "Buka Toko" : "Toko Saya"}
               </div>
             </div>
             {/* Kartu Foto Profil */}
@@ -150,11 +154,15 @@ const AkunSayaPage = () => {
                 <h1 className="text-xl font-bold text-gray-800">Data Diri</h1>
                 <div className="hidden md:flex justify-end">
                   <div
-                    onClick={() => navigate("/formUMKM")}
+                    onClick={() => {
+                      cookies.buka_toko == 0
+                        ? navigate("/formUMKM")
+                        : navigate("/tokoSaya");
+                    }}
                     className="flex w-fit items-center justify-center text-white  px-8 py-1 rounded-md bg-[#EE6D3F] hover:bg-[#d25f35] cursor-pointer transition-colors duration-300"
                   >
                     <MdOutlineStore className="inline-block mr-2 text-xl" />
-                    Buka Toko
+                    {cookies.buka_toko == 0 ? "Buka Toko" : "Toko Saya"}
                   </div>
                 </div>
               </div>
