@@ -39,7 +39,7 @@ const AkunSayaPage = () => {
                 className="md:hidden flex w-fit items-center justify-center text-white py-1 px-8 rounded-md bg-[#EE6D3F] hover:bg-[#d25f35] cursor-pointer transition-colors duration-300"
               >
                 <MdOutlineStore className="inline-block mr-2 text-xl" />
-                Buka Toko
+                Buka Toko 
               </div>
             </div>
             {/* Kartu Foto Profil */}
@@ -81,8 +81,9 @@ const AkunSayaPage = () => {
                     className="flex w-fit items-center justify-center text-white  px-8 py-1 rounded-md bg-[#EE6D3F] hover:bg-[#d25f35] cursor-pointer transition-colors duration-300"
                   >
                     <MdOutlineStore className="inline-block mr-2 text-xl" />
-                    Buka Toko
+                    Buka Toko 
                   </div>
+
                   
                 </div>
               </div>
@@ -133,6 +134,12 @@ const AkunSayaPage = () => {
                     className="flex items-center justify-center w-44 bg-[#4B4B4A] text-white px-5 border-2 border-[#4B4B4A] rounded-md hover:bg-[#242323] cursor-pointer transition-colors duration-300"
                   >
                     Ubah Password
+                  </div>
+                  <div
+                    onClick={() => {navigate("/alamat")}}
+                    className="flex items-center justify-center w-44 bg-[#4B4B4A] text-white px-5 border-2 border-[#4B4B4A] rounded-md hover:bg-[#242323] cursor-pointer transition-colors duration-300"
+                  >
+                    Alamat
                   </div>
                   <div 
                     className="flex items-center justify-center w-44 bg-red-500 text-white px-5 border-2 border-red-500 rounded-md hover:bg-red-600 cursor-pointer transition-colors duration-300"

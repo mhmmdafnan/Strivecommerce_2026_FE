@@ -17,6 +17,8 @@ import LoadingAcc from "./pages/LoadingACC.jsx";
 import LoginRoutes from "./Component/LoginRoutes.jsx";
 import TambahProdukPage from "./Component/TambahProduk.jsx";
 import Navbar from "./Component/Navbar.jsx";
+import AlamatPage from "./pages/AlamatPage.jsx";
+import TambahAlamat from "./pages/TambahAlamat.jsx";
 import { useState } from "react";
 import { ThemeProvider } from "./Component/ThemeContext.jsx";
 
@@ -42,6 +44,8 @@ function App() {
               <Route path="/loading" element={<LoadingAcc />} />
               <Route path="/formUMKM" element={<FormUMKMPage />} />
               <Route path="/toko" element={<TokoPage />} />
+              <Route path="/alamat" element={<AlamatPage />} />
+              <Route path="/TambahAlamat" element={<TambahAlamat />} />
               <Route path="/tambahProduk" element={<TambahProdukPage />} />
               <Route
                 path="/editProduk/:idProduk"

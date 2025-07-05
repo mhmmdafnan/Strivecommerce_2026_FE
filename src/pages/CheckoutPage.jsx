@@ -14,6 +14,8 @@ const CheckoutPage = () => {
 
     const location = useLocation();
     const keranjang = location.state?.keranjang || [];
+    console.log(keranjang);
+    const apiUrl = import.meta.env.VITE_API_URL; // URL API
 
     const [pengiriman, setPengiriman] = useState(0);
     const [ongkir, setOngkir] = useState(12000);
@@ -35,19 +37,18 @@ const CheckoutPage = () => {
     };
 
     const totalPayment = () => {
-        const totalBarang = keranjang.reduce((total, toko) => {
-            return total + toko.product.reduce((subTotal, produk) => {
-                return subTotal + (produk.isChecked ? produk.harga * produk.total : 0);
-            }, 0);
-        }, 0);
+        // const totalBarang = keranjang.reduce((total, toko) => {
+        //     return total + toko.product.reduce((subTotal, produk) => {
+        //         return subTotal + (produk.isChecked ? produk.harga * produk.total : 0);
+        //     }, 0);
+        // }, 0);
 
-        return totalBarang + ongkir + 212000;
+        // return totalBarang + ongkir + 212000;
     }
     
 
     return (
         <>
-            <Navbar />
 
             <PilihAlamatModal isOpen={showAlamatModal} onClose={onCloseAlamatModal} onSelect={showAlamatModalHandler} />
 
@@ -90,8 +91,8 @@ const CheckoutPage = () => {
                                 {
                                     keranjang.map((toko) => {
                                         // Filter produk yang isChecked = true
-                                        const checkedProducts = toko.product.filter((produk) => produk.isChecked);
-                                        if (checkedProducts.length === 0) return null; // Skip toko jika tidak ada produk terpilih
+                                        // const checkedProducts = toko.product.filter((produk) => produk.isChecked);
+                                        // if (checkedProducts.length === 0) return null; // Skip toko jika tidak ada produk terpilih
 
                                         return (
                                         <div className=" lg:bg-white mb-4 py-1 w-full md:mx-auto mlg:max-w-[700px] rounded-xl" key={toko.id}>
@@ -101,13 +102,17 @@ const CheckoutPage = () => {
                                             </h2>
                                             </div>
                                             {
-                                            checkedProducts.map((produk) => (
-                                                <div className="produk-list p-2 flex items-center" key={produk.id}>
+                                            toko.produk.map((produk) => (
+                                                <div className="produk-list p-2 flex items-center" key={produk.produkId}>
                                                     <label htmlFor="produk" className="ml-2 flex  justify-between w-full">
                                                         <div className="flex items-center">
-                                                            <img src={produk.gambar} className="w-16 rounded-xl h-16 object-cover" alt="" />
+                                                            <img src={apiUrl + "/pict/" + produk.produkId + produk.path} className="w-16 rounded-xl h-16 object-cover" alt="" />
                                                             <div className="ml-2">
-                                                                <h3 className="text-sm ">{produk.nama}</h3>
+                                                                <h3 className="text-sm ">{produk.namaProduk} <span className="text-gray-500 text-sm">({produk.qtty})</span> {produk.variasi != "-" && (
+                                                                    <p className="text-[10px] ml-1 text-gray-500">({produk.variasi})</p>
+                                                                )}
+                                                                </h3>
+                                                                
                                                             </div>
                                                             {/* <div className="justify-end items-center flex flex-1 ml-4">
                                                                 <div className={`bg-gray-200 mr-2 rounded-full px-2 py-1 text-xs text-gray-700 transition-all duration-500 ${produk.isChecked ? "opacity-100" : "opacity-40"}`} onClick={() => subtractTotal(toko.id, produk.id)}>
@@ -125,7 +130,7 @@ const CheckoutPage = () => {
                                                             </div> */}
                                                         </div>
                                                         <div className={`encounter justify-end items-center flex flex-1 `}>
-                                                            <p className="text-xs text-gray-500">Rp. {produk.harga.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</p>
+                                                            <p className="text-xs text-gray-500">Rp. {(produk.harga * produk.qtty).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}</p>
                                                         </div>
                                                     </label>
                                                 </div>
@@ -142,11 +147,11 @@ const CheckoutPage = () => {
                                     <div className="flex text-sm justify-between items-center">
                                         <h2 className="font-semibold">Total Barang</h2>
                                         <p className="font-semibold">
-                                            Rp. {keranjang.reduce((total, toko) => {
+                                            {/* Rp. {keranjang.reduce((total, toko) => {
                                                 return total + toko.product.reduce((subTotal, produk) => {
                                                     return subTotal + (produk.isChecked ? produk.harga * produk.total : 0);
                                                 }, 0);
-                                            }, 0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}
+                                            }, 0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} */}
                                         </p>
                                     </div>
                                 </div>
@@ -176,7 +181,7 @@ const CheckoutPage = () => {
                                     <div className="flex text-lg justify-between items-center">
                                         <h2 className="font-semibold">Total</h2>
                                         <p className="font-semibold">
-                                            Rp. {totalPayment().toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")}
+                                            {/* Rp. {totalPayment().toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".")} */}
                                         </p>
                                     </div>
                                 </div>
