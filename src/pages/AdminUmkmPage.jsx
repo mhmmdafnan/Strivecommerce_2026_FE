@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useCookies } from "react-cookie";
-import { jwtDecode } from "jwt-decode"; 
 
 import Sidebar from "../Component/Sidebar";
 import foto from "../assets/img/picture1.jpeg";
@@ -70,11 +69,6 @@ function MainPage() {
 
   // Fetch data when page changes
   useEffect(() => {
-    if (cookies["token"]) {
-      const decoded = jwtDecode(cookies["token"]);
-      console.log(decoded.firstName); 
-      console.log(decoded.email);
-    }
     const fetchData = async () => {
       setLoading(true);
       try {

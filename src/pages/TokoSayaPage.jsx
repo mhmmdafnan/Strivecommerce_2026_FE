@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { useCookies } from "react-cookie";
 
 import { useNavigate } from "react-router-dom";
 import ava from "../assets/img/picture1.jpeg";
@@ -8,6 +10,11 @@ import produk from "../assets/img/produk/kursi 1.jpg";
 import Navbar from "../Component/Navbar";
 
 const TokoSayaPage = () => {
+  const apiUrl = import.meta.env.VITE_API_URL;
+  const [cookies, setCookie] = useCookies();
+  const navigate = useNavigate();
+  const [selectedProducts, setSelectedProducts] = useState([]);
+  // const toko = { id: 1, nama: "Toko Saya" };
   const [produkList, setProdukList] = useState([
     {
       id: 1,
@@ -109,9 +116,6 @@ const TokoSayaPage = () => {
       gambar: produk,
     },
   ]);
-  const navigate = useNavigate();
-  const [selectedProducts, setSelectedProducts] = useState([]);
-  const toko = { id: 1, nama: "Toko Saya" };
 
   const handleSelectAll = () => {
     const allChecked = produkList.every((item) => item.isChecked);
@@ -136,11 +140,15 @@ const TokoSayaPage = () => {
     window.open(`/editProduk/${idProduk}`, "_blank");
   };
 
+  // Fetch data when page changes
+  useEffect(() => {}, []);
+
   return (
     <>
-      <Navbar />
       <div className="max-w-7xl mx-auto px-5 md:px-10 py-5 mb-20 md:mt-0">
-        <h1 className="text-sm text-gray-600 cursor-pointer">Toko Saya</h1>
+        <h1 className="text-sm text-gray-600 cursor-pointer">
+          {cookies.nama_toko}
+        </h1>
 
         <div className="bg-[#E9E9E9] shadow-lg border-[1px]  rounded-lg px-10 py-6 mt-4 max-w-5xl mx-auto">
           <div className="flex mb-4">
@@ -179,33 +187,33 @@ const TokoSayaPage = () => {
             {/* Data Diri */}
             <div className="md:basis-1/2 px-2 md:px-0 w-full ">
               <div className="flex justify-between items-center mb-2 md:mb-4">
-                <h1 className="text-xl font-bold text-gray-800">Nama Toko</h1>
+                <h1 className="text-xl font-bold text-gray-800">
+                  {cookies.nama_toko}
+                </h1>
               </div>
 
               <div className="text-sm space-y-2 mb-4">
                 <div className="grid grid-cols-2 w-60 lg:w-72 items-center">
                   <h2 className="">Nama Pengguna</h2>
                   <p className="text-xs w-40 lg:w-80 font-extralight">
-                    : John Doe
+                    : {cookies.firstName + " " + cookies.lastName}
                   </p>
                 </div>
                 <div className="grid grid-cols-2 w-60 lg:w-72 items-center">
                   <h2 className="">Nomor Telepon</h2>
                   <p className="text-xs w-40 lg:w-80 font-extralight">
-                    : +62 812-3456-7890
+                    : {cookies.telp}
                   </p>
                 </div>
                 <div className="grid grid-cols-2 w-60 lg:w-72 items-center">
                   <h2 className="">Produk Terjual</h2>
                   <p className="text-xs w-40 lg:w-80 font-extralight">
-                    : 5 Produk
+                    {/* : 5 Produk */}
                   </p>
                 </div>
                 <div className="grid grid-cols-2 w-60 lg:w-72 items-center">
                   <h2 className="">Alamat</h2>
-                  <p className="text-xs w-40 lg:w-80 font-extralight">
-                    : Jl. Kebon Jeruk No. 27, Jakarta
-                  </p>
+                  <p className="text-xs w-40 lg:w-80 font-extralight">:</p>
                 </div>
                 <div className="grid grid-cols-2 w-60 lg:w-72 items-center">
                   <h2 className="">Rating</h2>

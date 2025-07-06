@@ -20,7 +20,7 @@ const LoginModal = ({ isOpen, onClose, onSuccess }) => {
   const location = useLocation();
   const firstInputRef = useRef(null);
   const [cookies, setCookie, removeCookie] = useCookies(["isLoggedIn"]);
- 
+
   const [formData, setFormData] = useState({
     // inisialisasi state untuk menyimpan data form
     email: "",
@@ -41,10 +41,12 @@ const LoginModal = ({ isOpen, onClose, onSuccess }) => {
         email: formData.email,
         password: formData.pass,
       });
+      console.log(response);
+
       if (response.data.success) {
-        setCookie("isLoggedIn", true);
-        setCookie("token", response.data.token);
-        setCookie("user_id", response.data.id_user);
+        // setCookie("isLoggedIn", true);
+        // setCookie("token", response.data.token);
+        // setCookie("user_id", response.data.id_user);
         onSuccess(response);
       } else {
         setShowLoginError(true);
@@ -101,10 +103,10 @@ const LoginModal = ({ isOpen, onClose, onSuccess }) => {
           Belum punya akun?
           <span
             onClick={() => {
-              if (location.pathname === "/") {
+              if (location.pathname === "/register") {
                 onClose(); // jika sudah di halaman "/"
               } else {
-                navigate("/"); // jika bukan di halaman "/"
+                navigate("/register"); // jika bukan di halaman "/"
               }
             }}
             className="text-[#EE6D3F] font-bold hover:underline pl-1 cursor-pointer"
@@ -127,7 +129,9 @@ const LoginModal = ({ isOpen, onClose, onSuccess }) => {
 
           <div className="relative">
             <input
-              className={`bg-[#d8d8d8] text-xs ${showLoginError ? 'mb-0' : 'mb-8'} px-3 py-2 block rounded-lg w-full focus:ring-1 focus:ring-[#ff8052] focus:outline-none`}
+              className={`bg-[#d8d8d8] text-xs ${
+                showLoginError ? "mb-0" : "mb-8"
+              } px-3 py-2 block rounded-lg w-full focus:ring-1 focus:ring-[#ff8052] focus:outline-none`}
               name="pass"
               required
               type={showPassword ? "text" : "password"}
@@ -151,23 +155,18 @@ const LoginModal = ({ isOpen, onClose, onSuccess }) => {
             </div>
           )}
 
-
           <button
             className="w-full bg-[#EE6D3F] hover:bg-[#ff8052] h-10 transition duration-150 px-3 py-2 rounded-lg text-white text-xs md:text-sm"
             type="submit"
             // onClick={sendData}
           >
-            {
-              loading ? (
-                <div className="flex justify-center  items-center gap-2">
-                  <Loading w={4} h={4} />
-                </div>
-              ) : (
-                <>
-                  Sign In
-                </>
-              )
-            }
+            {loading ? (
+              <div className="flex justify-center  items-center gap-2">
+                <Loading w={4} h={4} />
+              </div>
+            ) : (
+              <>Sign In</>
+            )}
           </button>
           <button className="flex justify-center items-center mt-3 w-full  border border-gray-300 hover:bg-gray-200 text-xs px-3 py-2 rounded-lg gap-2">
             <img src={LogoGoogle} alt="Google" className="w-4 h-4" />

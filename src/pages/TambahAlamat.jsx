@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Loading from "../Component/Loading";
+import { useCookies } from "react-cookie";
 
 const AlamatPage = () => {
   const [prov, setProv] = useState();
@@ -18,13 +19,15 @@ const AlamatPage = () => {
   const [kodePos, setKodePos] = useState("");
   const [detail, setDetail] = useState("");
   const [alamatDefault, setAlamatDefault] = useState(false);
+  const [cookies, setCookie, removeCookie] = useCookies(["isLoggedIn"]);
+  const [namaBangunan, setNamaBangunan] = useState();
 
   const apiUrl = import.meta.env.VITE_API_URL;
 
   const handleCheckboxChange = (event) => {
     setAlamatDefault(event.target.checked);
   };
-  
+
   const handleChangeDesa = (event) => {
     setSelectDesa(event.target.value);
   };
@@ -39,17 +42,45 @@ const AlamatPage = () => {
     setSelectKab(event.target.value);
   };
 
-  const onAlamatSubmit = () => {
+  const onAlamatSubmit = async () => {
     console.log(selectProv, selectKab, selectKec, selectDesa, kodePos, detail);
-    
-    if (!selectProv || !selectKab || !selectKec || !selectDesa || !kodePos){
+
+    if (!selectProv || !selectKab || !selectKec || !selectDesa || !kodePos) {
       alert("Silahkan Lengkapi isi Form");
       return;
     }
 
-    
+    const def = alamatDefault ? 1 : 0;
 
-  }
+    try {
+      const response = await axios.post(`${apiUrl}/api/v1/alamat`, {
+        userId: cookies["user_id"],
+        kodeProv: selectProv,
+        kodeKab: selectKab,
+        kodeKec: selectKec,
+        kodeDesa: selectDesa,
+        detail: detail,
+        // catatan,
+        kode_pos: kodePos,
+        // is_toko,
+        is_default: def,
+      });
+      console.log(response);
+
+      if (response.data.success) {
+        // setCookie("isLoggedIn", true);
+        // setCookie("token", response.data.token);
+        // setCookie("user_id", response.data.id_user);
+        // onSuccess(response);
+      } else {
+        // setShowLoginError(true);
+      }
+    } catch (error) {
+      // setShowLoginError(true);
+    } finally {
+      // setLoading(false);
+    }
+  };
 
   useEffect(() => {
     const fetchProduk = async () => {
@@ -292,6 +323,20 @@ const AlamatPage = () => {
                   id="pos"
                   value={kodePos}
                   onChange={(e) => setKodePos(e.target.value)}
+                />
+              </div>
+              <div className="mb-4 flex items-center">
+                <label htmlFor="pos" className="w-24">
+                  Bangunan
+                </label>
+                <div className="w-8">:</div>
+                <input
+                  type="text"
+                  className="bg-gray-200 rounded-md px-2 py-1"
+                  name="bangunan"
+                  id="bangunan"
+                  value={namaBangunan}
+                  onChange={(e) => setNamaBangunan(e.target.value)}
                 />
               </div>
               <label htmlFor="detail" className="mb-4">

@@ -1,6 +1,8 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import HomePage from "./pages/HomePage.jsx";
 import SignupPage from "./pages/SignupPage.jsx";
@@ -22,47 +24,78 @@ import TambahAlamat from "./pages/TambahAlamat.jsx";
 import { useState } from "react";
 import { ThemeProvider } from "./Component/ThemeContext.jsx";
 
-function App() {
-
-  const [isLoginModal, setIsLoginModal] = useState(false);
+// Wrapper untuk mengatur kondisi Navbar
+const AppRoutes = ({ isLoginModal, setIsLoginModal }) => {
+  const location = useLocation();
+  const isAdminRoute = location.pathname.startsWith("/admin");
+  const isRegisterRoute = location.pathname === "/register";
 
   return (
     <>
-      <ThemeProvider>
-        <BrowserRouter>
-          <Navbar isLoginModal={isLoginModal} setIsLoginModal={setIsLoginModal}/>
-          <Routes>
-            {/* Halaman publik */}
-            <Route path="/" element={<HomePage />} />
-            <Route path="/detailProduk/:id" element={<DetailProdukPage isLoginModal={isLoginModal} setIsLoginModal={setIsLoginModal} />}  />
-            
-            <Route element={<LoginRoutes />}>
-              <Route path="/akunSaya" element={<AkunSayaPage />} />
-              <Route path="/tokoSaya" element={<TokoSayaPage />} />
-              <Route path="/keranjang" element={<KeranjangPage />} />
-              <Route path="/checkout" element={<CheckoutPage />} />
-              <Route path="/loading" element={<LoadingAcc />} />
-              <Route path="/formUMKM" element={<FormUMKMPage />} />
-              <Route path="/toko" element={<TokoPage />} />
-              <Route path="/alamat" element={<AlamatPage />} />
-              <Route path="/TambahAlamat" element={<TambahAlamat />} />
-              <Route path="/tambahProduk" element={<TambahProdukPage />} />
-              <Route
-                path="/editProduk/:idProduk"
-                element={<TambahProdukPage />}
-                
-                />
+      <ToastContainer
+        position="top-center"
+        autoClose={2000}
+        hideProgressBar={true}
+        newestOnTop={false}
+        closeOnClick
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
+      {!(isAdminRoute || isRegisterRoute) && (
+        <Navbar
+          isLoginModal={isLoginModal}
+          setIsLoginModal={setIsLoginModal}
+        />
+      )}
+      <Routes>
+        {/* Halaman publik */}
+        <Route path="/" element={<HomePage />} />
+        <Route
+          path="/detailProduk/:idProduk"
+          element={
+            <DetailProdukPage
+              isLoginModal={isLoginModal}
+              setIsLoginModal={setIsLoginModal}
+            />
+          }
+        />
 
-              <Route path="/adminUmkmList" element={<AdminUmkmPage />} />
-              <Route path="/adminPengajuan" element={<AdminPengajuanPage />} />
-            </Route>
+        <Route element={<LoginRoutes />}>
+          <Route path="/akunSaya" element={<AkunSayaPage />} />
+          <Route path="/tokoSaya" element={<TokoSayaPage />} />
+          <Route path="/keranjang" element={<KeranjangPage />} />
+          <Route path="/checkout" element={<CheckoutPage />} />
+          <Route path="/loading" element={<LoadingAcc />} />
+          <Route path="/formUMKM" element={<FormUMKMPage />} />
+          <Route path="/toko/:userId" element={<TokoPage />} />
+          <Route path="/alamat" element={<AlamatPage />} />
+          <Route path="/TambahAlamat" element={<TambahAlamat />} />
+          <Route path="/tambahProduk" element={<TambahProdukPage />} />
+          <Route path="/editProduk/:idProduk" element={<TambahProdukPage />} />
+          <Route path="/adminUmkmList" element={<AdminUmkmPage />} />
+          <Route path="/adminPengajuan" element={<AdminPengajuanPage />} />
+        </Route>
 
-            <Route path="/register" element={<SignupPage />} />
-          </Routes>
-        </BrowserRouter>
-      </ThemeProvider>
+        <Route path="/register" element={<SignupPage />} />
+      </Routes>
     </>
   );
-}
+};
 
-export default App;
+// Main App
+export default function App() {
+  const [isLoginModal, setIsLoginModal] = useState(false);
+
+  return (
+    <ThemeProvider>
+      <BrowserRouter>
+        <AppRoutes
+          isLoginModal={isLoginModal}
+          setIsLoginModal={setIsLoginModal}
+        />
+      </BrowserRouter>
+    </ThemeProvider>
+  );
+}
