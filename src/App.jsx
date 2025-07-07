@@ -67,7 +67,7 @@ const AppRoutes = ({ isLoginModal, setIsLoginModal }) => {
           <Route path="/checkout" element={<CheckoutPage />} />
           <Route path="/loading" element={<LoadingAcc />} />
           <Route path="/formUMKM" element={<FormUMKMPage />} />
-          <Route path="/toko/:userId" element={<TokoPage />} />
+          <Route path="/toko/:idToko" element={<TokoPage />} />
           <Route path="/tambahProduk" element={<TambahProdukPage />} />
           <Route path="/editProduk/:idProduk" element={<TambahProdukPage />} />
           <Route path="/adminUmkmList" element={<AdminUmkmPage />} />
