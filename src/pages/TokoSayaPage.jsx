@@ -8,6 +8,7 @@ import { MdOutlineEdit, MdOutlineDeleteOutline } from "react-icons/md";
 
 import produk from "../assets/img/produk/kursi 1.jpg";
 import Navbar from "../Component/Navbar";
+import Loading from "../Component/Loading";
 
 const TokoSayaPage = () => {
   const apiUrl = import.meta.env.VITE_API_URL;
@@ -15,108 +16,8 @@ const TokoSayaPage = () => {
   const navigate = useNavigate();
   const [selectedProducts, setSelectedProducts] = useState([]);
   // const toko = { id: 1, nama: "Toko Saya" };
-  const [produkList, setProdukList] = useState([
-    {
-      id: 1,
-      nama: "Produk A",
-      kategori: "Elektronik",
-      stok: 50,
-      terjual: 25,
-      harga: 100000,
-      gambar: produk,
-    },
-    {
-      id: 2,
-      nama: "Produk B",
-      kategori: "Pakaian",
-      stok: 80,
-      terjual: 30,
-      harga: 75000,
-      gambar: produk,
-    },
-    {
-      id: 3,
-      nama: "Produk C",
-      kategori: "Makanan",
-      stok: 120,
-      terjual: 70,
-      harga: 15000,
-      gambar: produk,
-    },
-    {
-      id: 4,
-      nama: "Produk D",
-      kategori: "Aksesoris",
-      stok: 40,
-      terjual: 20,
-      harga: 50000,
-      gambar: produk,
-    },
-    {
-      id: 5,
-      nama: "Produk E",
-      kategori: "Mainan",
-      stok: 60,
-      terjual: 15,
-      harga: 30000,
-      gambar: produk,
-    },
-    {
-      id: 6,
-      nama: "Produk F",
-      kategori: "Peralatan Rumah Tangga",
-      stok: 30,
-      terjual: 10,
-      harga: 200000,
-      gambar: produk,
-    },
-    {
-      id: 7,
-      nama: "Produk G",
-      kategori: "Olahraga",
-      stok: 90,
-      terjual: 40,
-      harga: 120000,
-      gambar: produk,
-    },
-    {
-      id: 8,
-      nama: "Produk H",
-      kategori: "Kecantikan",
-      stok: 70,
-      terjual: 35,
-      harga: 85000,
-      gambar: produk,
-    },
-    {
-      id: 9,
-      nama: "Produk I",
-      kategori: "Buku",
-      stok: 110,
-      terjual: 55,
-      harga: 45000,
-      gambar: produk,
-    },
-    {
-      id: 10,
-      nama: "Produk J",
-      kategori: "Peralatan Kantor",
-      stok: 20,
-      terjual: 5,
-      harga: 60000,
-      gambar: produk,
-    },
-    {
-      id: 11,
-      nama: "Produk K",
-      kategori: "Elektronik",
-      stok: 50,
-      terjual: 25,
-      harga: 100000,
-      gambar: produk,
-    },
-  ]);
-
+  const [produkList, setProdukList] = useState([]);
+  const [loading, setLoading] = useState();
   const handleSelectAll = () => {
     const allChecked = produkList.every((item) => item.isChecked);
     const updatedList = produkList.map((item) => ({
@@ -141,7 +42,42 @@ const TokoSayaPage = () => {
   };
 
   // Fetch data when page changes
-  useEffect(() => {}, []);
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        // Ambil dua data secara paralel
+
+        const allProdukRes = await axios.get(`${apiUrl}/api/v1/product`, {
+          params: {
+            total: 12,
+            idToko: cookies.user_id,
+          },
+        });
+        // Set data produk umum
+        if (allProdukRes.data.success) {
+          const dataProduk = allProdukRes.data.data;
+
+          const produkDenganStok = dataProduk.map((produk) => {
+            const stokTotal = (produk.variasi || []).reduce(
+              (acc, variasi) => acc + (variasi.stok || 0),
+              0
+            );
+            return { ...produk, stokTotal };
+          });
+
+          setProdukList(produkDenganStok);
+        }
+      } catch (error) {
+        console.error("Gagal fetch data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    // console.log(produkList);
+
+    fetchData();
+  }, []);
 
   return (
     <>
@@ -277,16 +213,25 @@ const TokoSayaPage = () => {
                       <div>
                         <img
                           className="h-10 w-10 rounded-xl border-2 border-gray-400 object-contain"
-                          src={item.gambar}
+                          src={
+                            apiUrl +
+                            "/pict/" +
+                            item.id +
+                            JSON.parse(item.path)[0]
+                          }
                           alt=""
                         />
                       </div>
                       <div>{item.nama}</div>
                     </div>
-                    <div>{item.kategori}</div>
-                    <div>{item.stok} pcs</div>
+                    <div>{item.kategori == 0 && "-"}</div>
+                    <div>{item.stokTotal} pcs</div>
                     <div>{item.terjual} pcs</div>
-                    <div>Rp {item.harga.toLocaleString("id-ID")}</div>
+                    <div>
+                      {item.variasi?.[0]?.harga
+                        ? `Rp. ${item.variasi[0].harga.toLocaleString("id-ID")}`
+                        : "Harga tidak tersedia"}
+                    </div>
                     <div className="flex justify-center gap-2">
                       <div
                         onClick={() => handleEditKlik(item.id)}

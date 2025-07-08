@@ -171,31 +171,31 @@ const AkunSayaPage = () => {
                 <div>
                   <h2>Nama Pengguna</h2>
                   <p className="text-xs font-extralight text-gray-500">
-                    {cookies["firstname"] + " " + cookies["lastname"]}
+                    {cookies.firstName + " " + cookies.lastName}
                   </p>
                 </div>
                 <div>
                   <h2>Email</h2>
                   <p className="text-xs font-extralight text-gray-500">
-                    {cookies["email"]}
+                    {cookies.email}
                   </p>
                 </div>
                 <div>
                   <h2>Nomor Telepon</h2>
                   <p className="text-xs font-extralight text-gray-500">
-                    {cookies["telp"]}
+                    {cookies.telp}
                   </p>
                 </div>
                 <div>
                   <h2>Tanggal Lahir</h2>
                   <p className="text-xs font-extralight text-gray-500">
-                    {formatTanggal(cookies["tanggal_lahir"])}
+                    {formatTanggal(cookies.tanggal_lahir)}
                   </p>
                 </div>
                 <div>
                   <h2>Jenis Kelamin</h2>
                   <p className="text-xs font-extralight text-gray-500">
-                    {cookies["gender"] == 1 ? "Laki-laki" : "Perempuan"}
+                    {cookies.gender == 1 ? "Laki-laki" : "Perempuan"}
                   </p>
                 </div>
                 {/* Tombol Aksi */}
