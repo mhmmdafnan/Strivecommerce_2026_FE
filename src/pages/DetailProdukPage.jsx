@@ -149,12 +149,16 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
         if (response.data.success) {
           const produkData = response.data.data;
           setDataProduk(produkData);
+          // console.log(response.data.data.variasi[0].path);
 
           // Parse path (array gambar)
           const fotoArray = JSON.parse(produkData.path);
+          console.log(fotoArray);
+          
           setFotoUtama(fotoArray[0]);
           setFotoProduk(fotoArray);
           setShareText(`Cek produk ${produkData.nama}, cuma di sini!`);
+          // console.log(fotoArray);
         } else {
           setShowLoginError(true);
         }
@@ -232,7 +236,7 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
                     onMouseLeave={() => setZoom(false)}
                   >
                     <img
-                      src={`${apiUrl}/img/product/${idProduk}${fotoUtama}`}
+                      src={`${apiUrl}${fotoUtama}`}
                       // src={
                       //   fotoUtama ? apiUrl + idProduk + "/" + fotoUtama : "-"
                       // }
@@ -252,27 +256,39 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
                   </div>
                   {/* foto lainnya - desktop */}
                   <div className="flex md:hidden gap-2 p-2">
-                    {fotoProduk.map((foto, index) => (
-                      <div
-                        key={index}
-                        onClick={() => {
-                          setFotoUtama(foto);
-                          setSelectedIndex(index);
-                        }}
-                        className={`h-20 w-20 rounded-xl cursor-pointer transition-all duration-200 
-      border-[1px] hover:border-[#EE6D3F] ${
-        selectedIndex === index
-          ? "border-[#EE6D3F] ring-2 ring-[#EE6D3F]"
-          : "border-gray-500"
-      }`}
-                      >
+                    {/* {console.log((fotoProduk))} */}
+
+                    {fotoProduk.length > 1 ? (
+                      fotoProduk.map((foto, index) => (
+                        <div
+                          key={index}
+                          onClick={() => {
+                            setFotoUtama(foto);
+                            setSelectedIndex(index);
+                          }}
+                          className={`h-20 w-20 rounded-xl cursor-pointer transition-all duration-200 
+          border-[1px] hover:border-[#EE6D3F] ${
+            selectedIndex === index
+              ? "border-[#EE6D3F] ring-2 ring-[#EE6D3F]"
+              : "border-gray-500"
+          }`}
+                        >
+                          <img
+                            src={`${apiUrl}${foto[index]}`}
+                            className="rounded-xl h-full w-full object-cover"
+                            alt={`foto-${index}`}
+                          />
+                        </div>
+                      ))
+                    ) : (
+                      <div className="h-20 w-20 rounded-xl border border-gray-500">
                         <img
-                          src={`${apiUrl}/img/product/${idProduk}${foto}`}
+                          src={`${apiUrl}/img/product/${idProduk}${fotoProduk[0]}`}
                           className="rounded-xl h-full w-full object-cover"
-                          alt={`foto-${index}`}
+                          alt="foto-utama"
                         />
                       </div>
-                    ))}
+                    )}
                   </div>
                 </div>
               </>

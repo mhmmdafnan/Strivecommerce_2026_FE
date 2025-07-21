@@ -81,7 +81,7 @@ const HomePage = () => {
         const [allProdukRes, sliderProdukRes] = await Promise.all([
           axios.get(`${apiUrl}/api/v1/product`, {
             params: {
-              total: 12,
+              total: 20,
             },
           }),
           axios.get(`${apiUrl}/api/v1/product`, {
@@ -199,10 +199,9 @@ const HomePage = () => {
                   >
                     <img
                       src={
-                        apiUrl +
-                        "/pict/" +
-                        item.id +
-                        JSON.parse(item.path)[0]
+                        Array.isArray(JSON.parse(item.path))
+                          ? apiUrl + JSON.parse(item.path)[0]
+                          : apiUrl + JSON.parse(item.path)
                       }
                       alt={item.nama}
                       className="w-full h-40 object-contain rounded-xl border border-gray-600 "
@@ -242,10 +241,9 @@ const HomePage = () => {
                   >
                     <img
                       src={
-                        apiUrl +
-                        "/pict/" +
-                        produk.id +
-                        JSON.parse(produk.path)[0]
+                        Array.isArray(JSON.parse(produk.path))
+                          ? apiUrl + JSON.parse(produk.path)[0]
+                          : apiUrl + JSON.parse(produk.path)
                       }
                       className="w-full h-30 object-cover rounded-3xl border-2 border-gray-200 hover:scale-105 transition-all duration-300"
                       alt={produk.nama}

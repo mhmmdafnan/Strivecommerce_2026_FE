@@ -6,6 +6,7 @@ import { FaCheckCircle, FaPlus } from "react-icons/fa";
 import { useCookies } from "react-cookie";
 import axios from "axios";
 import { toast } from "react-toastify";
+import Loading from "./Loading";
 
 const TambahProduk = () => {
   const navigate = useNavigate();
@@ -35,6 +36,14 @@ const TambahProduk = () => {
       },
     ],
   });
+
+  const initialFormData = {
+    nama: "",
+    deskripsi: "",
+    kategori: "",
+    media: [],
+    variasi: [{ nama: "", harga: "", stok: "", media: [] }],
+  };
 
   const check_empty = () => {
     if (formData.nama === "") {
@@ -125,40 +134,7 @@ const TambahProduk = () => {
     return val.replace(/[^\d]/g, "");
   };
 
-  const updateData = async (idProduk, propertyData) => {
-    // const formDataWithFiles = new FormData();
-    // formDataWithFiles.append("nama", propertyData.nama);
-    // formDataWithFiles.append("loc", propertyData.lokasi);
-    // formDataWithFiles.append("tag_loc", propertyData.tag_lokasi);
-    // formDataWithFiles.append("luas", propertyData.luas_rumah);
-    // formDataWithFiles.append("jml_kmr_tdr", propertyData.jml_kmr_tdr);
-    // formDataWithFiles.append("jml_kmr_mnd", propertyData.jml_kmr_mnd);
-    // formDataWithFiles.append("detail", propertyData.detail);
-    // formDataWithFiles.append("harga", propertyData.harga);
-    // if (propertyData.media && propertyData.media.length > 0) {
-    //   propertyData.media.forEach((file) => {
-    //     formDataWithFiles.append("files", file);
-    //   });
-    // }
-    // try {
-    //   const res = await axios.patch(
-    //     `${backendUrl}/api/v1/properti/${idProduk}`,
-    //     formDataWithFiles,
-    //     {
-    //       headers: {
-    //         "Content-Type": "multipart/form-data",
-    //         token: `${cookies["token"]}`,
-    //       },
-    //     }
-    //   );
-    //   return res.data.data;
-    // } catch (err) {
-    //   console.error("Error saat update:", err.response || err.message);
-    //   throw err;
-    // }
-  };
-
-  const sendData = async () => {
+  const updateData = async (idProduk, produkData) => {
     const form = new FormData();
 
     // Data utama produk
@@ -167,29 +143,71 @@ const TambahProduk = () => {
     form.append("kategori", formData.kategori || 0);
     form.append("userId", cookies.user_id);
 
-
-    // Tambahkan path utama
-    const mediaPaths = formData.media.map((_, i) => `/uploads/media_img_${i}`);
-    form.append("path", JSON.stringify(mediaPaths));
-
-    // Tambahkan variasi dan file-nya
-    const variasiPayload = (formData.variasi || []).map((v, index) => {
-      const mediaNames = (v.media || []).map(
-        (_, i) => `variasi_${index}_img_${i}`
+    if (produkData.media && produkData.media.length > 0) {
+      produkData.media.forEach((file) => {
+        form.append("files", file);
+      });
+    }
+    try {
+      const res = await axios.patch(
+        `${backendUrl}/api/v1/product/${idProduk}`,
+        form,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            token: `${cookies["token"]}`,
+          },
+        }
       );
+      return res.data.data;
+    } catch (err) {
+      console.error("Error saat update:", err.response || err.message);
+      throw err;
+    }
+  };
 
-      return {
+  const sendData = async (formData) => {
+    const form = new FormData();
+
+    // Data utama produk
+    form.append("nama", formData.nama);
+    form.append("deskripsi", formData.deskripsi);
+    form.append("kategori", formData.kategori || 0);
+    form.append("userId", cookies.user_id);
+
+    // Kirim file utama (pastikan ini objek File)
+    if (formData.media && formData.media[0]) {
+      formData.media
+        .slice()
+        .reverse()
+        .forEach((file) => {
+          form.append("files", file);
+          // formDataWithFiles.append("fileOrder[]", index);
+        });
+      // form.append("fileUtama", formData.media[0]);
+    }
+
+    // Kirim variasi file dan metadata
+    const variasiPayload = [];
+
+    formData.variasi.forEach((v, index) => {
+      // Kirim file variasi (bisa lebih dari satu per variasi jika perlu)
+      (v.media || []).forEach((file, i) => {
+        form.append(`variasi[${index}][file]`, file);
+      });
+
+      // Simpan metadata variasi untuk dikirim via JSON
+      variasiPayload.push({
         nama: v.nama,
         harga: parseInt(v.harga),
         stok: parseInt(v.stok),
-        path: mediaNames.map((n) => `/uploads/${n}`),
-      };
+      });
     });
 
+    //  Kirim metadata variasi
     form.append("variasi", JSON.stringify(variasiPayload));
-    console.log([...form.entries()]);
 
-    // Kirim ke backend
+    //  Kirim ke backend
     try {
       const res = await axios.post(`${apiUrl}/api/v1/product`, form, {
         headers: { "Content-Type": "multipart/form-data" },
@@ -198,7 +216,6 @@ const TambahProduk = () => {
       return res.data;
     } catch (err) {
       console.error("Gagal mengirim data:", err);
-      console.log("Server response:", err?.response?.data);
       toast.error("Gagal menambahkan produk");
       return null;
     }
@@ -206,57 +223,64 @@ const TambahProduk = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    // setLoading(true);
     if (!formData.nama || formData.variasi.length === 0) {
       toast.error("Nama produk dan variasi wajib diisi!");
+      // setLoading(false);
       return;
     }
 
-    const result = await sendData();
+    const result = await sendData(formData);
 
-    if (result?.success) {
-      // Reset form, navigasi, atau aksi setelah sukses
-      // setFormData(...);
-      // navigate("/toko-saya");
-    }
+    // if (result?.success) {
+    //   // Reset form, navigasi, atau aksi setelah sukses
+    //   setFormData(initialFormData);
+    //   // navigate("/toko-saya");
+    //   setLoading(false);
+    // }
   };
 
   useEffect(() => {
+    console.log("ID Produk:", idProduk);
+    
     firstInputRef.current?.focus();
-    // const fetchData = async () => {
-    //   if (idProp) {
-    //     try {
-    //       const res = await axios.get(
-    //         `${backendUrl}/api/v1/properti/${idProp}`,
-    //         {
-    //           headers: {
-    //             token: `${cookies["token"]}`,
-    //           },
-    //         }
-    //       );
-    //       const data = res.data.data;
-    //       // Set nilai default form
-    //       setFormData({
-    //         nama: data.nama,
-    //         lokasi: data.loc,
-    //         tag_lokasi: data.tag_loc,
-    //         luas_rumah: data.luas,
-    //         jml_kmr_tdr: data.jml_kmr_tdr,
-    //         jml_kmr_mnd: data.jml_kmr_mnd,
-    //         detail: data.detail,
-    //         harga: data.harga,
-    //         media: [], // File tidak bisa dimuat ulang, jadi tetap kosong
-    //       });
-    //       // Simpan path gambar dari backend (jika banyak, pakai array)
-    //       if (data.file_path) {
-    //         const parsed = JSON.parse(data.file_path); // asumsi bentuknya array string
-    //         setImagePreview(parsed);
-    //       }
-    //     } catch (error) {
-    //       console.error("Gagal memuat data properti:", error);
-    //     }
-    //   }
-    // };
-    // fetchData();
+    const fetchData = async () => {
+      setLoading(true);
+      if (idProduk) {
+        try {
+          const res = await axios.get(`${apiUrl}/api/v1/product/${idProduk}`, {
+            headers: {
+              token: `${cookies["token"]}`,
+            },
+          });
+          const data = res.data.data;
+          console.log(data);
+
+          // Set nilai default form
+          setFormData({
+            nama: data.nama || "",
+            kategori: data.kategori || "",
+            deskripsi: data.desc || "",
+            media: [],
+            variasi: data.variasi.map((v) => ({
+              nama: v.nama || "",
+              harga: v.harga || "",
+              stok: v.stok || "",
+              media: JSON.parse(v.path),
+            })),
+          });
+          // Simpan path gambar dari backend (jika banyak, pakai array)
+          if (data.path) {
+            const parsed = JSON.parse(data.path); // asumsi bentuknya array string
+            setImagePreview(parsed);
+          }
+        } catch (error) {
+          console.error("Gagal memuat data Produk:", error);
+        }
+        setLoading(false);
+      }
+    };
+    fetchData();
   }, []);
 
   return (
@@ -279,151 +303,165 @@ const TambahProduk = () => {
             <h1 className="text-xl font-bold mb-4">
               {idProduk ? "Edit Produk" : "Tambah Produk"}
             </h1>
-
-            <form className="grid gap-4" onSubmit={handleSubmit}>
-              {/* Nama Unit */}
-              <div className="flex flex-col md:flex-row md:items-center">
-                <label className="md:w-1/3 text-gray-700">Nama Unit</label>
-                <input
-                  ref={firstInputRef}
-                  type="text"
-                  name="nama"
-                  value={formData.nama}
-                  onChange={handleChange}
-                  className="mt-1 md:mt-0 p-2 border border-gray-300 rounded-lg w-full md:w-2/3 focus:ring-1 focus:ring-[#ff8052] focus:border-[#ff8052] focus:outline-none"
-                  //   required
-                />
+            {loading ? (
+              <div className="col-span-6 flex justify-center items-center h-80">
+                <Loading w={10} h={10} />
               </div>
-
-              {/* kategori */}
-              <div className="flex flex-col md:flex-row md:items-center">
-                <label className="md:w-1/3 text-gray-700">Kategori</label>
-                <input
-                  type="text"
-                  name="kategori"
-                  value={formData.kategori}
-                  onChange={handleChange}
-                  className="mt-1 md:mt-0 p-2 border border-gray-300 rounded-lg w-full md:w-2/3 focus:ring-1 focus:ring-[#ff8052] focus:border-[#ff8052] focus:outline-none"
-                  //   required
-                />
-              </div>
-
-              {/* Deskripsi  */}
-              <div className="flex flex-col md:flex-row md:items-start">
-                <label className="md:w-1/3 text-gray-700">Deskripsi</label>
-                <textarea
-                  name="deskripsi"
-                  value={formData.deskripsi}
-                  onChange={handleChange}
-                  className="mt-1 md:mt-0 p-2 border rounded-lg w-full md:w-2/3 h-32 focus:ring-1 focus:ring-[#ff8052] focus:border-[#ff8052] focus:outline-none"
-                  //   required
-                ></textarea>
-              </div>
-
-              {/* Foto */}
-              <div className="flex flex-col md:flex-row md:items-center">
-                <label className="md:w-1/3 text-gray-700">Foto Produk</label>
-                <input
-                  type="file"
-                  name="media"
-                  accept="image/*"
-                  onChange={handleFileChange}
-                  multiple
-                  className="mt-1 md:mt-0 p-2 border bg-white border-gray-300 rounded-lg w-full md:w-2/3 focus:ring-1 focus:ring-[#ff8052] focus:border-[#ff8052] focus:outline-none"
-                  //   required={!idProduk}
-                />
-              </div>
-              {idProduk && imagePreview.length > 0 && (
-                <div className="mt-2 flex flex-row gap-2 md:ml-1 w-full md:w-2/3 ">
-                  {imagePreview.map((imgPath, index) => (
-                    <img
-                      key={index}
-                      src={backendUrl + imgPath} // sesuaikan dengan path serve kamu
-                      alt={`Foto ${index + 1}`}
-                      className="w-24 h-24 object-cover rounded border "
+            ) : (
+              <>
+                <form className="grid gap-4" onSubmit={handleSubmit}>
+                  {/* Nama Unit */}
+                  <div className="flex flex-col md:flex-row md:items-center">
+                    <label className="md:w-1/3 text-gray-700">Nama Unit</label>
+                    <input
+                      ref={firstInputRef}
+                      type="text"
+                      name="nama"
+                      value={formData.nama}
+                      onChange={handleChange}
+                      className="mt-1 md:mt-0 p-2 border border-gray-300 rounded-lg w-full md:w-2/3 focus:ring-1 focus:ring-[#ff8052] focus:border-[#ff8052] focus:outline-none"
+                      //   required
                     />
-                  ))}
-                </div>
-              )}
-              {/* stok */}
-              <div className="mb-4">
-                <div className="flex justify-between mb-2">
-                  <label className="md:w-1/3 mb-2 text-gray-700">
-                    Variasi Produk
-                  </label>
-                  <div
-                    onClick={handleTambahVariasi}
-                    className="flex justify-center items-center bg-[#EE6D3F] text-white px-4 py-2 rounded-lg hover:bg-[#ce4747] transition cursor-pointer"
-                  >
-                    <FaPlus />
                   </div>
-                </div>
-                {formData.variasi.map((item, index) => (
-                  <React.Fragment key={index}>
-                    <div className="flex gap-2 mb-2  justify-end items-center">
-                      {formData.variasi.length > 1 && index > 0 && (
-                        <div
-                          onClick={() => handleHapusVariasi(index)}
-                          className="flex justify-center items-center bg-red-500 text-white px-1 w-fit rounded-lg hover:bg-red-600 cursor-pointer"
-                        >
-                          ✕
-                        </div>
-                      )}
 
-                      <input
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) => handleFileChange(e, index)}
-                        multiple
-                        className="mt-1 md:mt-0 p-2 border bg-white border-gray-300 rounded-lg w-full md:w-2/3 focus:ring-1 focus:ring-[#ff8052] focus:border-[#ff8052] focus:outline-none"
-                        //   required={!idProduk}
-                      />
-                      <input
-                        type="text"
-                        placeholder="Nama Variasi (contoh: Warna Merah)"
-                        value={item.nama}
-                        onChange={(e) =>
-                          handleVariasiChange(index, "nama", e.target.value)
-                        }
-                        className="p-2 border border-gray-300 rounded-lg w-1/3 focus:ring-1 focus:ring-[#ff8052] focus:border-[#ff8052] focus:outline-none"
-                      />
-                      <input
-                        type="number"
-                        placeholder="Stok"
-                        value={item.stok}
-                        onChange={(e) =>
-                          handleVariasiChange(index, "stok", e.target.value)
-                        }
-                        className="p-2 border border-gray-300 rounded-lg w-20 focus:ring-1 focus:ring-[#ff8052] focus:border-[#ff8052] focus:outline-none"
-                      />
-                      <input
-                        type="text"
-                        placeholder="Harga"
-                        value={formatRupiah(item.harga)}
-                        onChange={(e) =>
-                          handleVariasiChange(
-                            index,
-                            "harga",
-                            toNumberOnly(e.target.value)
-                          )
-                        }
-                        className="p-2 border border-gray-300 rounded-lg w-1/3 focus:ring-1 focus:ring-[#ff8052] focus:border-[#ff8052] focus:outline-none"
-                      />
+                  {/* kategori */}
+                  <div className="flex flex-col md:flex-row md:items-center">
+                    <label className="md:w-1/3 text-gray-700">Kategori</label>
+                    <input
+                      type="text"
+                      name="kategori"
+                      value={formData.kategori}
+                      onChange={handleChange}
+                      className="mt-1 md:mt-0 p-2 border border-gray-300 rounded-lg w-full md:w-2/3 focus:ring-1 focus:ring-[#ff8052] focus:border-[#ff8052] focus:outline-none"
+                      //   required
+                    />
+                  </div>
+
+                  {/* Deskripsi  */}
+                  <div className="flex flex-col md:flex-row md:items-start">
+                    <label className="md:w-1/3 text-gray-700">Deskripsi</label>
+                    <textarea
+                      name="deskripsi"
+                      value={formData.deskripsi}
+                      onChange={handleChange}
+                      className="mt-1 md:mt-0 p-2 border rounded-lg w-full md:w-2/3 h-32 focus:ring-1 focus:ring-[#ff8052] focus:border-[#ff8052] focus:outline-none"
+                      //   required
+                    ></textarea>
+                  </div>
+
+                  {/* Foto */}
+                  <div className="flex flex-col md:flex-row md:items-center">
+                    <label className="md:w-1/3 text-gray-700">
+                      Foto Produk
+                    </label>
+                    <input
+                      type="file"
+                      name="media"
+                      accept="image/*"
+                      onChange={handleFileChange}
+                      multiple
+                      className="mt-1 md:mt-0 p-2 border bg-white border-gray-300 rounded-lg w-full md:w-2/3 focus:ring-1 focus:ring-[#ff8052] focus:border-[#ff8052] focus:outline-none"
+                      //   required={!idProduk}
+                    />
+                  </div>
+                  {idProduk && imagePreview.length > 0 && (
+                    <div className="mt-2 flex flex-row gap-2 md:ml-1 justify-end w-full">
+                      {imagePreview.map((imgPath, index) => (
+                        <img
+                          key={index}
+                          src={apiUrl + imgPath} // sesuaikan dengan path serve kamu
+                          alt={`Foto ${index + 1}`}
+                          className="w-24 h-24 object-cover rounded-xl border-2 border-gray-500  "
+                        />
+                      ))}
                     </div>
-                  </React.Fragment>
-                ))}
-              </div>
+                  )}
+                  {/* stok */}
+                  <div className="mb-4">
+                    <div className="flex justify-between mb-2">
+                      <label className="md:w-1/3 mb-2 text-gray-700">
+                        Variasi Produk
+                      </label>
+                      <div
+                        onClick={handleTambahVariasi}
+                        className="flex justify-center items-center bg-[#EE6D3F] text-white px-4 py-2 rounded-lg hover:bg-[#ce4747] transition cursor-pointer"
+                      >
+                        <FaPlus />
+                      </div>
+                    </div>
+                    {formData.variasi.map((item, index) => (
+                      <React.Fragment key={index}>
+                        <div className="flex gap-2 mb-2  justify-end items-center">
+                          {formData.variasi.length > 1 && index > 0 && (
+                            <div
+                              onClick={() => handleHapusVariasi(index)}
+                              className="flex justify-center items-center bg-red-500 text-white px-1 w-fit rounded-lg hover:bg-red-600 cursor-pointer"
+                            >
+                              ✕
+                            </div>
+                          )}
+                          <div className="border-2 border-gray-500 h-10 w-16 rounded-lg flex justify-center items-center">
+                            <img
+                              src={apiUrl + item.media}
+                              className="h-full w-full object-cover rounded-lg"
+                              alt=""
+                            />
+                          </div>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={(e) => handleFileChange(e, index)}
+                            className="mt-1 md:mt-0 p-2 border bg-white border-gray-300 rounded-lg w-full md:w-2/3 focus:ring-1 focus:ring-[#ff8052] focus:border-[#ff8052] focus:outline-none"
+                            //   required={!idProduk}
+                          />
+                          <input
+                            type="text"
+                            placeholder="Nama Variasi (contoh: Warna Merah)"
+                            value={item.nama}
+                            onChange={(e) =>
+                              handleVariasiChange(index, "nama", e.target.value)
+                            }
+                            className="p-2 border border-gray-300 rounded-lg w-1/3 focus:ring-1 focus:ring-[#ff8052] focus:border-[#ff8052] focus:outline-none"
+                          />
+                          <input
+                            type="number"
+                            placeholder="Stok"
+                            value={item.stok}
+                            onChange={(e) =>
+                              handleVariasiChange(index, "stok", e.target.value)
+                            }
+                            className="p-2 border border-gray-300 rounded-lg w-20 focus:ring-1 focus:ring-[#ff8052] focus:border-[#ff8052] focus:outline-none"
+                          />
+                          <input
+                            type="text"
+                            placeholder="Harga"
+                            value={formatRupiah(item.harga)}
+                            onChange={(e) =>
+                              handleVariasiChange(
+                                index,
+                                "harga",
+                                toNumberOnly(e.target.value)
+                              )
+                            }
+                            className="p-2 border border-gray-300 rounded-lg w-1/3 focus:ring-1 focus:ring-[#ff8052] focus:border-[#ff8052] focus:outline-none"
+                          />
+                        </div>
+                      </React.Fragment>
+                    ))}
+                  </div>
 
-              {/* Submit Button */}
-              <div className="flex justify-center mt-6">
-                <button
-                  type="submit"
-                  className="bg-[#EE6D3F] text-white px-6 py-2 rounded-lg hover:bg-[#d25f35] transition"
-                >
-                  Submit
-                </button>
-              </div>
-            </form>
+                  {/* Submit Button */}
+                  <div className="flex justify-center mt-6">
+                    <button
+                      type="submit"
+                      className="bg-[#EE6D3F] text-white px-6 py-2 rounded-lg hover:bg-[#d25f35] transition"
+                    >
+                      Submit
+                    </button>
+                  </div>
+                </form>
+              </>
+            )}
           </div>
         </div>
       </div>
