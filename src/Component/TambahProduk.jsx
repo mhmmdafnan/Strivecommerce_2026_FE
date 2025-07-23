@@ -138,19 +138,58 @@ const TambahProduk = () => {
     const form = new FormData();
 
     // Data utama produk
-    form.append("nama", formData.nama);
-    form.append("deskripsi", formData.deskripsi);
-    form.append("kategori", formData.kategori || 0);
+    form.append("nama", produkData.nama);
+    form.append("deskripsi", produkData.deskripsi);
+    form.append("kategori", produkData.kategori || 0);
     form.append("userId", cookies.user_id);
 
-    if (produkData.media && produkData.media.length > 0) {
-      produkData.media.forEach((file) => {
-        form.append("files", file);
-      });
+    // console.log(produkData);
+
+    // Kirim file utama (pastikan ini objek File)
+    const adaFileBaru = produkData.media.some((file) => file instanceof File);
+
+    if (adaFileBaru) {
+      produkData.media
+        .slice()
+        .reverse()
+        .forEach((file) => {
+          if (file instanceof File) {
+            form.append("files", file);
+          }
+        });
+    } else {
+      // Kirim path lama agar backend tahu: pakai media yang sudah ada
+      form.append("mediaLama", JSON.stringify(produkData.media));
     }
+
+    // Kirim variasi file dan metadata
+    const variasiPayload = [];
+
+    produkData.variasi.forEach((v, index) => {
+      // ✅ Hanya file baru yang akan dikirim
+      if (
+        v.media &&
+        typeof v.media === "object" &&
+        "name" in v.media &&
+        "size" in v.media
+      ) {
+        console.log("VARIASI FILE DITAMBAHKAN:", v.media);
+        form.append(`variasi[${index}][file]`, v.media);
+      }
+
+      variasiPayload.push({
+        nama: v.nama,
+        harga: parseInt(v.harga),
+        stok: parseInt(v.stok),
+        fileBaru: v.media instanceof File, // bisa ditambahkan sebagai info bantu
+      });
+    });
+
+    form.append("variasi", JSON.stringify(variasiPayload));
+
     try {
       const res = await axios.patch(
-        `${backendUrl}/api/v1/product/${idProduk}`,
+        `${apiUrl}/api/v1/product/${idProduk}`,
         form,
         {
           headers: {
@@ -159,10 +198,12 @@ const TambahProduk = () => {
           },
         }
       );
+      toast.success("Produk berhasil ditambahkan!");
       return res.data.data;
     } catch (err) {
-      console.error("Error saat update:", err.response || err.message);
-      throw err;
+      console.error("Gagal mengirim data:", err);
+      toast.error("Gagal menambahkan produk");
+      return null;
     }
   };
 
@@ -230,7 +271,14 @@ const TambahProduk = () => {
       return;
     }
 
-    const result = await sendData(formData);
+    if (idProduk) {
+      // Update produk yang sudah ada
+      // const result = await updateData(idProduk, formData);
+      await updateData(idProduk, formData);
+    } else {
+      // const result = await sendData(formData);
+      await sendData(formData);
+    }
 
     // if (result?.success) {
     //   // Reset form, navigasi, atau aksi setelah sukses
@@ -241,8 +289,9 @@ const TambahProduk = () => {
   };
 
   useEffect(() => {
-    console.log("ID Produk:", idProduk);
-    
+    // console.log("ID Produk:", idProduk);
+    // console.log(produkData);
+
     firstInputRef.current?.focus();
     const fetchData = async () => {
       setLoading(true);
@@ -277,8 +326,8 @@ const TambahProduk = () => {
         } catch (error) {
           console.error("Gagal memuat data Produk:", error);
         }
-        setLoading(false);
       }
+      setLoading(false);
     };
     fetchData();
   }, []);

@@ -73,6 +73,19 @@ const HomePage = () => {
     ],
   };
 
+  const getFirstImagePath = (path) => {
+    try {
+      if (!path) return "/fallback-image.png";
+      const parsed = JSON.parse(path);
+      if (Array.isArray(parsed)) return apiUrl + parsed[0];
+      if (typeof parsed === "string") return apiUrl + parsed;
+      return "/fallback-image.png";
+    } catch (e) {
+      console.warn("Invalid path:", path);
+      return "/fallback-image.png";
+    }
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -92,7 +105,8 @@ const HomePage = () => {
           }),
         ]);
 
-        // console.log(sliderProdukRes.data.data);
+        console.log("slider", sliderProdukRes.data.data);
+        console.log("all", allProdukRes.data.data);
 
         // Set data produk umum
         if (allProdukRes.data.success) {
@@ -198,11 +212,7 @@ const HomePage = () => {
                     onClick={() => navigate("/detailProduk/" + item.id)}
                   >
                     <img
-                      src={
-                        Array.isArray(JSON.parse(item.path))
-                          ? apiUrl + JSON.parse(item.path)[0]
-                          : apiUrl + JSON.parse(item.path)
-                      }
+                      src={getFirstImagePath(item.path)}
                       alt={item.nama}
                       className="w-full h-40 object-contain rounded-xl border border-gray-600 "
                     />
@@ -240,17 +250,13 @@ const HomePage = () => {
                     className="h-34 cursor-pointer hover:shadow-md rounded-xl p-2"
                   >
                     <img
-                      src={
-                        Array.isArray(JSON.parse(produk.path))
-                          ? apiUrl + JSON.parse(produk.path)[0]
-                          : apiUrl + JSON.parse(produk.path)
-                      }
+                      src={getFirstImagePath(produk.path)}
                       className="w-full h-30 object-cover rounded-3xl border-2 border-gray-200 hover:scale-105 transition-all duration-300"
                       alt={produk.nama}
                     />
                     <div className="p-2">
                       <div className="text-xs font-extralight text-black">
-                        Rp. {produk.variasi[0].harga.toLocaleString("id-ID")}
+                        Rp. {produk.variasi?.[0]?.harga.toLocaleString("id-ID") ?? 0}
                       </div>
                       <div className="text-md font-medium text-black truncate">
                         {produk.nama}

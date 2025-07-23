@@ -65,6 +65,7 @@ const TokoSayaPage = () => {
             );
             return { ...produk, stokTotal };
           });
+          console.log("Produk dengan stok:", produkDenganStok);
 
           setProdukList(produkDenganStok);
         }
@@ -220,9 +221,11 @@ const TokoSayaPage = () => {
                             <img
                               className="h-10 w-10 rounded-xl border-2 border-gray-400 object-contain"
                               src={
-                                Array.isArray(JSON.parse(item.path))
-                                  ? apiUrl + JSON.parse(item.path)[0]
-                                  : apiUrl + JSON.parse(item.path)
+                                item.path && item.path !== "[]"
+                                  ? Array.isArray(JSON.parse(item.path))
+                                    ? apiUrl + JSON.parse(item.path)[0]
+                                    : apiUrl + JSON.parse(item.path)
+                                  : "/fallback-image.png" // fallback jika path kosong
                               }
                               alt=""
                             />
