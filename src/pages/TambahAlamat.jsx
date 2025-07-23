@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Loading from "../Component/Loading";
 import { useCookies } from "react-cookie";
+import { useNavigate } from "react-router-dom";
 
 const AlamatPage = () => {
   const [prov, setProv] = useState();
@@ -17,16 +18,19 @@ const AlamatPage = () => {
   const [loadingKec, setLoadingKec] = useState();
   const [loadingDesa, setLoadingDesa] = useState();
   const [kodePos, setKodePos] = useState("");
+  const [nama, setNama] = useState("");
+  const [noTelp, setNoTelp] = useState("");
   const [detail, setDetail] = useState("");
   const [alamatDefault, setAlamatDefault] = useState(false);
   const [cookies, setCookie, removeCookie] = useCookies(["isLoggedIn"]);
-  const [namaBangunan, setNamaBangunan] = useState();
-
+  const [namaBangunan, setNamaBangunan] = useState("");
+  const navigate = useNavigate();
   const apiUrl = import.meta.env.VITE_API_URL;
 
   const handleCheckboxChange = (event) => {
     setAlamatDefault(event.target.checked);
   };
+
 
   const handleChangeDesa = (event) => {
     setSelectDesa(event.target.value);
@@ -60,6 +64,9 @@ const AlamatPage = () => {
         kodeKec: selectKec,
         kodeDesa: selectDesa,
         detail: detail,
+        nama : nama,
+        notelp : noTelp,
+        bangunan : namaBangunan,
         // catatan,
         kode_pos: kodePos,
         // is_toko,
@@ -68,10 +75,7 @@ const AlamatPage = () => {
       console.log(response);
 
       if (response.data.success) {
-        // setCookie("isLoggedIn", true);
-        // setCookie("token", response.data.token);
-        // setCookie("user_id", response.data.id_user);
-        // onSuccess(response);
+        navigate("/alamat")
       } else {
         // setShowLoginError(true);
       }
@@ -194,12 +198,54 @@ const AlamatPage = () => {
     <>
       <div className="max-w-7xl mx-auto px-5 md:px-10 py-5 mb-20 md:mt-0">
         <h1 className="text-sm text-gray-600 cursor-pointer">Tambah Alamat</h1>
-        <div className="bg-white shadow-lg border-[1px] rounded-lg px-4 py-6 mt-4 max-w-5xl mx-auto">
+        <div className="bg-[#E9E9E9] shadow-lg border-[1px] rounded-lg px-4 py-6 mt-4 max-w-5xl mx-auto">
           <div className="form">
             <h2 className="w-full text-center text-2xl mb-10 ">
               Masukan Alamat Anda
             </h2>
             <form action={onAlamatSubmit} className="flex flex-col">
+              <div className="mb-4 flex items-center">
+                <label htmlFor="pos" className="w-24">
+                  Bangunan
+                </label>
+                <div className="w-8">:</div>
+                <input
+                  type="text"
+                  className="bg-white w-60 rounded-md px-2 py-1"
+                  name="bangunan"
+                  id="bangunan"
+                  value={namaBangunan}
+                  onChange={(e) => setNamaBangunan(e.target.value)}
+                />
+              </div>
+              <div className="mb-4 flex items-center">
+                <label htmlFor="pos" className="w-24">
+                  Nama
+                </label>
+                <div className="w-8">:</div>
+                <input
+                  type="text"
+                  className="bg-white w-60 rounded-md px-2 py-1"
+                  name="nama"
+                  id="nama"
+                  value={nama}
+                  onChange={(e) => setNama(e.target.value)}
+                />
+              </div>
+              <div className="mb-4 flex items-center">
+                <label htmlFor="pos" className="w-24">
+                  Nomor Telp
+                </label>
+                <div className="w-8">:</div>
+                <input
+                  type="text"
+                  className="bg-white rounded-md px-2 py-1"
+                  name="noTelp"
+                  id="noTelp"
+                  value={noTelp}
+                  onChange={(e) => setNoTelp(e.target.value)}
+                />
+              </div>
               <div className="mb-4 flex items-center">
                 <label htmlFor="prov" className="w-24">
                   Provinsi
@@ -213,7 +259,7 @@ const AlamatPage = () => {
                     id="prov"
                     value={selectProv}
                     onChange={handleChangeProv}
-                    className="flex-1 bg-gray-200 text-center rounded px-2 py-1"
+                    className="flex-1 bg-white text-center rounded px-2 py-1"
                   >
                     <option value="">-- PILIH PROVINSI --</option>
                     {prov?.map((prov) => (
@@ -239,7 +285,7 @@ const AlamatPage = () => {
                     id="kab"
                     value={selectKab}
                     onChange={handleChangeKab}
-                    className="flex-1 text-center bg-gray-200 rounded px-2 py-1"
+                    className="flex-1 text-center bg-white rounded px-2 py-1"
                   >
                     <option value="">-- PILIH KABUPATEN --</option>
                     {kab
@@ -267,7 +313,7 @@ const AlamatPage = () => {
                       id="kec"
                       value={selectKec}
                       onChange={handleChangeKec}
-                      className="bg-gray-200 text-center rounded px-2 py-1 flex-1"
+                      className="bg-white text-center rounded px-2 py-1 flex-1"
                     >
                       <option value="">-- PILIH KECAMATAN --</option>
                       {kec
@@ -296,7 +342,7 @@ const AlamatPage = () => {
                       id="kec"
                       value={selectDesa}
                       onChange={handleChangeDesa}
-                      className="bg-gray-200 text-center flex-1 rounded px-2 py-1"
+                      className="bg-white text-center flex-1 rounded px-2 py-1"
                     >
                       <option value="">-- PILIH DESA --</option>
                       {desa
@@ -318,31 +364,18 @@ const AlamatPage = () => {
                 <div className="w-8">:</div>
                 <input
                   type="text"
-                  className="bg-gray-200 rounded-md px-2 py-1"
+                  className="bg-white rounded-md px-2 py-1"
                   name="pos"
                   id="pos"
                   value={kodePos}
                   onChange={(e) => setKodePos(e.target.value)}
                 />
               </div>
-              <div className="mb-4 flex items-center">
-                <label htmlFor="pos" className="w-24">
-                  Bangunan
-                </label>
-                <div className="w-8">:</div>
-                <input
-                  type="text"
-                  className="bg-gray-200 rounded-md px-2 py-1"
-                  name="bangunan"
-                  id="bangunan"
-                  value={namaBangunan}
-                  onChange={(e) => setNamaBangunan(e.target.value)}
-                />
-              </div>
+
               <label htmlFor="detail" className="mb-4">
                 Detail :
                 <textarea
-                  className="bg-gray-200 mt-2 items-start rounded-md px-2 py-1 w-full h-24 resize-y"
+                  className="bg-white mt-2 items-start rounded-md px-2 py-1 w-full h-24 resize-y"
                   name="detail"
                   id="detail"
                   rows={4}

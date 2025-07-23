@@ -7,95 +7,13 @@ import { MdOutlineStoreMallDirectory } from "react-icons/md";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { FaShareNodes } from "react-icons/fa6";
 
-import Navbar from "../Component/Navbar";
 import ModalShare from "../Component/ShareModal";
-import produk1 from "../assets/img/produk/kursi 1.jpg";
-import produk2 from "../assets/img/produk/kursi 2.jpg";
-import produk3 from "../assets/img/produk/kursi 3.jpg";
 import fotoToko from "../assets/img/market foto.png";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { useCookies } from "react-cookie";
 import LoginModal from "../Component/LoginModal";
 import Loading from "../Component/Loading";
-
-const produkList = [
-  {
-    id: 1,
-    nama: "Nama Barang wkwkwkwkwkkwkwkw",
-    harga: "Rp. 100.000",
-    toko: "Toko",
-    gambar: produk1,
-  },
-  {
-    id: 2,
-    nama: "Nama Barang wkwkwkwkwkkwkwkw",
-    harga: "Rp. 100.000",
-    toko: "Toko",
-    gambar: produk2,
-  },
-  {
-    id: 3,
-    nama: "Nama Barang wkwkwkwkwkkwkwkw",
-    harga: "Rp. 100.000",
-    toko: "Toko",
-    gambar: produk3,
-  },
-  {
-    id: 4,
-    nama: "Nama Barang wkwkwkwkwkkwkwkw",
-    harga: "Rp. 100.000",
-    toko: "Toko",
-    gambar: produk1,
-  },
-  {
-    id: 5,
-    nama: "Nama Barang wkwkwkwkwkkwkwkw",
-    harga: "Rp. 100.000",
-    toko: "Toko",
-    gambar: produk2,
-  },
-  {
-    id: 6,
-    nama: "Nama Barang wkwkwkwkwkkwkwkw",
-    harga: "Rp. 100.000",
-    toko: "Toko",
-    gambar: produk3,
-  },
-  {
-    id: 7,
-    nama: "Nama Barang wkwkwkwkwkkwkwkw",
-    harga: "Rp. 100.000",
-    toko: "Toko",
-    gambar: produk1,
-  },
-  {
-    id: 8,
-    nama: "Nama Barang wkwkwkwkwkkwkwkw",
-    harga: "Rp. 100.000",
-    toko: "Toko",
-    gambar: produk2,
-  },
-  {
-    id: 9,
-    nama: "Nama Barang wkwkwkwkwkkwkwkw",
-    harga: "Rp. 100.000",
-    toko: "Toko",
-    gambar: produk3,
-  },
-  // dan seterusnya
-];
-
-const produk = {
-  nama: "Kursi Gaming Ergonomis",
-  harga: 100000,
-  deskripsi: `Lorem ipsum dolor sit amet consectetur adipisicing elit. Quam, dolore? 
-  Nulla fugiat vero minima corporis, totam iste error adipisci, rem incidunt esse nam! 
-  Voluptates, eaque nesciunt ratione quia praesentium nihil! Lorem ipsum dolor sit amet consectetur,
-  adipisicing elit. Repudiandae soluta ad cumque ex impedit. Quia enim, numquam ut ea natus quaerat 
-  sunt minus accusamus eaque voluptatibus. Dolorem nostrum culpa iusto..`,
-  fotoProduk: [produk1, produk2, produk3],
-};
 
 const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
   const apiUrl = import.meta.env.VITE_API_URL;
@@ -107,6 +25,7 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
   const [fotoUtama, setFotoUtama] = useState();
   const [loadingProduk, setLoadingProduk] = useState(false);
   const [dataProduk, setDataProduk] = useState();
+  const [produkList, setProdukList] = useState([]);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [zoom, setZoom] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0 });
@@ -114,8 +33,10 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
   const [stokProduk, setStokProduk] = useState(10);
   const [openModal, setOpenModal] = useState(false);
   const shareUrl = `${window.location.origin}${location.pathname}`;
-  const shareText = `Cek produk ${produk.nama}, cuma di sini!`;
+  const [shareText, setShareText] = useState();
   const [loadingKeranjang, setLoadingKeranjang] = useState();
+  const [review, setReview] = useState({});
+  const [loadingReview, setLoadingReview] = useState();
   const [cookies, setCookie, removeCookie] = useCookies(["isLoggedIn"]);
 
   const handleMouseMove = (e) => {
@@ -147,13 +68,9 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
   );
 
   const onSuccessLogin = (data) => {
-    console.log(data);
     setCookie("isLoggedIn", true);
     setCookie("token", data.data.token);
-    console.log(data.data.id_user);
-
     setCookie("id_user", data.data.id_user);
-
     setIsLoginModal(false);
     // console.log(cookies["token"], data.data.token);
   };
@@ -198,24 +115,21 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
   };
 
   const onKeranjangClick = () => {
+    console.log(cookies.id_user);
+    
     if (!cookies.isLoggedIn) {
       setIsLoginModal(true);
     } else {
       setLoadingKeranjang(true);
-
-      console.log(cookies.id_user);
-      console.log(dataProduk.variasi[indexStok].id);
-      console.log(dataProduk.id);
-
       axios
         .post(`${apiUrl}/api/v1/add_to_cart`, {
           productId: dataProduk.id,
-          userId: cookies.id_user,
+          userId: cookies.user_id,
           variasiId: dataProduk.variasi[indexStok].id,
           quantity: jumlahProduk,
         })
         .then((res) => {
-          console.log("berhasil: ", res);
+          // console.log("berhasil: ", res);
         })
         .catch(() => {
           alert("Gagal menambahkan ke keranjang!");
@@ -227,45 +141,102 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
     }
   };
 
-  useEffect(() => {
-    // console.log(idProduk);
+  function getTimeDiffInMinutesWITA(isoString) {
+    const WITA_OFFSET = 8 * 60; // WITA = UTC+8 dalam menit
+    const nowUTC = new Date(new Date().toISOString()); // waktu sekarang dalam UTC
+    const nowWITA = new Date(nowUTC.getTime() + WITA_OFFSET * 60 * 1000); // ubah ke WITA
 
-    // Simulasi pengambilan data produk berdasarkan idProduk
+    const target = new Date(isoString); // waktu dari ISO string
+    const diffMs = nowWITA - target;
+    const diffMinutes = Math.floor(diffMs / 1000 / 60);
+    const jam = diffMinutes/60;
+    if (jam > 1){
+      const hari = jam/24;
+      if (hari > 1){
+        return [hari, "hari"];
+      }
+      return [Math.round(diffMinutes/60), "Jam"]
+    }
+    return [Math.round(diffMinutes), "Menit"];
+  }
+
+  // Ambil data produk utama berdasarkan idProduk
+  useEffect(() => {
     const fetchProduk = async () => {
       setLoadingProduk(true);
       try {
         const response = await axios.get(
-          `${apiUrl}/api/v1/product/` + idProduk,
-          {}
+          `${apiUrl}/api/v1/product/${idProduk}`
         );
-        console.log(response.data.data);
 
         if (response.data.success) {
-          setDataProduk(response.data.data);
-          // console.log(response.data.data);
+          const produkData = response.data.data;
+          setDataProduk(produkData);
 
-          // Ubah string JSON menjadi array
-          const fotoArray = JSON.parse(response.data.data.path);
+          // Parse path (array gambar)
+          const fotoArray = JSON.parse(produkData.path);
           setFotoUtama(fotoArray[0]);
           setFotoProduk(fotoArray);
+          setShareText(`Cek produk ${produkData.nama}, cuma di sini!`);
         } else {
           setShowLoginError(true);
         }
       } catch (error) {
-        // setShowLoginError(true);
-        console.log(error);
+        console.error("Gagal fetch produk:", error);
       } finally {
         setLoadingProduk(false);
       }
     };
 
     fetchProduk();
-  }, []);
 
+    const fetchReview = async () => {
+      setLoadingReview(true);
+      try {
+        const response = await axios.get(`${apiUrl}/api/v1/review/${idProduk}`);
+
+        if (response.data.success) {
+          const review = response.data.data;
+          console.log(review);
+
+          setReview(review);
+        } else {
+          setShowLoginError(true);
+        }
+      } catch (error) {
+        console.error("Gagal fetch produk:", error);
+      } finally {
+        setLoadingReview(false);
+      }
+    };
+
+    fetchReview();
+  }, [idProduk]);
+
+  // Ambil produk slider setelah userId dari dataProduk tersedia
   useEffect(() => {
-    console.log(fotoProduk);
-    // console.log(fotoUtama);
-  }, [fotoProduk]);
+    if (!dataProduk?.userId) return;
+
+    const fetchSlider = async () => {
+      try {
+        const res = await axios.get(`${apiUrl}/api/v1/product`, {
+          params: {
+            idToko: dataProduk.userId,
+            total: 10,
+            orderBy: "harga_asc",
+          },
+        });
+
+        if (res.data.success) {
+          setProdukList(res.data.data);
+        }
+      } catch (error) {
+        console.error("Gagal fetch slider:", error);
+      }
+    };
+
+    fetchSlider();
+  }, [dataProduk?.userId]);
 
   return (
     <div className="dark:bg-[#393E41] transition-all duration-500">
@@ -306,7 +277,7 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
                     onMouseLeave={() => setZoom(false)}
                   >
                     <img
-                      src={`${apiUrl}/img/product/${idProduk}${fotoUtama}`}
+                      src={`${apiUrl}${fotoUtama}`}
                       // src={
                       //   fotoUtama ? apiUrl + idProduk + "/" + fotoUtama : "-"
                       // }
@@ -341,7 +312,7 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
       }`}
                       >
                         <img
-                          src={`${apiUrl}/img/product/${idProduk}${foto}`}
+                          src={`${apiUrl}${idProduk}${foto}`}
                           className="rounded-xl h-full w-full object-cover"
                           alt={`foto-${index}`}
                         />
@@ -445,29 +416,35 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
 
           {/* Galeri dan Tombol Beli */}
           <div className="hidden md:flex flex-col md:flex-row mt-2 gap-4 ">
-            <div className="md:basis-1/2 flex gap-2 p-2 max-w-4xl">
-              {fotoProduk.map((foto, index) => (
-                <div
-                  key={index}
-                  onClick={() => {
-                    setFotoUtama(foto);
-                    setSelectedIndex(index);
-                  }}
-                  className={`h-20 w-20 rounded-xl cursor-pointer transition-all duration-200 
+            {loadingProduk ? (
+              <>
+                <div className="col-span-6 flex justify-center items-center h-full"></div>
+              </>
+            ) : (
+              <div className="md:basis-1/2 flex gap-2 p-2 max-w-4xl">
+                {fotoProduk.map((foto, index) => (
+                  <div
+                    key={index}
+                    onClick={() => {
+                      setFotoUtama(foto);
+                      setSelectedIndex(index);
+                    }}
+                    className={`h-20 w-20 rounded-xl cursor-pointer transition-all duration-200 
               border-[1px] hover:border-[#EE6D3F] ${
                 selectedIndex === index
                   ? "border-[#EE6D3F] ring-2 ring-[#EE6D3F]"
                   : "border-gray-500"
               }`}
-                >
-                  <img
-                    src={apiUrl + foto[index]}
-                    className="rounded-xl h-full w-full object-cover"
-                    alt={`foto-${index}`}
-                  />
-                </div>
-              ))}
-            </div>
+                  >
+                    <img
+                      src={`${apiUrl}${foto}`}
+                      className="rounded-xl h-full w-full object-cover"
+                      alt={`foto-${index}`}
+                    />
+                  </div>
+                ))}
+              </div>
+            )}
 
             {/* Jumlah & Beli — untuk Desktop */}
             {!loadingProduk && (
@@ -600,7 +577,7 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
                   />
                 </div>
                 <div
-                  onClick={() => navigate("/toko")}
+                  onClick={() => navigate("/toko/" + dataProduk.userId)}
                   className="cursor-pointer"
                 >
                   <div className="text-xl font-semibold hover:text-[#EE6D3F]">
@@ -630,31 +607,106 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
         <div className="relative mt-10 dark:text-white">
           <h2 className="text-xl mb-4">Produk lainnya di toko ini</h2>
 
-          <Slider
-            {...sliderSettings}
-            prevArrow={<CustomPrev />}
-            nextArrow={<CustomNext />}
-          >
-            {produkList.map((item) => (
-              <div
-                key={item.id}
-                className="p-2 hover:shadow-md rounded-xl cursor-pointer"
-              >
-                <img
-                  src={item.gambar}
-                  alt={item.nama}
-                  className="w-full h-40 object-contain rounded-xl border border-gray-600 hover:scale-105 transition-all duration-300"
-                />
-                <div className="mt-2 text-sm text-black font-light">
-                  {item.harga}
+          {!produkList || produkList.length === 0 ? (
+            <div className="col-span-6 flex justify-center items-center h-40">
+              <Loading w={10} h={10} />
+            </div>
+          ) : (
+            <Slider
+              {...sliderSettings}
+              prevArrow={<CustomPrev />}
+              nextArrow={<CustomNext />}
+            >
+              {produkList.map((item) => (
+                <div
+                  key={item.id}
+                  className="p-2 hover:scale-105 transition-all duration-300 cursor-pointer"
+                  onClick={() => navigate("/detailProduk/" + item.id)}
+                >
+                  <img
+                    src={apiUrl + JSON.parse(item.path)[0]}
+                    alt={item.nama}
+                    className="w-full h-40 object-contain rounded-xl border border-gray-600"
+                  />
+                  <div className="mt-2 text-sm text-black font-light">
+                    {item.variasi?.[0]?.harga
+                      ? `Rp. ${item.variasi[0].harga.toLocaleString("id-ID")}`
+                      : "Harga tidak tersedia"}
+                  </div>
+                  <div className="text-md font-medium text-black truncate">
+                    {item.nama}
+                  </div>
+                  <div className="text-sm text-gray-500">{item.toko}</div>
                 </div>
-                <div className="text-md font-medium text-black truncate">
-                  {item.nama}
-                </div>
-                <div className="text-sm text-gray-500">{item.toko}</div>
-              </div>
-            ))}
-          </Slider>
+              ))}
+            </Slider>
+          )}
+        </div>
+
+        <div className="px-1 mt-8">
+          <h1 className="text-xl">Ulasan Pembeli</h1>
+
+          {!loadingReview && (
+            <>
+              {Array.isArray(review) && review.length > 0 && (
+                <>
+                  <div className="font-light text-xs mb-8">
+                    Menampilkan {review.length} ulasan
+                  </div>
+                </>
+              )}
+            </>
+          )}
+
+          {loadingReview ? (
+            <div className="col-span-6 flex justify-center items-center w-full">
+              <Loading w={10} h={10} />
+            </div>
+          ) : (
+            <>
+              {Array.isArray(review) && review.length > 0 ? (
+                <>
+                  {review.map((rev, idx) => {
+                    return (
+                      <div
+                        key={idx}
+                        className="w-full px-2 py-2 mb-2 border-b-2"
+                      >
+                        <div className="time text-xs text-gray-500 mb-1">
+                          {getTimeDiffInMinutesWITA(rev.time)[0] + " " + getTimeDiffInMinutesWITA(rev.time)[1]} yang lalu.
+                        </div>
+                        <div className="profil mb-2">
+                          <div className="img flex justify-start items-center gap-2 text-md ">
+                            <div className="rounded-full overflow-hidden w-8 h-8 ">
+                              <img
+                                src={`${apiUrl}/img/profile_image/${rev.user.path_file}`}
+                                alt=""
+                              />
+                            </div>
+                            <div>
+                              {rev.user.firstName} {rev.user.lastName} *{" "}
+                              {rev.rating}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="review text-sm font-light">
+                          {rev.review}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </>
+              ) : (
+                <>
+                  <div className="col-span-6 flex justify-center items-center mt-8 w-full">
+                    {/* <Loading w={10} h={10} /> */}
+                    <h1 className="text-gray-400 text-xl">Belum ada Ulasan</h1>
+                  </div>
+                </>
+              )}
+            </>
+          )}
+          {/* Bagian Komentar */}
         </div>
       </div>
       <ModalShare

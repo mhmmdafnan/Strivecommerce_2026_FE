@@ -21,6 +21,7 @@ import TambahProdukPage from "./Component/TambahProduk.jsx";
 import Navbar from "./Component/Navbar.jsx";
 import AlamatPage from "./pages/AlamatPage.jsx";
 import TambahAlamat from "./pages/TambahAlamat.jsx";
+import PaymentPage from "./pages/PaymentPage.jsx"
 import { useState } from "react";
 import { ThemeProvider } from "./Component/ThemeContext.jsx";
 
@@ -72,10 +73,12 @@ const AppRoutes = ({ isLoginModal, setIsLoginModal }) => {
           <Route path="/toko/:userId" element={<TokoPage />} />
           <Route path="/alamat" element={<AlamatPage />} />
           <Route path="/TambahAlamat" element={<TambahAlamat />} />
+          <Route path="/toko/:idToko" element={<TokoPage />} />
           <Route path="/tambahProduk" element={<TambahProdukPage />} />
           <Route path="/editProduk/:idProduk" element={<TambahProdukPage />} />
           <Route path="/adminUmkmList" element={<AdminUmkmPage />} />
           <Route path="/adminPengajuan" element={<AdminPengajuanPage />} />
+          <Route path="/payment/:id" element={<PaymentPage />} />
         </Route>
 
         <Route path="/register" element={<SignupPage />} />

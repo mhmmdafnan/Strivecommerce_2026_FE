@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
 
 import fotoToko from "../assets/img/market foto.png";
 import { IoChatboxEllipsesOutline } from "react-icons/io5";
@@ -11,81 +12,146 @@ import produk1 from "../assets/img/produk/kursi 1.jpg";
 import produk2 from "../assets/img/produk/kursi 2.jpg";
 import produk3 from "../assets/img/produk/kursi 3.jpg";
 import { MdOutlineStoreMallDirectory } from "react-icons/md";
+import Loading from "../Component/Loading";
 
-const produkList = [
-  {
-    id: 1,
-    nama: "Nama Barang wkwkwkwkwkkwkwkw",
-    harga: "Rp. 100.000",
-    toko: "Toko",
-    gambar: produk1,
-  },
-  {
-    id: 2,
-    nama: "Nama Barang wkwkwkwkwkkwkwkw",
-    harga: "Rp. 100.000",
-    toko: "Toko",
-    gambar: produk2,
-  },
-  {
-    id: 3,
-    nama: "Nama Barang wkwkwkwkwkkwkwkw",
-    harga: "Rp. 100.000",
-    toko: "Toko",
-    gambar: produk3,
-  },
-  {
-    id: 4,
-    nama: "Nama Barang wkwkwkwkwkkwkwkw",
-    harga: "Rp. 100.000",
-    toko: "Toko",
-    gambar: produk1,
-  },
-  {
-    id: 5,
-    nama: "Nama Barang wkwkwkwkwkkwkwkw",
-    harga: "Rp. 100.000",
-    toko: "Toko",
-    gambar: produk2,
-  },
-  {
-    id: 6,
-    nama: "Nama Barang wkwkwkwkwkkwkwkw",
-    harga: "Rp. 100.000",
-    toko: "Toko",
-    gambar: produk3,
-  },
-  {
-    id: 7,
-    nama: "Nama Barang wkwkwkwkwkkwkwkw",
-    harga: "Rp. 100.000",
-    toko: "Toko",
-    gambar: produk1,
-  },
-  {
-    id: 8,
-    nama: "Nama Barang wkwkwkwkwkkwkwkw",
-    harga: "Rp. 100.000",
-    toko: "Toko",
-    gambar: produk2,
-  },
-  {
-    id: 9,
-    nama: "Nama Barang wkwkwkwkwkkwkwkw",
-    harga: "Rp. 100.000",
-    toko: "Toko",
-    gambar: produk3,
-  },
-  // dan seterusnya
-];
+// const produkList = [
+//   {
+//     id: 1,
+//     nama: "Nama Barang wkwkwkwkwkkwkwkw",
+//     harga: "Rp. 100.000",
+//     toko: "Toko",
+//     gambar: produk1,
+//   },
+//   {
+//     id: 2,
+//     nama: "Nama Barang wkwkwkwkwkkwkwkw",
+//     harga: "Rp. 100.000",
+//     toko: "Toko",
+//     gambar: produk2,
+//   },
+//   {
+//     id: 3,
+//     nama: "Nama Barang wkwkwkwkwkkwkwkw",
+//     harga: "Rp. 100.000",
+//     toko: "Toko",
+//     gambar: produk3,
+//   },
+//   {
+//     id: 4,
+//     nama: "Nama Barang wkwkwkwkwkkwkwkw",
+//     harga: "Rp. 100.000",
+//     toko: "Toko",
+//     gambar: produk1,
+//   },
+//   {
+//     id: 5,
+//     nama: "Nama Barang wkwkwkwkwkkwkwkw",
+//     harga: "Rp. 100.000",
+//     toko: "Toko",
+//     gambar: produk2,
+//   },
+//   {
+//     id: 6,
+//     nama: "Nama Barang wkwkwkwkwkkwkwkw",
+//     harga: "Rp. 100.000",
+//     toko: "Toko",
+//     gambar: produk3,
+//   },
+//   {
+//     id: 7,
+//     nama: "Nama Barang wkwkwkwkwkkwkwkw",
+//     harga: "Rp. 100.000",
+//     toko: "Toko",
+//     gambar: produk1,
+//   },
+//   {
+//     id: 8,
+//     nama: "Nama Barang wkwkwkwkwkkwkwkw",
+//     harga: "Rp. 100.000",
+//     toko: "Toko",
+//     gambar: produk2,
+//   },
+//   {
+//     id: 9,
+//     nama: "Nama Barang wkwkwkwkwkkwkwkw",
+//     harga: "Rp. 100.000",
+//     toko: "Toko",
+//     gambar: produk3,
+//   },
+//   // dan seterusnya
+// ];
 
 const TokoPage = () => {
+  const apiUrl = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
-  const Toko = { namaToko: "Nama Toko", Kabupaten: "Majene" };
-
+  const [toko, setToko] = useState([]);
+  const { idToko } = useParams();
   const [openModal, setOpenModal] = useState(false);
   const shareUrl = `${window.location.origin}${location.pathname}`;
-  const shareText = `Cek Toko ${Toko.namaToko}, cuma di sini!`;
+  const [loading, setLoading] = useState(false);
+  const [produkList, setProdukList] = useState([]);
+  const [shareText, setShareText] = useState();
+
+  useEffect(() => {
+    const fetchDataToko = async () => {
+      // console.log(typeof idToko);
+
+      setLoading(true);
+      try {
+        // Ambil dua data secara paralel
+
+        const response = await axios.get(`${apiUrl}/api/v1/toko/${idToko}`);
+
+        // console.log(response.data.data);
+
+        // Set data produk umum
+        if (response.data.success) {
+          setToko(response.data.data);
+          setShareText(
+            `Cek Toko ${response.data.data.nama_toko}, cuma di sini!`
+          );
+        }
+      } catch (error) {
+        console.error("Gagal fetch data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    // console.log(cookies);
+
+    fetchDataToko();
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        // Ambil dua data secara paralel
+
+        const allProdukRes = await axios.get(`${apiUrl}/api/v1/product`, {
+          params: {
+            total: 12,
+            idToko: idToko,
+          },
+        });
+
+        console.log(allProdukRes.data.data);
+
+        // Set data produk umum
+        if (allProdukRes.data.success) {
+          setProdukList(allProdukRes.data.data);
+        }
+      } catch (error) {
+        console.error("Gagal fetch data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    // console.log(cookies);
+
+    fetchData();
+  }, []);
+
   return (
     <>
       <div className="max-w-7xl mx-auto px-5 md:px-20 py-5 mb-20 md:mt-0">
@@ -95,7 +161,7 @@ const TokoPage = () => {
             Home /
           </div>
           <div className="text-sm text-[#EE6D3F] hover:text-[#bc5b38] cursor-pointer">
-            {Toko.namaToko}
+            {toko.nama_toko}
           </div>
         </div>
         {/* Toko Card  */}
@@ -108,12 +174,12 @@ const TokoPage = () => {
                 alt=""
               />
             </div>
-            <div onClick={() => navigate("/toko")} className="cursor-pointer">
+            <div className="cursor-pointer">
               <div className="text-xl font-semibold hover:text-[#EE6D3F]">
-                Toko
+                {toko.nama_toko}
               </div>
               <div className="flex mb-2 text-xs items-center gap-x-1 text-gray-500 hover:text-gray-800">
-                <FaLocationDot /> {Toko.Kabupaten}
+                <FaLocationDot /> {toko.Kabupaten}
               </div>
               <div className="flex gap-x-2">
                 <div
@@ -155,31 +221,44 @@ const TokoPage = () => {
             </div>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2 md:gap-4 lg:gap-6">
-            {produkList.map((produk) => (
-              <div
-                onClick={() => navigate("/detailProduk")}
-                key={produk.id}
-                className="h-34 cursor-pointer hover:shadow-md rounded-xl p-2"
-              >
-                <img
-                  src={produk.gambar}
-                  className="w-full h-30 object-cover rounded-3xl border-2 border-gray-200 hover:scale-105 transition-all duration-300"
-                  alt={produk.nama}
-                />
-                <div className="p-2">
-                  <div className="text-sm font-extralight text-black">
-                    {produk.harga}
-                  </div>
-                  <div className="text-md font-medium text-black truncate">
-                    {produk.nama}
-                  </div>
-                  <div className="flex items-center gap-x-1 text-sm font-extralight text-gray-500">
-                    <MdOutlineStoreMallDirectory />
-                    {produk.toko}
-                  </div>
-                </div>
+            {loading ? (
+              <div className="col-span-6 flex justify-center items-center h-80">
+                <Loading w={10} h={10} />
               </div>
-            ))}
+            ) : (
+              <>
+                {produkList.map((produk) => (
+                  <div
+                    onClick={() => navigate(`/detailProduk/${produk.id}`)}
+                    key={produk.id}
+                    className="h-34 cursor-pointer hover:shadow-md rounded-xl p-2"
+                  >
+                    <img
+                      src={
+                        apiUrl +
+                        "/pict/" +
+                        produk.id +
+                        JSON.parse(produk.path)[0]
+                      }
+                      className="w-full h-30 object-cover rounded-3xl border-2 border-gray-200 hover:scale-105 transition-all duration-300"
+                      alt={produk.nama}
+                    />
+                    <div className="p-2">
+                      <div className="text-xs font-extralight text-black">
+                        Rp. {produk.variasi[0].harga.toLocaleString("id-ID")}
+                      </div>
+                      <div className="text-md font-medium text-black truncate">
+                        {produk.nama}
+                      </div>
+                      <div className="flex items-center gap-x-1 text-sm font-extralight text-gray-500">
+                        <MdOutlineStoreMallDirectory />
+                        {produk.toko}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </>
+            )}
           </div>
         </div>
       </div>

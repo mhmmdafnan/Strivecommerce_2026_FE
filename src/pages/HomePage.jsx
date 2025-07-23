@@ -106,6 +106,8 @@ const HomePage = () => {
 
         // Set produk slider
         if (sliderProdukRes.data.success) {
+          console.log(sliderProdukRes.data);
+          
           setProdukSlider(sliderProdukRes.data.data);
         }
       } catch (error) {
@@ -194,11 +196,15 @@ const HomePage = () => {
                 {produkSlider.map((item) => (
                   <div
                     key={item.id}
-                    className="p-2 hover:scale-105 transition-all duration-300 cursor-pointer" 
+                    className="p-2 hover:scale-105 transition-all duration-300 cursor-pointer"
                     onClick={() => navigate("/detailProduk/" + item.id)}
                   >
                     <img
-                      src={apiUrl + "/pict/" + item.id + item.path}
+                      src={
+                        apiUrl +
+                        
+                        JSON.parse(item.path)[0]
+                      }
                       alt={item.nama}
                       className="w-full h-40 object-contain rounded-xl border border-gray-600 "
                     />
@@ -236,7 +242,11 @@ const HomePage = () => {
                     className="h-34 cursor-pointer hover:shadow-md rounded-xl p-2"
                   >
                     <img
-                      src={apiUrl + "/pict/" + produk.id + produk.path}
+                      src={
+                        apiUrl +
+                        
+                        JSON.parse(produk.path)[0]
+                      }
                       className="w-full h-30 object-cover rounded-3xl border-2 border-gray-200 hover:scale-105 transition-all duration-300"
                       alt={produk.nama}
                     />

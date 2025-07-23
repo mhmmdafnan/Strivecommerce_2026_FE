@@ -101,38 +101,36 @@ const KeranjangPage = () => {
   const addTotal = (tokoId, produkId) => {
     // Tambah jumlah produk dalam keranjang
     console.log(tokoId, produkId);
-    
-    const newDbKeranjang = dbKeranjang.map(toko => {
-      
+
+    const newDbKeranjang = dbKeranjang.map((toko) => {
       if (toko.tokoId === tokoId) {
         // console.log(toko);
         return {
           ...toko,
-          produk: toko.produk.map(p => {
-            
+          produk: toko.produk.map((p) => {
             if (p.produkId === produkId) {
               return { ...p, qtty: p.qtty + 1 };
             }
             return p;
-          })
+          }),
         };
       }
       return toko;
     });
 
-    const newDataKeranjang =   dataKeranjang.map(toko => {
+    const newDataKeranjang = dataKeranjang.map((toko) => {
       if (toko.id === tokoId) {
         return {
           ...toko,
-          product: toko.product.map(item => {
+          product: toko.product.map((item) => {
             if (item.product.id === produkId) {
               return {
                 ...item,
-                quantity: item.quantity + 1
+                quantity: item.quantity + 1,
               };
             }
             return item;
-          })
+          }),
         };
       }
       return toko;
@@ -144,38 +142,36 @@ const KeranjangPage = () => {
 
   const subtractTotal = (tokoId, produkId) => {
     // Kurangi jumlah produk dalam keranjang
-        
-    const newDbKeranjang = dbKeranjang.map(toko => {
-      
+
+    const newDbKeranjang = dbKeranjang.map((toko) => {
       if (toko.tokoId === tokoId) {
         // console.log(toko);
         return {
           ...toko,
-          produk: toko.produk.map(p => {
-            
+          produk: toko.produk.map((p) => {
             if (p.produkId === produkId) {
               return { ...p, qtty: p.qtty - 1 };
             }
             return p;
-          })
+          }),
         };
       }
       return toko;
     });
 
-    const newDataKeranjang =   dataKeranjang.map(toko => {
+    const newDataKeranjang = dataKeranjang.map((toko) => {
       if (toko.id === tokoId) {
         return {
           ...toko,
-          product: toko.product.map(item => {
+          product: toko.product.map((item) => {
             if (item.product.id === produkId) {
               return {
                 ...item,
-                quantity: item.quantity - 1
+                quantity: item.quantity - 1,
               };
             }
             return item;
-          })
+          }),
         };
       }
       return toko;
@@ -200,9 +196,9 @@ const KeranjangPage = () => {
         produkId: p.product.id,
         namaProduk: p.product.nama,
         harga: p.variasi.harga,
-        variasi : p.variasi.nama,
+        variasi: p.variasi.nama,
         qtty: p.quantity || 1,
-        path : p.product.path
+        path: p.product.path,
       }));
 
       return [
@@ -240,25 +236,29 @@ const KeranjangPage = () => {
   };
 
   const handleCheckout = () => {
- 
     navigate("/checkout", { state: { keranjang: dbKeranjang } });
   };
 
   function groupByToko(data) {
     const grouped = {};
+
     data.forEach((item) => {
+      const tokoId = item.product.user.id;
       const namaToko = item.product.user.nama_toko;
-      if (!grouped[namaToko]) {
-        grouped[namaToko] = [];
+
+      if (!grouped[tokoId]) {
+        grouped[tokoId] = {
+          tokoId,
+          toko: namaToko,
+          product: [],
+        };
       }
-      grouped[namaToko].push(item);
+
+      grouped[tokoId].product.push(item);
     });
-    // Ubah ke array of object { toko, product: [...] }
-    return Object.entries(grouped).map(([toko, products], idx) => ({
-      toko,
-      id: idx,
-      product: products,
-    }));
+
+    // Ubah ke array of object { tokoId, toko, product: [...] }
+    return Object.values(grouped);
   }
 
   useEffect(() => {
@@ -272,16 +272,20 @@ const KeranjangPage = () => {
           params: {
             userId: cookies.user_id,
           },
+          headers: {
+            Authorization: `Bearer ${cookies.token}`,
+          },
         });
         // console.log(response.data.data);
 
         if (response.data.success) {
+          // console.log(JSON.stringify(response.data.data));
+
           const grouped = groupByToko(response.data.data);
           console.log(grouped);
 
           setDataKeranjang(grouped);
         } else {
-          setShowLoginError(true);
         }
       } catch (error) {
         // setShowLoginError(true);
@@ -323,7 +327,7 @@ const KeranjangPage = () => {
                         <div key={id}>
                           <div
                             className="bg-white mb-4 py-1 w-full md:shadow-sm md:mx-auto mlg:max-w-[700px] rounded-xl"
-                            key={toko.id}
+                            key={toko.tokoId}
                           >
                             <div className="nama-toko p-2">
                               <h2 className="ml-2 font-semibold">
@@ -334,7 +338,7 @@ const KeranjangPage = () => {
                                   id=""
                                   onClick={() =>
                                     handleSelectAll(
-                                      toko.id,
+                                      toko.tokoId,
                                       toko.toko,
                                       toko.product
                                     )
@@ -357,18 +361,18 @@ const KeranjangPage = () => {
                                     onClick={() =>
                                       handleCheckboxChange(
                                         produk.product.id,
-                                        toko.id,
+                                        toko.tokoId,
                                         produk.product.nama,
                                         toko.toko,
                                         produk.variasi.harga,
                                         produk.quantity,
                                         produk.variasi.nama,
-                                        produk.product.path,
+                                        produk.product.path
                                       )
                                     }
                                     checked={dbKeranjang.some(
                                       (dbToko) =>
-                                        dbToko.tokoId === toko.id &&
+                                        dbToko.tokoId === toko.tokoId &&
                                         dbToko.produk.some(
                                           (p) =>
                                             p.produkId === produk.product.id
@@ -381,14 +385,19 @@ const KeranjangPage = () => {
                                   >
                                     <div className="flex items-center">
                                       <img
-                                        src={`${apiUrl}/pict/${produk.product.id}${produk.product.path}`}
+                                        src={`${apiUrl}${
+                                          JSON.parse(produk.product.path)[0]
+                                        }`}
                                         className="w-16 rounded-xl h-16 object-cover"
                                         alt=""
                                       />
                                       <div className="ml-2">
                                         <h3 className="text-sm flex items-center">
-                                          {produk.product.nama} {produk.variasi.nama != "-" && (
-                                            <p className="text-[10px] ml-1 text-gray-500">({produk.variasi.nama})</p>
+                                          {produk.product.nama}{" "}
+                                          {produk.variasi.nama != "-" && (
+                                            <p className="text-[10px] ml-1 text-gray-500">
+                                              ({produk.variasi.nama})
+                                            </p>
                                           )}
                                         </h3>
                                         <p className="text-xs text-gray-500">
@@ -409,7 +418,7 @@ const KeranjangPage = () => {
                                         className={`bg-gray-200 mr-2 rounded-full px-2 py-1 text-xs text-gray-700 transition-all duration-500 ${
                                           dbKeranjang.some(
                                             (dbToko) =>
-                                              dbToko.tokoId === toko.id &&
+                                              dbToko.tokoId === toko.tokoId &&
                                               dbToko.produk.some(
                                                 (p) =>
                                                   p.produkId ===
@@ -420,7 +429,10 @@ const KeranjangPage = () => {
                                             : "opacity-40"
                                         }`}
                                         onClick={() =>
-                                          subtractTotal(toko.id, produk.product.id)
+                                          subtractTotal(
+                                            toko.tokoId,
+                                            produk.product.id
+                                          )
                                         }
                                       >
                                         -
@@ -432,7 +444,7 @@ const KeranjangPage = () => {
                                         className={`bg-gray-200 mx-2 rounded-full px-2 py-1 text-xs text-gray-700 transition-all duration-500 ${
                                           dbKeranjang.some(
                                             (dbToko) =>
-                                              dbToko.tokoId === toko.id &&
+                                              dbToko.tokoId === toko.tokoId &&
                                               dbToko.produk.some(
                                                 (p) =>
                                                   p.produkId ===
@@ -443,7 +455,7 @@ const KeranjangPage = () => {
                                             : "opacity-40"
                                         }`}
                                         onClick={() =>
-                                          addTotal(toko.id, produk.product.id)
+                                          addTotal(toko.tokoId, produk.product.id)
                                         }
                                       >
                                         +

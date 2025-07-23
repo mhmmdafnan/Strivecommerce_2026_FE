@@ -268,7 +268,7 @@ const TambahProduk = () => {
 
   return (
     <>
-      <Navbar />
+      {/* <Navbar /> */}
       <div className="max-w-7xl mx-auto px-5 md:px-20 py-5 mb-20 md:mt-0">
         {/* Navigation */}
         <div className="flex gap-x-1 p-1 my-2">
