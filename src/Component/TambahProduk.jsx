@@ -3,6 +3,9 @@ import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Navbar from "./Navbar";
 import { FaCheckCircle, FaPlus } from "react-icons/fa";
+import { useCookies } from "react-cookie";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const TambahProduk = () => {
   const navigate = useNavigate();
@@ -16,12 +19,21 @@ const TambahProduk = () => {
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const firstInputRef = useRef(null);
+  const [cookies, setCookies] = useCookies();
+  const apiUrl = import.meta.env.VITE_API_URL;
   const [formData, setFormData] = useState({
     nama: "",
     kategori: "",
-    variasi: [{ nama: "", stok: "", harga: "" }],
     deskripsi: "",
-    media: [], // Ubah menjadi array untuk menampung banyak file
+    media: [],
+    variasi: [
+      {
+        nama: "",
+        harga: "",
+        stok: "",
+        media: [],
+      },
+    ],
   });
 
   const check_empty = () => {
@@ -58,20 +70,12 @@ const TambahProduk = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
-    // const msg_div = document.getElementById("message-div");
-    // const msg_div_ksg = document.getElementById("message-div-ksg");
-    // if (!msg_div.classList.contains("hidden")) {
-    //   msg_div.classList.add("hidden");
-    // }
-    // if (!msg_div_ksg.classList.contains("hidden")) {
-    //   msg_div_ksg.classList.add("hidden");
-    // }
   };
 
   const handleTambahVariasi = () => {
     setFormData((prev) => ({
       ...prev,
-      variasi: [...prev.variasi, { nama: "", stok: "", harga: "" }],
+      variasi: [...prev.variasi, { nama: "", stok: "", harga: "", media: [] }],
     }));
   };
 
@@ -93,6 +97,19 @@ const TambahProduk = () => {
     }));
   };
 
+  const handleFileChange = (e, index = null) => {
+    const files = Array.from(e.target.files);
+    if (index === null) {
+      // untuk foto produk utama
+      setFormData((prev) => ({ ...prev, media: files }));
+    } else {
+      // untuk foto variasi
+      const updatedVariasi = [...formData.variasi];
+      updatedVariasi[index].media = files;
+      setFormData((prev) => ({ ...prev, variasi: updatedVariasi }));
+    }
+  };
+
   // Format angka jadi Rupiah
   const formatRupiah = (angka) => {
     if (!angka) return "";
@@ -106,30 +123,6 @@ const TambahProduk = () => {
   // Ambil angka murni dari string input
   const toNumberOnly = (val) => {
     return val.replace(/[^\d]/g, "");
-  };
-
-  const handleFileChange = (e) => {
-    // const selectedFiles = Array.from(e.target.files);
-    // const allowedExtensions = [".jpg", ".jpeg", ".png"];
-    // const maxFileSize = 10 * 1024 * 1024; // 10 MB dalam byte
-    // console.log(selectedFiles);
-    // const validFiles = selectedFiles.filter((file) => {
-    //   const ext = file.name.toLowerCase().split(".").pop();
-    //   const isValidExtension = allowedExtensions.includes(`.${ext}`);
-    //   const isValidSize = file.size <= maxFileSize; // Memeriksa ukuran file
-    //   return isValidExtension && isValidSize;
-    // });
-    // // Cek jika ada file yang tidak valid
-    // if (validFiles.length !== selectedFiles.length) {
-    //   alert(
-    //     "Hanya file gambar (jpg, jpeg, png) dengan ukuran maksimal 10 MB yang diperbolehkan!"
-    //   );
-    // }
-    // setFormData({
-    //   ...formData,
-    //   media: validFiles, // Mengubah file menjadi array dan hanya file valid yang diterima
-    // });
-    // console.log("Files yang dipilih:", validFiles);
   };
 
   const updateData = async (idProduk, propertyData) => {
@@ -165,66 +158,66 @@ const TambahProduk = () => {
     // }
   };
 
-  const sendData = async (propertyData) => {
-    // const formDataWithFiles = new FormData();
-    // formDataWithFiles.append("nama", propertyData.nama);
-    // formDataWithFiles.append("loc", propertyData.lokasi);
-    // formDataWithFiles.append("tag_loc", propertyData.tag_lokasi);
-    // formDataWithFiles.append("luas", propertyData.luas_rumah);
-    // formDataWithFiles.append("jml_kmr_tdr", propertyData.jml_kmr_tdr);
-    // formDataWithFiles.append("jml_kmr_mnd", propertyData.jml_kmr_mnd);
-    // formDataWithFiles.append("detail", propertyData.detail);
-    // formDataWithFiles.append("harga", propertyData.harga);
-    // // Menambahkan semua file ke FormData
-    // propertyData.media
-    //   .slice()
-    //   .reverse()
-    //   .forEach((file) => {
-    //     formDataWithFiles.append("files", file);
-    //     // formDataWithFiles.append("fileOrder[]", index);
-    //   });
-    // // console.log(propertyData)
-    // try {
-    //   const res = await axios.post(
-    //     backendUrl + "/api/v1/properti",
-    //     formDataWithFiles,
-    //     {
-    //       headers: {
-    //         "Content-Type": "multipart/form-data",
-    //         token: `${cookies["token"]}`,
-    //       },
-    //     }
-    //   );
-    //   console.log(res.data);
-    //   return res.data.data;
-    // } catch (err) {
-    //   console.error("Error detail:", err.response || err.message);
-    //   throw err;
-    // }
+  const sendData = async () => {
+    const form = new FormData();
+
+    // Data utama produk
+    form.append("nama", formData.nama);
+    form.append("deskripsi", formData.deskripsi);
+    form.append("kategori", formData.kategori || 0);
+    form.append("userId", cookies.user_id);
+
+
+    // Tambahkan path utama
+    const mediaPaths = formData.media.map((_, i) => `/uploads/media_img_${i}`);
+    form.append("path", JSON.stringify(mediaPaths));
+
+    // Tambahkan variasi dan file-nya
+    const variasiPayload = (formData.variasi || []).map((v, index) => {
+      const mediaNames = (v.media || []).map(
+        (_, i) => `variasi_${index}_img_${i}`
+      );
+
+      return {
+        nama: v.nama,
+        harga: parseInt(v.harga),
+        stok: parseInt(v.stok),
+        path: mediaNames.map((n) => `/uploads/${n}`),
+      };
+    });
+
+    form.append("variasi", JSON.stringify(variasiPayload));
+    console.log([...form.entries()]);
+
+    // Kirim ke backend
+    try {
+      const res = await axios.post(`${apiUrl}/api/v1/product`, form, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      toast.success("Produk berhasil ditambahkan!");
+      return res.data;
+    } catch (err) {
+      console.error("Gagal mengirim data:", err);
+      console.log("Server response:", err?.response?.data);
+      toast.error("Gagal menambahkan produk");
+      return null;
+    }
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    setShowSuccessModal(true);
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!formData.nama || formData.variasi.length === 0) {
+      toast.error("Nama produk dan variasi wajib diisi!");
+      return;
+    }
 
-    // setLoading(true);
-    // if (check_empty()) {
-    //   try {
-    //     if (idProp) {
-    //       // MODE EDIT
-    //       await updateData(idProp, formData);
-    //       navigate("/super/properti?success-edit=true");
-    //     } else {
-    //       // MODE TAMBAH
-    //       await sendData(formData);
-    //       navigate("/super/properti?success-add=true");
-    //     }
-    //   } catch (error) {
-    //     // console.error("Error saat mengirim data:", error);
-    //     navigate("/super/properti?error=true");
-    //   }
-    // }
-    // setLoading(false);
+    const result = await sendData();
+
+    if (result?.success) {
+      // Reset form, navigasi, atau aksi setelah sukses
+      // setFormData(...);
+      // navigate("/toko-saya");
+    }
   };
 
   useEffect(() => {
@@ -268,7 +261,10 @@ const TambahProduk = () => {
 
   return (
     <>
+<<<<<<< HEAD
       {/* <Navbar /> */}
+=======
+>>>>>>> 7980bfb38f72e57657581ef7b77389b3491e3c69
       <div className="max-w-7xl mx-auto px-5 md:px-20 py-5 mb-20 md:mt-0">
         {/* Navigation */}
         <div className="flex gap-x-1 p-1 my-2">
@@ -367,11 +363,8 @@ const TambahProduk = () => {
                   </div>
                 </div>
                 {formData.variasi.map((item, index) => (
-                  <>
-                    <div
-                      key={index}
-                      className="flex gap-2 mb-2  justify-end items-center"
-                    >
+                  <React.Fragment key={index}>
+                    <div className="flex gap-2 mb-2  justify-end items-center">
                       {formData.variasi.length > 1 && index > 0 && (
                         <div
                           onClick={() => handleHapusVariasi(index)}
@@ -380,6 +373,15 @@ const TambahProduk = () => {
                           ✕
                         </div>
                       )}
+
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => handleFileChange(e, index)}
+                        multiple
+                        className="mt-1 md:mt-0 p-2 border bg-white border-gray-300 rounded-lg w-full md:w-2/3 focus:ring-1 focus:ring-[#ff8052] focus:border-[#ff8052] focus:outline-none"
+                        //   required={!idProduk}
+                      />
                       <input
                         type="text"
                         placeholder="Nama Variasi (contoh: Warna Merah)"
@@ -412,7 +414,7 @@ const TambahProduk = () => {
                         className="p-2 border border-gray-300 rounded-lg w-1/3 focus:ring-1 focus:ring-[#ff8052] focus:border-[#ff8052] focus:outline-none"
                       />
                     </div>
-                  </>
+                  </React.Fragment>
                 ))}
               </div>
 

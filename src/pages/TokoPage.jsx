@@ -102,6 +102,7 @@ const TokoPage = () => {
 
         const response = await axios.get(`${apiUrl}/api/v1/toko/${idToko}`);
 
+        // console.log(response.data.data.alamat[0].kodeKab);
         // console.log(response.data.data);
 
         // Set data produk umum
@@ -118,6 +119,8 @@ const TokoPage = () => {
       }
     };
     // console.log(cookies);
+    // console.log(toko.alamat[0]);
+    
 
     fetchDataToko();
   }, []);
@@ -135,7 +138,6 @@ const TokoPage = () => {
           },
         });
 
-        console.log(allProdukRes.data.data);
 
         // Set data produk umum
         if (allProdukRes.data.success) {
@@ -179,7 +181,7 @@ const TokoPage = () => {
                 {toko.nama_toko}
               </div>
               <div className="flex mb-2 text-xs items-center gap-x-1 text-gray-500 hover:text-gray-800">
-                <FaLocationDot /> {toko.Kabupaten}
+                <FaLocationDot /> {toko.alamat?.[0].kabupaten.nama}
               </div>
               <div className="flex gap-x-2">
                 <div
@@ -250,10 +252,10 @@ const TokoPage = () => {
                       <div className="text-md font-medium text-black truncate">
                         {produk.nama}
                       </div>
-                      <div className="flex items-center gap-x-1 text-sm font-extralight text-gray-500">
+                      {/* <div className="flex items-center gap-x-1 text-sm font-extralight text-gray-500">
                         <MdOutlineStoreMallDirectory />
                         {produk.toko}
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                 ))}

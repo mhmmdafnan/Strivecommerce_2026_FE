@@ -9,6 +9,7 @@ import { MdOutlineEdit, MdOutlineDeleteOutline } from "react-icons/md";
 import AddResiModal from "../Component/AddResiModal";
 import produk from "../assets/img/produk/kursi 1.jpg";
 import Navbar from "../Component/Navbar";
+import Loading from "../Component/Loading";
 
 const TokoSayaPage = () => {
   const apiUrl = import.meta.env.VITE_API_URL;
@@ -22,6 +23,7 @@ const TokoSayaPage = () => {
   const navigate = useNavigate();
   const [selectedProducts, setSelectedProducts] = useState([]);
   // const toko = { id: 1, nama: "Toko Saya" };
+<<<<<<< HEAD
   const [produkList, setProdukList] = useState([
     {
       id: 1,
@@ -130,6 +132,10 @@ const TokoSayaPage = () => {
     setShowResi(true);
   };
 
+=======
+  const [produkList, setProdukList] = useState([]);
+  const [loading, setLoading] = useState();
+>>>>>>> 7980bfb38f72e57657581ef7b77389b3491e3c69
   const handleSelectAll = () => {
     const allChecked = produkList.every((item) => item.isChecked);
     const updatedList = produkList.map((item) => ({
@@ -156,6 +162,7 @@ const TokoSayaPage = () => {
 
   // Fetch data when page changes
   useEffect(() => {
+<<<<<<< HEAD
     const fetchTransaksi = async () => {
       setLoading(true);
       try {
@@ -180,12 +187,47 @@ const TokoSayaPage = () => {
       } catch (error) {
         // setShowLoginError(true);
         console.log(error);
+=======
+    const fetchData = async () => {
+      setLoading(true);
+      try {
+        // Ambil dua data secara paralel
+
+        const allProdukRes = await axios.get(`${apiUrl}/api/v1/product`, {
+          params: {
+            total: 12,
+            idToko: cookies.user_id,
+          },
+        });
+        // Set data produk umum
+        if (allProdukRes.data.success) {
+          const dataProduk = allProdukRes.data.data;
+
+          const produkDenganStok = dataProduk.map((produk) => {
+            const stokTotal = (produk.variasi || []).reduce(
+              (acc, variasi) => acc + (variasi.stok || 0),
+              0
+            );
+            return { ...produk, stokTotal };
+          });
+
+          setProdukList(produkDenganStok);
+        }
+      } catch (error) {
+        console.error("Gagal fetch data:", error);
+>>>>>>> 7980bfb38f72e57657581ef7b77389b3491e3c69
       } finally {
         setLoading(false);
       }
     };
+<<<<<<< HEAD
 
     fetchTransaksi();
+=======
+    // console.log(produkList);
+
+    fetchData();
+>>>>>>> 7980bfb38f72e57657581ef7b77389b3491e3c69
   }, []);
 
   return (
@@ -299,7 +341,45 @@ const TokoSayaPage = () => {
                         }
                         onChange={handleSelectAll}
                       />
+<<<<<<< HEAD
                       ID Produk
+=======
+                      {item.id}
+                    </div>
+                    <div className="flex justify-start items-center gap-2">
+                      <div>
+                        <img
+                          className="h-10 w-10 rounded-xl border-2 border-gray-400 object-contain"
+                          src={
+                            apiUrl +
+                            "/pict/" +
+                            item.id +
+                            JSON.parse(item.path)[0]
+                          }
+                          alt=""
+                        />
+                      </div>
+                      <div>{item.nama}</div>
+                    </div>
+                    <div>{item.kategori == 0 && "-"}</div>
+                    <div>{item.stokTotal} pcs</div>
+                    <div>{item.terjual} pcs</div>
+                    <div>
+                      {item.variasi?.[0]?.harga
+                        ? `Rp. ${item.variasi[0].harga.toLocaleString("id-ID")}`
+                        : "Harga tidak tersedia"}
+                    </div>
+                    <div className="flex justify-center gap-2">
+                      <div
+                        onClick={() => handleEditKlik(item.id)}
+                        className="text-gray-800 hover:text-[#EE6D3F] cursor-pointer"
+                      >
+                        <MdOutlineEdit className="text-xl" />
+                      </div>
+                      <div className="text-red-500 hover:text-red-700 cursor-pointer">
+                        <MdOutlineDeleteOutline className="text-xl" />
+                      </div>
+>>>>>>> 7980bfb38f72e57657581ef7b77389b3491e3c69
                     </div>
                     <div>Nama Produk</div>
                     <div>Kategori</div>
