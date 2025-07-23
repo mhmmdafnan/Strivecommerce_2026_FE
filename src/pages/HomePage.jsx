@@ -120,6 +120,8 @@ const HomePage = () => {
 
         // Set produk slider
         if (sliderProdukRes.data.success) {
+          console.log(sliderProdukRes.data);
+          
           setProdukSlider(sliderProdukRes.data.data);
         }
       } catch (error) {

@@ -38,21 +38,7 @@ export default function Navbar({ isLoginModal, setIsLoginModal }) {
 
   const onSuccessLogin = (data) => {
     console.log(data);
-    setCookie("isLoggedIn", true);
-    setCookie("token", data.data.token);
-    setCookie("user_id", data.data.id_user);
-    setCookie("role", data.data.role);
-    setCookie("firstName", data.data.firstname);
-    setCookie("lastName", data.data.lastname);
-    setCookie("gender", data.data.gender);
-    setCookie("email", data.data.email);
-    setCookie("tanggal_lahir", data.data.tanggal_lahir);
-    setCookie("telp", data.data.telp);
-    setCookie("path_file", data.data.path_file);
-    setCookie("nama_toko", data.data.nama_toko);
-    setCookie("buka_toko", data.data.buka_toko);
-    setCookie("klasifikasi_toko", data.data.klasifikasi_toko);
-    setCookie("rating_toko", data.data.rating_toko);
+    
 
     if (data.data.role == 10) {
       navigate("/adminPengajuan");

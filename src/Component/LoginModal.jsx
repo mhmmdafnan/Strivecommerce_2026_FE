@@ -44,14 +44,29 @@ const LoginModal = ({ isOpen, onClose, onSuccess }) => {
       console.log(response);
 
       if (response.data.success) {
-        // setCookie("isLoggedIn", true);
-        // setCookie("token", response.data.token);
-        // setCookie("user_id", response.data.id_user);
+        setCookie("isLoggedIn", true);
+        setCookie("token", response.data.token);
+        setCookie("user_id", response.data.id_user);
+        setCookie("role", response.data.role);
+        setCookie("firstName", response.data.firstname);
+        setCookie("lastName", response.data.lastname);
+        setCookie("gender", response.data.gender);
+        setCookie("email", response.data.email);
+        setCookie("tanggal_lahir", response.data.tanggal_lahir);
+        setCookie("telp", response.data.telp);
+        setCookie("path_file", response.data.path_file);
+        setCookie("nama_toko", response.data.nama_toko);
+        setCookie("buka_toko", response.data.buka_toko);
+        setCookie("klasifikasi_toko", response.data.klasifikasi_toko);
+        setCookie("rating_toko", response.data.rating_toko);
         onSuccess(response);
       } else {
+        // console.log("sini");
+        
         setShowLoginError(true);
       }
     } catch (error) {
+      // console.log("sini", error);
       setShowLoginError(true);
     } finally {
       setLoading(false);

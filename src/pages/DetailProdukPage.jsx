@@ -35,6 +35,8 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
   const shareUrl = `${window.location.origin}${location.pathname}`;
   const [shareText, setShareText] = useState();
   const [loadingKeranjang, setLoadingKeranjang] = useState();
+  const [review, setReview] = useState({});
+  const [loadingReview, setLoadingReview] = useState();
   const [cookies, setCookie, removeCookie] = useCookies(["isLoggedIn"]);
 
   const handleMouseMove = (e) => {
@@ -113,6 +115,8 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
   };
 
   const onKeranjangClick = () => {
+    console.log(cookies.id_user);
+    
     if (!cookies.isLoggedIn) {
       setIsLoginModal(true);
     } else {
@@ -120,7 +124,7 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
       axios
         .post(`${apiUrl}/api/v1/add_to_cart`, {
           productId: dataProduk.id,
-          userId: cookies.id_user,
+          userId: cookies.user_id,
           variasiId: dataProduk.variasi[indexStok].id,
           quantity: jumlahProduk,
         })
@@ -136,6 +140,25 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
         });
     }
   };
+
+  function getTimeDiffInMinutesWITA(isoString) {
+    const WITA_OFFSET = 8 * 60; // WITA = UTC+8 dalam menit
+    const nowUTC = new Date(new Date().toISOString()); // waktu sekarang dalam UTC
+    const nowWITA = new Date(nowUTC.getTime() + WITA_OFFSET * 60 * 1000); // ubah ke WITA
+
+    const target = new Date(isoString); // waktu dari ISO string
+    const diffMs = nowWITA - target;
+    const diffMinutes = Math.floor(diffMs / 1000 / 60);
+    const jam = diffMinutes/60;
+    if (jam > 1){
+      const hari = jam/24;
+      if (hari > 1){
+        return [hari, "hari"];
+      }
+      return [Math.round(diffMinutes/60), "Jam"]
+    }
+    return [Math.round(diffMinutes), "Menit"];
+  }
 
   // Ambil data produk utama berdasarkan idProduk
   useEffect(() => {
@@ -170,6 +193,28 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
     };
 
     fetchProduk();
+
+    const fetchReview = async () => {
+      setLoadingReview(true);
+      try {
+        const response = await axios.get(`${apiUrl}/api/v1/review/${idProduk}`);
+
+        if (response.data.success) {
+          const review = response.data.data;
+          console.log(review);
+
+          setReview(review);
+        } else {
+          setShowLoginError(true);
+        }
+      } catch (error) {
+        console.error("Gagal fetch produk:", error);
+      } finally {
+        setLoadingReview(false);
+      }
+    };
+
+    fetchReview();
   }, [idProduk]);
 
   // Ambil produk slider setelah userId dari dataProduk tersedia
@@ -236,6 +281,7 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
                     onMouseLeave={() => setZoom(false)}
                   >
                     <img
+                      src={`${apiUrl}${fotoUtama}`}
                       src={`${apiUrl}${fotoUtama}`}
                       // src={
                       //   fotoUtama ? apiUrl + idProduk + "/" + fotoUtama : "-"
@@ -408,7 +454,7 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
               }`}
                   >
                     <img
-                      src={`${apiUrl}/img/product/${idProduk}${foto}`}
+                      src={`${apiUrl}${foto}`}
                       className="rounded-xl h-full w-full object-cover"
                       alt={`foto-${index}`}
                     />
@@ -595,7 +641,7 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
                   onClick={() => navigate("/detailProduk/" + item.id)}
                 >
                   <img
-                    src={apiUrl + "/pict/" + item.id + JSON.parse(item.path)[0]}
+                    src={apiUrl + JSON.parse(item.path)[0]}
                     alt={item.nama}
                     className="w-full h-40 object-contain rounded-xl border border-gray-600"
                   />
@@ -612,6 +658,72 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
               ))}
             </Slider>
           )}
+        </div>
+
+        <div className="px-1 mt-8">
+          <h1 className="text-xl">Ulasan Pembeli</h1>
+
+          {!loadingReview && (
+            <>
+              {Array.isArray(review) && review.length > 0 && (
+                <>
+                  <div className="font-light text-xs mb-8">
+                    Menampilkan {review.length} ulasan
+                  </div>
+                </>
+              )}
+            </>
+          )}
+
+          {loadingReview ? (
+            <div className="col-span-6 flex justify-center items-center w-full">
+              <Loading w={10} h={10} />
+            </div>
+          ) : (
+            <>
+              {Array.isArray(review) && review.length > 0 ? (
+                <>
+                  {review.map((rev, idx) => {
+                    return (
+                      <div
+                        key={idx}
+                        className="w-full px-2 py-2 mb-2 border-b-2"
+                      >
+                        <div className="time text-xs text-gray-500 mb-1">
+                          {getTimeDiffInMinutesWITA(rev.time)[0] + " " + getTimeDiffInMinutesWITA(rev.time)[1]} yang lalu.
+                        </div>
+                        <div className="profil mb-2">
+                          <div className="img flex justify-start items-center gap-2 text-md ">
+                            <div className="rounded-full overflow-hidden w-8 h-8 ">
+                              <img
+                                src={`${apiUrl}/img/profile_image/${rev.user.path_file}`}
+                                alt=""
+                              />
+                            </div>
+                            <div>
+                              {rev.user.firstName} {rev.user.lastName} *{" "}
+                              {rev.rating}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="review text-sm font-light">
+                          {rev.review}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </>
+              ) : (
+                <>
+                  <div className="col-span-6 flex justify-center items-center mt-8 w-full">
+                    {/* <Loading w={10} h={10} /> */}
+                    <h1 className="text-gray-400 text-xl">Belum ada Ulasan</h1>
+                  </div>
+                </>
+              )}
+            </>
+          )}
+          {/* Bagian Komentar */}
         </div>
       </div>
       <ModalShare
