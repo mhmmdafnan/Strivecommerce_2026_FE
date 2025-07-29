@@ -219,14 +219,17 @@ const HomePage = () => {
                       className="w-full h-40 object-contain rounded-xl border border-gray-600 "
                     />
                     <div className="mt-2 text-sm text-black font-light">
-                      {item.variasi?.[0]?.harga
-                        ? `Rp. ${item.variasi[0].harga.toLocaleString("id-ID")}`
+                      {item.harga
+                        ? `Rp. ${item.harga.toLocaleString("id-ID")}`
                         : "Harga tidak tersedia"}
                     </div>
                     <div className="text-md font-medium text-black truncate">
                       {item.nama}
                     </div>
-                    <div className="text-sm text-gray-500">{item.toko}</div>
+                    <div className="flex items-center gap-x-1 text-sm font-extralight text-gray-500 truncate">
+                        <MdOutlineStoreMallDirectory />
+                        {item.user.nama_toko}
+                      </div>
                   </div>
                 ))}
               </Slider>
@@ -258,7 +261,7 @@ const HomePage = () => {
                     />
                     <div className="p-2">
                       <div className="text-xs font-extralight text-black">
-                        Rp. {produk.variasi?.[0]?.harga.toLocaleString("id-ID") ?? 0}
+                        Rp. {produk.harga.toLocaleString("id-ID") ?? 0}
                       </div>
                       <div className="text-md font-medium text-black truncate">
                         {produk.nama}

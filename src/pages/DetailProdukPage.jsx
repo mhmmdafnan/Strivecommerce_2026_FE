@@ -114,51 +114,6 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
     ],
   };
 
-  const onKeranjangClick = () => {
-    console.log(cookies.id_user);
-    
-    if (!cookies.isLoggedIn) {
-      setIsLoginModal(true);
-    } else {
-      setLoadingKeranjang(true);
-      axios
-        .post(`${apiUrl}/api/v1/add_to_cart`, {
-          productId: dataProduk.id,
-          userId: cookies.user_id,
-          variasiId: dataProduk.variasi[indexStok].id,
-          quantity: jumlahProduk,
-        })
-        .then((res) => {
-          // console.log("berhasil: ", res);
-        })
-        .catch(() => {
-          alert("Gagal menambahkan ke keranjang!");
-          console.error(err);
-        })
-        .finally(() => {
-          setLoadingKeranjang(false);
-        });
-    }
-  };
-
-  function getTimeDiffInMinutesWITA(isoString) {
-    const WITA_OFFSET = 8 * 60; // WITA = UTC+8 dalam menit
-    const nowUTC = new Date(new Date().toISOString()); // waktu sekarang dalam UTC
-    const nowWITA = new Date(nowUTC.getTime() + WITA_OFFSET * 60 * 1000); // ubah ke WITA
-
-    const target = new Date(isoString); // waktu dari ISO string
-    const diffMs = nowWITA - target;
-    const diffMinutes = Math.floor(diffMs / 1000 / 60);
-    const jam = diffMinutes/60;
-    if (jam > 1){
-      const hari = jam/24;
-      if (hari > 1){
-        return [hari, "hari"];
-      }
-      return [Math.round(diffMinutes/60), "Jam"]
-    }
-    return [Math.round(diffMinutes), "Menit"];
-  }
 
   // Ambil data produk utama berdasarkan idProduk
   useEffect(() => {
@@ -366,7 +321,7 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
                   <>
                     Rp.{" "}
                     {dataProduk
-                      ? dataProduk.variasi[indexStok].harga.toLocaleString(
+                      ? dataProduk.harga.toLocaleString(
                           "id-ID"
                         )
                       : "-"}
@@ -609,8 +564,8 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
                     className="w-full h-40 object-contain rounded-xl border border-gray-600"
                   />
                   <div className="mt-2 text-sm text-black font-light">
-                    {item.variasi?.[0]?.harga
-                      ? `Rp. ${item.variasi[0].harga.toLocaleString("id-ID")}`
+                    {item.harga
+                      ? `Rp. ${item.harga.toLocaleString("id-ID")}`
                       : "Harga tidak tersedia"}
                   </div>
                   <div className="text-md font-medium text-black truncate">
