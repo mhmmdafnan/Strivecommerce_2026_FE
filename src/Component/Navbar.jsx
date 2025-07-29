@@ -135,29 +135,7 @@ export default function Navbar({ isLoginModal, setIsLoginModal }) {
             </div>
           ) : null}
 
-          {/* <AiOutlineUser className="text-xl hidden md:flex" /> */}
-          {cookies["isLoggedIn"] ? (
-            <>
-              <img
-                onClick={() => navigate("/akunSaya")}
-                width={40}
-                height={40}
-                className="h-8 w-8 rounded-full cursor-pointer "
-                // src={ava}
-                src={apiUrl + "/img/profile_image/" + cookies["path_file"]}
-                alt="avatar-img"
-              />
-            </>
-          ) : (
-            <>
-              <div
-                className="cursor-pointer dark:text-white group ml-4 justify-center hover:border-b-2 border-[#FE5D26] dark:border-white transition-all flex duration-500"
-                onClick={showLoginModal}
-              >
-                Login
-              </div>
-            </>
-          )}
+
 
           {/* avtar img */}
         </div>

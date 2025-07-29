@@ -44,12 +44,12 @@ const AppRoutes = ({ isLoginModal, setIsLoginModal }) => {
         pauseOnHover
         theme="colored"
       />
-      {!(isAdminRoute || isRegisterRoute) && (
+      {/* {!(isAdminRoute || isRegisterRoute) && ( */}
         <Navbar
-          isLoginModal={isLoginModal}
-          setIsLoginModal={setIsLoginModal}
+          // isLoginModal={isLoginModal}
+          // setIsLoginModal={setIsLoginModal}
         />
-      )}
+      {/* )} */}
       <Routes>
         {/* Halaman publik */}
         <Route path="/" element={<HomePage />} />
@@ -66,7 +66,7 @@ const AppRoutes = ({ isLoginModal, setIsLoginModal }) => {
         <Route element={<LoginRoutes />}>
           <Route path="/akunSaya" element={<AkunSayaPage />} />
           <Route path="/tokoSaya" element={<TokoSayaPage />} />
-          <Route path="/keranjang" element={<KeranjangPage />} />
+          {/* <Route path="/keranjang" element={<KeranjangPage />} /> */}
           <Route path="/checkout" element={<CheckoutPage />} />
           <Route path="/loading" element={<LoadingAcc />} />
           <Route path="/formUMKM" element={<FormUMKMPage />} />

@@ -334,17 +334,13 @@ const TambahProduk = () => {
 
   return (
     <>
-<<<<<<< HEAD
-      {/* <Navbar /> */}
-=======
->>>>>>> 7980bfb38f72e57657581ef7b77389b3491e3c69
       <div className="max-w-7xl mx-auto px-5 md:px-20 py-5 mb-20 md:mt-0">
         {/* Navigation */}
         <div className="flex gap-x-1 p-1 my-2">
           <div
             onClick={() => navigate("/tokoSaya")}
             className="text-sm text-gray-400 hover:text-gray-800 cursor-pointer"
-          >
+          >ß
             Toko Saya /
           </div>
           <div className="text-sm text-gray-400 hover:text-gray-800 cursor-pointer">

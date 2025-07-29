@@ -282,7 +282,7 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
                   >
                     <img
                       src={`${apiUrl}${fotoUtama}`}
-                      src={`${apiUrl}${fotoUtama}`}
+
                       // src={
                       //   fotoUtama ? apiUrl + idProduk + "/" + fotoUtama : "-"
                       // }
@@ -415,18 +415,7 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
                     )}
                 </div>
               </div>
-              <div className="mt-4 hidden md:block">
-                <span className="text-[#EE6D3F] dark:text-gray-400 text-sm font-semibold">
-                  Stok Produk :{" "}
-                </span>
-                <span className="text-sm font-semibold">
-                  {loadingProduk ? (
-                    <></>
-                  ) : (
-                    <>{dataProduk ? dataProduk.variasi[0].stok : "-"}</>
-                  )}
-                </span>
-              </div>
+
               <div className="border-b-2 rounded-xl border-[#D2D0D0] " />
             </div>
           </div>
@@ -493,22 +482,7 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
                   >
                     <FaShareNodes className="hover:scale-125 transition-transform duration-500" />
                   </button>
-                  <div
-                    className="bg-[#E1DDDD] dark:bg-[#222831] hover:bg-gray-300 dark:hover:dark:bg-[#4b5563] w-10 p-2 text-xl rounded-lg cursor-pointer"
-                    onClick={onKeranjangClick}
-                  >
-                    {loadingKeranjang ? (
-                      <>
-                        <div className="col-span-6 flex  justify-center items-center h-full">
-                          <Loading w={4} h={4} />
-                        </div>
-                      </>
-                    ) : (
-                      <>
-                        <AiOutlineShoppingCart className="hover:scale-125 transition-transform duration-500" />
-                      </>
-                    )}
-                  </div>
+                 
                   <div className="flex bg-[#EE6D3F] dark:bg-[#222831] dark:hover:dark:bg-[#4b5563] hover:bg-[#cf582d] font-semibold text-white justify-center items-center w-full rounded-lg cursor-pointer">
                     Beli
                   </div>
@@ -519,18 +493,7 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
           {/* Jumlah & Beli — Fixed Bottom di hp */}
           {!loadingProduk && (
             <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-[#393E46] dark:border-0 shadow-black shadow-2xl p-4 border-t md:hidden z-50 ">
-              <div className="">
-                <span className="text-[#EE6D3F] text-xs font-semibold dark:text-gray-400">
-                  Stok Produk :
-                </span>
-                <span className="text-xs font-semibold">
-                  {loadingProduk ? (
-                    <></>
-                  ) : (
-                    <>{dataProduk ? dataProduk.variasi[0].stok : "-"}</>
-                  )}
-                </span>
-              </div>
+
               <div className="flex justify-between items-center">
                 <h1 className="text-base font-medium">Jumlah</h1>
                 <div className="flex gap-x-2 items-center">
@@ -660,71 +623,7 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
           )}
         </div>
 
-        <div className="px-1 mt-8">
-          <h1 className="text-xl">Ulasan Pembeli</h1>
-
-          {!loadingReview && (
-            <>
-              {Array.isArray(review) && review.length > 0 && (
-                <>
-                  <div className="font-light text-xs mb-8">
-                    Menampilkan {review.length} ulasan
-                  </div>
-                </>
-              )}
-            </>
-          )}
-
-          {loadingReview ? (
-            <div className="col-span-6 flex justify-center items-center w-full">
-              <Loading w={10} h={10} />
-            </div>
-          ) : (
-            <>
-              {Array.isArray(review) && review.length > 0 ? (
-                <>
-                  {review.map((rev, idx) => {
-                    return (
-                      <div
-                        key={idx}
-                        className="w-full px-2 py-2 mb-2 border-b-2"
-                      >
-                        <div className="time text-xs text-gray-500 mb-1">
-                          {getTimeDiffInMinutesWITA(rev.time)[0] + " " + getTimeDiffInMinutesWITA(rev.time)[1]} yang lalu.
-                        </div>
-                        <div className="profil mb-2">
-                          <div className="img flex justify-start items-center gap-2 text-md ">
-                            <div className="rounded-full overflow-hidden w-8 h-8 ">
-                              <img
-                                src={`${apiUrl}/img/profile_image/${rev.user.path_file}`}
-                                alt=""
-                              />
-                            </div>
-                            <div>
-                              {rev.user.firstName} {rev.user.lastName} *{" "}
-                              {rev.rating}
-                            </div>
-                          </div>
-                        </div>
-                        <div className="review text-sm font-light">
-                          {rev.review}
-                        </div>
-                      </div>
-                    );
-                  })}
-                </>
-              ) : (
-                <>
-                  <div className="col-span-6 flex justify-center items-center mt-8 w-full">
-                    {/* <Loading w={10} h={10} /> */}
-                    <h1 className="text-gray-400 text-xl">Belum ada Ulasan</h1>
-                  </div>
-                </>
-              )}
-            </>
-          )}
-          {/* Bagian Komentar */}
-        </div>
+    
       </div>
       <ModalShare
         isOpen={openModal}
