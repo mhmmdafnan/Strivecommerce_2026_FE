@@ -10,9 +10,6 @@ import Loading from "./Loading";
 
 const TambahProduk = () => {
   const navigate = useNavigate();
-  //   const backendUrl = import.meta.env.VITE_API_URL;
-  //   const [searchParams, setSearchParams] = useSearchParams();
-  //   const [cookies] = useCookies();
   const { idProduk } = useParams();
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -27,14 +24,7 @@ const TambahProduk = () => {
     kategori: "",
     deskripsi: "",
     media: [],
-    variasi: [
-      {
-        nama: "",
-        harga: "",
-        stok: "",
-        media: [],
-      },
-    ],
+    harga: "",
   });
 
   const initialFormData = {
@@ -42,7 +32,7 @@ const TambahProduk = () => {
     deskripsi: "",
     kategori: "",
     media: [],
-    variasi: [{ nama: "", harga: "", stok: "", media: [] }],
+    harga: "",
   };
 
   const check_empty = () => {
@@ -51,15 +41,6 @@ const TambahProduk = () => {
     }
     if (formData.kategori === "") {
       return false;
-    }
-    // Validasi minimal 1 variasi
-    if (formData.variasi.length === 0) return false;
-
-    // Cek setiap variasi: nama dan stok harus diisi
-    for (let v of formData.variasi) {
-      if (v.nama.trim() === "" || v.stok === "" || v.harga === "") {
-        return false;
-      }
     }
     if (formData.deskripsi === "") {
       return false;
@@ -81,42 +62,13 @@ const TambahProduk = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleTambahVariasi = () => {
-    setFormData((prev) => ({
-      ...prev,
-      variasi: [...prev.variasi, { nama: "", stok: "", harga: "", media: [] }],
-    }));
-  };
-
-  const handleHapusVariasi = (index) => {
-    const updated = formData.variasi.filter((_, i) => i !== index);
-    setFormData((prev) => ({
-      ...prev,
-      variasi: updated,
-    }));
-  };
-
-  const handleVariasiChange = (index, field, value) => {
-    const updated = [...formData.variasi];
-    updated[index][field] = value;
-
-    setFormData((prev) => ({
-      ...prev,
-      variasi: updated,
-    }));
-  };
-
-  const handleFileChange = (e, index = null) => {
+  const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
-    if (index === null) {
-      // untuk foto produk utama
-      setFormData((prev) => ({ ...prev, media: files }));
-    } else {
-      // untuk foto variasi
-      const updatedVariasi = [...formData.variasi];
-      updatedVariasi[index].media = files;
-      setFormData((prev) => ({ ...prev, variasi: updatedVariasi }));
-    }
+
+    setFormData((prev) => ({ ...prev, media: files }));
+
+    const previews = files.map((file) => URL.createObjectURL(file));
+    setImagePreview(previews); // ini akan ganti gambar lama kalau ada
   };
 
   // Format angka jadi Rupiah
@@ -140,6 +92,7 @@ const TambahProduk = () => {
     // Data utama produk
     form.append("nama", produkData.nama);
     form.append("deskripsi", produkData.deskripsi);
+    form.append("harga", produkData.harga);
     form.append("kategori", produkData.kategori || 0);
     form.append("userId", cookies.user_id);
 
@@ -162,31 +115,6 @@ const TambahProduk = () => {
       form.append("mediaLama", JSON.stringify(produkData.media));
     }
 
-    // Kirim variasi file dan metadata
-    const variasiPayload = [];
-
-    produkData.variasi.forEach((v, index) => {
-      // ✅ Hanya file baru yang akan dikirim
-      if (
-        v.media &&
-        typeof v.media === "object" &&
-        "name" in v.media &&
-        "size" in v.media
-      ) {
-        console.log("VARIASI FILE DITAMBAHKAN:", v.media);
-        form.append(`variasi[${index}][file]`, v.media);
-      }
-
-      variasiPayload.push({
-        nama: v.nama,
-        harga: parseInt(v.harga),
-        stok: parseInt(v.stok),
-        fileBaru: v.media instanceof File, // bisa ditambahkan sebagai info bantu
-      });
-    });
-
-    form.append("variasi", JSON.stringify(variasiPayload));
-
     try {
       const res = await axios.patch(
         `${apiUrl}/api/v1/product/${idProduk}`,
@@ -198,11 +126,11 @@ const TambahProduk = () => {
           },
         }
       );
-      toast.success("Produk berhasil ditambahkan!");
+      toast.success("Produk berhasil diupdate!");
       return res.data.data;
     } catch (err) {
       console.error("Gagal mengirim data:", err);
-      toast.error("Gagal menambahkan produk");
+      toast.error("Gagal mengupdate produk");
       return null;
     }
   };
@@ -214,6 +142,7 @@ const TambahProduk = () => {
     form.append("nama", formData.nama);
     form.append("deskripsi", formData.deskripsi);
     form.append("kategori", formData.kategori || 0);
+    form.append("harga", formData.harga || 0);
     form.append("userId", cookies.user_id);
 
     // Kirim file utama (pastikan ini objek File)
@@ -227,26 +156,6 @@ const TambahProduk = () => {
         });
       // form.append("fileUtama", formData.media[0]);
     }
-
-    // Kirim variasi file dan metadata
-    const variasiPayload = [];
-
-    formData.variasi.forEach((v, index) => {
-      // Kirim file variasi (bisa lebih dari satu per variasi jika perlu)
-      (v.media || []).forEach((file, i) => {
-        form.append(`variasi[${index}][file]`, file);
-      });
-
-      // Simpan metadata variasi untuk dikirim via JSON
-      variasiPayload.push({
-        nama: v.nama,
-        harga: parseInt(v.harga),
-        stok: parseInt(v.stok),
-      });
-    });
-
-    //  Kirim metadata variasi
-    form.append("variasi", JSON.stringify(variasiPayload));
 
     //  Kirim ke backend
     try {
@@ -265,8 +174,15 @@ const TambahProduk = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     // setLoading(true);
-    if (!formData.nama || formData.variasi.length === 0) {
-      toast.error("Nama produk dan variasi wajib diisi!");
+    if (
+      !formData.nama ||
+      !formData.harga ||
+      !formData.kategori ||
+      !formData.deskripsi
+    ) {
+      toast.error(
+        "Nama produk, harga, media, kategori, dan deskripsi wajib di isi!"
+      );
       // setLoading(false);
       return;
     }
@@ -274,24 +190,28 @@ const TambahProduk = () => {
     if (idProduk) {
       // Update produk yang sudah ada
       // const result = await updateData(idProduk, formData);
+      if (
+        !formData.nama ||
+        !formData.harga ||
+        !formData.kategori ||
+        !formData.deskripsi
+      ) {
+        toast.error(
+          "Nama produk, harga, media, kategori, dan deskripsi wajib di isi!"
+        );
+        // setLoading(false);
+        return;
+      }
       await updateData(idProduk, formData);
     } else {
+      console.log(formData);
+
       // const result = await sendData(formData);
       await sendData(formData);
     }
-
-    // if (result?.success) {
-    //   // Reset form, navigasi, atau aksi setelah sukses
-    //   setFormData(initialFormData);
-    //   // navigate("/toko-saya");
-    //   setLoading(false);
-    // }
   };
 
   useEffect(() => {
-    // console.log("ID Produk:", idProduk);
-    // console.log(produkData);
-
     firstInputRef.current?.focus();
     const fetchData = async () => {
       setLoading(true);
@@ -311,12 +231,7 @@ const TambahProduk = () => {
             kategori: data.kategori || "",
             deskripsi: data.desc || "",
             media: [],
-            variasi: data.variasi.map((v) => ({
-              nama: v.nama || "",
-              harga: v.harga || "",
-              stok: v.stok || "",
-              media: JSON.parse(v.path),
-            })),
+            harga: data.harga || "",
           });
           // Simpan path gambar dari backend (jika banyak, pakai array)
           if (data.path) {
@@ -331,6 +246,16 @@ const TambahProduk = () => {
     };
     fetchData();
   }, []);
+  
+  useEffect(() => {
+    return () => {
+      imagePreview.forEach((url) => {
+        if (!url.startsWith("/img")) {
+          URL.revokeObjectURL(url);
+        }
+      });
+    };
+  }, [imagePreview]);
 
   return (
     <>
@@ -340,8 +265,8 @@ const TambahProduk = () => {
           <div
             onClick={() => navigate("/tokoSaya")}
             className="text-sm text-gray-400 hover:text-gray-800 cursor-pointer"
-          >ß
-            Toko Saya /
+          >
+            ß Toko Saya /
           </div>
           <div className="text-sm text-gray-400 hover:text-gray-800 cursor-pointer">
             {idProduk ? "Edit Produk" : "Tambah Produk"}
@@ -385,6 +310,21 @@ const TambahProduk = () => {
                       //   required
                     />
                   </div>
+                  {/* Harga */}
+                  <div className="flex flex-col md:flex-row md:items-center mb-4">
+                    <label className="md:w-1/3 text-gray-700">Harga</label>
+                    <input
+                      type="text"
+                      value={formatRupiah(formData.harga)}
+                      onChange={(e) =>
+                        setFormData({
+                          ...formData,
+                          harga: toNumberOnly(e.target.value),
+                        })
+                      }
+                      className="mt-1 md:mt-0 p-2 border border-gray-300 rounded-lg w-full md:w-2/3 focus:ring-1 focus:ring-[#ff8052] focus:border-[#ff8052] focus:outline-none"
+                    />
+                  </div>
 
                   {/* Deskripsi  */}
                   <div className="flex flex-col md:flex-row md:items-start">
@@ -413,91 +353,22 @@ const TambahProduk = () => {
                       //   required={!idProduk}
                     />
                   </div>
-                  {idProduk && imagePreview.length > 0 && (
-                    <div className="mt-2 flex flex-row gap-2 md:ml-1 justify-end w-full">
+                  {imagePreview.length > 0 && (
+                    <div className="mt-2 flex flex-row gap-2 md:ml-1 justify-end w-full flex-wrap">
                       {imagePreview.map((imgPath, index) => (
                         <img
                           key={index}
-                          src={apiUrl + imgPath} // sesuaikan dengan path serve kamu
+                          src={
+                            imgPath.startsWith("/img")
+                              ? apiUrl + imgPath
+                              : imgPath
+                          }
                           alt={`Foto ${index + 1}`}
-                          className="w-24 h-24 object-cover rounded-xl border-2 border-gray-500  "
+                          className="w-24 h-24 object-cover rounded-xl border-2 border-gray-500"
                         />
                       ))}
                     </div>
                   )}
-                  {/* stok */}
-                  <div className="mb-4">
-                    <div className="flex justify-between mb-2">
-                      <label className="md:w-1/3 mb-2 text-gray-700">
-                        Variasi Produk
-                      </label>
-                      <div
-                        onClick={handleTambahVariasi}
-                        className="flex justify-center items-center bg-[#EE6D3F] text-white px-4 py-2 rounded-lg hover:bg-[#ce4747] transition cursor-pointer"
-                      >
-                        <FaPlus />
-                      </div>
-                    </div>
-                    {formData.variasi.map((item, index) => (
-                      <React.Fragment key={index}>
-                        <div className="flex gap-2 mb-2  justify-end items-center">
-                          {formData.variasi.length > 1 && index > 0 && (
-                            <div
-                              onClick={() => handleHapusVariasi(index)}
-                              className="flex justify-center items-center bg-red-500 text-white px-1 w-fit rounded-lg hover:bg-red-600 cursor-pointer"
-                            >
-                              ✕
-                            </div>
-                          )}
-                          <div className="border-2 border-gray-500 h-10 w-16 rounded-lg flex justify-center items-center">
-                            <img
-                              src={apiUrl + item.media}
-                              className="h-full w-full object-cover rounded-lg"
-                              alt=""
-                            />
-                          </div>
-                          <input
-                            type="file"
-                            accept="image/*"
-                            onChange={(e) => handleFileChange(e, index)}
-                            className="mt-1 md:mt-0 p-2 border bg-white border-gray-300 rounded-lg w-full md:w-2/3 focus:ring-1 focus:ring-[#ff8052] focus:border-[#ff8052] focus:outline-none"
-                            //   required={!idProduk}
-                          />
-                          <input
-                            type="text"
-                            placeholder="Nama Variasi (contoh: Warna Merah)"
-                            value={item.nama}
-                            onChange={(e) =>
-                              handleVariasiChange(index, "nama", e.target.value)
-                            }
-                            className="p-2 border border-gray-300 rounded-lg w-1/3 focus:ring-1 focus:ring-[#ff8052] focus:border-[#ff8052] focus:outline-none"
-                          />
-                          <input
-                            type="number"
-                            placeholder="Stok"
-                            value={item.stok}
-                            onChange={(e) =>
-                              handleVariasiChange(index, "stok", e.target.value)
-                            }
-                            className="p-2 border border-gray-300 rounded-lg w-20 focus:ring-1 focus:ring-[#ff8052] focus:border-[#ff8052] focus:outline-none"
-                          />
-                          <input
-                            type="text"
-                            placeholder="Harga"
-                            value={formatRupiah(item.harga)}
-                            onChange={(e) =>
-                              handleVariasiChange(
-                                index,
-                                "harga",
-                                toNumberOnly(e.target.value)
-                              )
-                            }
-                            className="p-2 border border-gray-300 rounded-lg w-1/3 focus:ring-1 focus:ring-[#ff8052] focus:border-[#ff8052] focus:outline-none"
-                          />
-                        </div>
-                      </React.Fragment>
-                    ))}
-                  </div>
 
                   {/* Submit Button */}
                   <div className="flex justify-center mt-6">

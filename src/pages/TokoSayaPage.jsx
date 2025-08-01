@@ -14,10 +14,6 @@ import Loading from "../Component/Loading";
 const TokoSayaPage = () => {
   const apiUrl = import.meta.env.VITE_API_URL;
   const [cookies, setCookie] = useCookies();
-  const [resiAktif, setResiAktif] = useState(null);
-  const [show, setShow] = useState(0);
-  const [showResi, setShowResi] = useState(false);
-  const [dataTransaksi, setDataTransaksi] = useState([]);
   const [dataProduk, setDataProduk] = useState([]);
   const navigate = useNavigate();
   const [selectedProducts, setSelectedProducts] = useState([]);
@@ -47,44 +43,37 @@ const TokoSayaPage = () => {
     window.open(`/editProduk/${idProduk}`, "_blank");
   };
 
-
   // Fetch data when page changes
   useEffect(() => {
-    const fetchTransaksi = async () => {
+    console.log(cookies);
+
+    const fetchData = async () => {
       setLoading(true);
       try {
-        // console.log(cookies.user_id);
-
-        const response = await axios.get(`${apiUrl}/api/v1/transaksi`, {
+        const produkResponse = await axios.get(`${apiUrl}/api/v1/product`, {
           params: {
-            tokoId: cookies.user_id,
+            idToko: cookies.user_id,
           },
           headers: {
             Authorization: `Bearer ${cookies.token}`,
           },
         });
-        // console.log(response.data.data);
-
-        console.log(response.data.data);
-        if (response.data.success) {
-          // console.log(JSON.stringify(response.data.data));
-          setDataTransaksi(response.data.data);
-        } else {
+        console.log(produkResponse.data);
+        if (produkResponse.data.success) {
+          setProdukList(produkResponse.data.data);
         }
       } catch (error) {
-        // setShowLoginError(true);
         console.log(error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchTransaksi();
-  }, []);
+    fetchData();
+  }, [produkList]);
 
   return (
     <>
-      <AddResiModal isOpen={showResi} onClose={() => setShowResi(false)} onSuccess={() => {}} id={resiAktif} />
       <div className="max-w-7xl mx-auto px-5 md:px-10 py-5 mb-20 md:mt-0">
         <h1 className="text-sm text-gray-600 cursor-pointer">
           {cookies.nama_toko}
@@ -167,10 +156,7 @@ const TokoSayaPage = () => {
         </div>
         <div className="bg-[#E9E9E9] shadow-lg border-[1px]  rounded-lg px-10 py-6 mt-4 max-w-5xl mx-auto">
           <div className="flex mb-4 justify-between">
-            <div className="flex gap-8">
-              <h1 className={`${show === 0 ? "font-semibold" : "text-gray-500 cursor-pointer hover:text-black transition-all duration-500"} `} onClick={() => setShow(0)}>Produk</h1>
-              <h1 className={`${show === 1 ? "font-semibold" : "text-gray-500 cursor-pointer hover:text-black transition-all duration-500"} `} onClick={() => setShow(1)}>Transaksi</h1>
-            </div>
+            <h1 className="font-semibold">Produk Saya</h1>
             <div
               onClick={handleTambahKlik}
               className="bg-[#EE6D3F] text-white px-4 rounded-lg cursor-pointer hover:bg-[#d25f35] transition-colors duration-300 flex items-center gap-2"
@@ -178,20 +164,41 @@ const TokoSayaPage = () => {
               Tambah
             </div>
           </div>
-          {
-            show === 0 ? (
-              <div className="w-full overflow-x-auto">
-                <div className="table-area min-w-[900px]">
-                  {/* Header */}
-                  <div className="grid grid-cols-7 bg-[#dbd9d9] font-semibold text-center px-2 py-3">
-                    <div className="flex items-center gap-2">
+          <div className="w-full overflow-x-auto">
+            <div className="table-area min-w-[900px]">
+              {/* Header */}
+              <div className="grid grid-cols-7 bg-[#dbd9d9] font-semibold text-center px-2 py-3">
+                <div className="flex items-center gap-x-4">
+                  <input
+                    type="checkbox"
+                    checked={
+                      produkList.length > 0 &&
+                      produkList.every((item) => item.isChecked)
+                    }
+                    onChange={handleSelectAll}
+                  />
+                  <span>ID</span>
+                </div>
+                <div>Nama Produk</div>
+                <div>Kategori</div>
+                <div>Stok</div>
+                <div>Terjual</div>
+                <div>Harga</div>
+                <div>Aksi</div>
+              </div>
+
+              {/* Body */}
+              <div className="max-h-[300px] overflow-y-auto divide-y divide-gray-300">
+                {produkList.map((item) => (
+                  <div
+                    key={item.id}
+                    className="grid grid-cols-7 items-center text-center px-2 py-2 hover:bg-gray-100 transition duration-200"
+                  >
+                    <div className="flex gap-x-4 items-center">
                       <input
                         type="checkbox"
-                        checked={
-                          produkList.length > 0 &&
-                          produkList.every((item) => item.isChecked)
-                        }
-                        onChange={handleSelectAll}
+                        checked={item.isChecked}
+                        onChange={() => handleCheckboxChange(item.id)}
                       />
                       {item.id}
                     </div>
@@ -199,25 +206,16 @@ const TokoSayaPage = () => {
                       <div>
                         <img
                           className="h-10 w-10 rounded-xl border-2 border-gray-400 object-contain"
-                          src={
-                            apiUrl +
-                            "/pict/" +
-                            item.id +
-                            JSON.parse(item.path)[0]
-                          }
+                          src={apiUrl + JSON.parse(item.path)[0]}
                           alt=""
                         />
                       </div>
                       <div>{item.nama}</div>
                     </div>
-                    <div>{item.kategori == 0 && "-"}</div>
-                    <div>{item.stokTotal} pcs</div>
+                    <div>{item.kategori}</div>
+                    <div>{item.stok} pcs</div>
                     <div>{item.terjual} pcs</div>
-                    <div>
-                      {item.variasi?.[0]?.harga
-                        ? `Rp. ${item.variasi[0].harga.toLocaleString("id-ID")}`
-                        : "Harga tidak tersedia"}
-                    </div>
+                    <div>Rp {item.harga.toLocaleString("id-ID")}</div>
                     <div className="flex justify-center gap-2">
                       <div
                         onClick={() => handleEditKlik(item.id)}
@@ -229,109 +227,12 @@ const TokoSayaPage = () => {
                         <MdOutlineDeleteOutline className="text-xl" />
                       </div>
                     </div>
-                    <div>Nama Produk</div>
-                    <div>Kategori</div>
-                    <div>Stok</div>
-                    <div>Terjual</div>
-                    <div>Harga</div>
-                    <div>Aksi</div>
                   </div>
-
-                  {/* Body */}
-                  <div className="max-h-[300px] overflow-y-auto divide-y divide-gray-300">
-                    {produkList.map((item) => (
-                      <div
-                        key={item.id}
-                        className="grid grid-cols-7 items-center text-center px-2 py-2 hover:bg-gray-100 transition duration-200"
-                      >
-                        <div className="flex gap-x-4 items-center">
-                          <input
-                            type="checkbox"
-                            checked={item.isChecked}
-                            onChange={() => handleCheckboxChange(item.id)}
-                          />
-                          {item.id}
-                        </div>
-                        <div className="flex justify-start items-center gap-2">
-                          <div>
-                            <img
-                              className="h-10 w-10 rounded-xl border-2 border-gray-400 object-contain"
-                              src={item.gambar}
-                              alt=""
-                            />
-                          </div>
-                          <div>{item.nama}</div>
-                        </div>
-                        <div>{item.kategori}</div>
-                        <div>{item.stok} pcs</div>
-                        <div>{item.terjual} pcs</div>
-                        <div>Rp {item.harga.toLocaleString("id-ID")}</div>
-                        <div className="flex justify-center gap-2">
-                          <div
-                            onClick={() => handleEditKlik(item.id)}
-                            className="text-gray-800 hover:text-[#EE6D3F] cursor-pointer"
-                          >
-                            <MdOutlineEdit className="text-xl" />
-                          </div>
-                          <div className="text-red-500 hover:text-red-700 cursor-pointer">
-                            <MdOutlineDeleteOutline className="text-xl" />
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+                ))}
               </div>
-            ) : (show === 1 && !loading) &&  (
-              <div className="w-full overflow-x-auto">
-                <div className="table-area min-w-[900px]">
-                  {/* Header */}
-                  <div className="grid grid-cols-6 bg-[#dbd9d9] font-semibold text-center px-2 py-3">
-                    <div className="flex justify-center items-center gap-2">
-
-                      ID Transaksi
-                    </div>
-                    <div>Nama Pengguna</div>
-                    <div>Harga</div>
-                    <div>Waktu</div>
-                    <div>Status</div>
-                    <div>Aksi</div>
-                  </div>
-
-                  {/* Body */}
-                  <div className="max-h-[300px] overflow-y-auto divide-y divide-gray-300">
-                    {dataTransaksi.map((item) => (
-                      <div
-                        key={item.id}
-                        className="grid grid-cols-6 items-center text-center px-2 py-2 hover:bg-gray-100 transition duration-200"
-                      >
-                        <div className="flex gap-x-4 text-center justify-center items-center">
-
-                          {item.id}
-                        </div>
-                          
-                        <div>{item.user.firstName + " " + item.user.lastName} </div>
-
-                        <div>Rp {item.harga.toLocaleString("id-ID")}</div>
-                        <div>{new Date(item.time).toLocaleString("id-ID", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit", second: "2-digit" })}</div>
-                        <div>{item.status}</div>
-                        <div className="flex justify-center gap-2">
-                          <div
-                            onClick={() => onResiClick(item.id)}
-                            className="text-gray-800 hover:text-[#EE6D3F] cursor-pointer"
-                          >
-                            <MdOutlineEdit className="text-xl" />
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            )
-          }
+            </div>
+          </div>
         </div>
-        
       </div>
     </>
   );

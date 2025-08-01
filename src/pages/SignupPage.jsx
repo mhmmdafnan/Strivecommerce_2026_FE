@@ -81,18 +81,15 @@ const signupPage = () => {
             msg_div.classList.remove("hidden");
             // msg_div.innerHTML = response.data.message;
           }
-        })
-        
+        });
     } catch (error) {
-        setLoading(false);
-        const msg_div = document.getElementById("message-div");
-        msg_div.classList.remove("hidden");
-        msg_div.innerHTML = "Terjadi kesalahan, silakan coba lagi.";
+      setLoading(false);
+      const msg_div = document.getElementById("message-div");
+      msg_div.classList.remove("hidden");
+      msg_div.innerHTML = "Terjadi kesalahan, silakan coba lagi.";
     } finally {
       setLoading(false);
     }
-    
-
   };
 
   const onSubmitClick = () => {
@@ -146,7 +143,7 @@ const signupPage = () => {
             </p>
 
             {/* Form */}
-            <div className="space-y-3" >
+            <div className="space-y-3">
               <input
                 ref={firstInputRef}
                 type="text"
@@ -221,6 +218,10 @@ const signupPage = () => {
       {/* Modal Ganti Password */}
       <LoginModal
         isOpen={isLoginModalOpen}
+        onSuccess={() => {
+          setLoginModalOpen(false);
+          navigate("/akunSaya");
+        }}
         onClose={() => setLoginModalOpen(false)}
       />
     </div>
