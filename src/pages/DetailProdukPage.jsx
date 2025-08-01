@@ -114,7 +114,6 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
     ],
   };
 
-
   // Ambil data produk utama berdasarkan idProduk
   useEffect(() => {
     const fetchProduk = async () => {
@@ -131,8 +130,8 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
 
           // Parse path (array gambar)
           const fotoArray = JSON.parse(produkData.path);
-          console.log(fotoArray);
-          
+          // console.log(fotoArray);
+
           setFotoUtama(fotoArray[0]);
           setFotoProduk(fotoArray);
           setShareText(`Cek produk ${produkData.nama}, cuma di sini!`);
@@ -148,43 +147,22 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
     };
 
     fetchProduk();
-
-    const fetchReview = async () => {
-      setLoadingReview(true);
-      try {
-        const response = await axios.get(`${apiUrl}/api/v1/review/${idProduk}`);
-
-        if (response.data.success) {
-          const review = response.data.data;
-          console.log(review);
-
-          setReview(review);
-        } else {
-          setShowLoginError(true);
-        }
-      } catch (error) {
-        console.error("Gagal fetch produk:", error);
-      } finally {
-        setLoadingReview(false);
-      }
-    };
-
-    fetchReview();
   }, [idProduk]);
 
   // Ambil produk slider setelah userId dari dataProduk tersedia
   useEffect(() => {
-    if (!dataProduk?.userId) return;
-
+    if (!dataProduk) return;
+    
     const fetchSlider = async () => {
       try {
         const res = await axios.get(`${apiUrl}/api/v1/product`, {
           params: {
-            idToko: dataProduk.userId,
+            idToko: dataProduk.user.id,
             total: 10,
             orderBy: "harga_asc",
           },
         });
+        console.log(res.data.data);
 
         if (res.data.success) {
           setProdukList(res.data.data);
@@ -195,7 +173,7 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
     };
 
     fetchSlider();
-  }, [dataProduk?.userId]);
+  }, [dataProduk]);
 
   return (
     <div className="dark:bg-[#393E41] transition-all duration-500">
@@ -237,7 +215,6 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
                   >
                     <img
                       src={`${apiUrl}${fotoUtama}`}
-
                       // src={
                       //   fotoUtama ? apiUrl + idProduk + "/" + fotoUtama : "-"
                       // }
@@ -305,11 +282,6 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
                 ) : (
                   <div className="flex items-end">
                     <div>{dataProduk ? dataProduk.nama : ""}</div>
-                    <div className="text-sm text-gray-500 ml-2">
-                      {dataProduk
-                        ? "(" + dataProduk.variasi[indexStok].nama + ")"
-                        : ""}
-                    </div>
                     {/* " (" + dataProduk.variasi[indexStok].nama + ")" */}
                   </div>
                 )}
@@ -321,9 +293,7 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
                   <>
                     Rp.{" "}
                     {dataProduk
-                      ? dataProduk.harga.toLocaleString(
-                          "id-ID"
-                        )
+                      ? dataProduk.harga.toLocaleString("id-ID")
                       : "-"}
                   </>
                 )}
@@ -341,33 +311,6 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
                   ) : (
                     <>{dataProduk ? dataProduk.desc : "-"}</>
                   )}
-                </div>
-              </div>
-              <div className="variasi mb-4">
-                <div className="variasi flex gap-3">
-                  {!loadingProduk &&
-                    dataProduk &&
-                    dataProduk.variasi.length > 1 &&
-                    Array.isArray(dataProduk.variasi) && (
-                      <>
-                        {dataProduk.variasi.map((variasi, index) => (
-                          <div
-                            onClick={() => {
-                              setIndexStok(index);
-                            }}
-                            key={index}
-                            className={`${
-                              index == indexStok
-                                ? "bg-[#EE6D3F] text-white dark:bg-[#4b5563] "
-                                : "bg-gray-200"
-                            } px-2 py-1 dark:bg-[#222831] dark:hover:dark:bg-[#4b5563] rounded-lg cursor-pointer hover:bg-[#EE6D3F]  hover:text-white transition-colors duration-300`}
-                          >
-                            {variasi.nama}{" "}
-                            {/* tampilkan nama variasi, atau info lain */}
-                          </div>
-                        ))}
-                      </>
-                    )}
                 </div>
               </div>
 
@@ -437,7 +380,7 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
                   >
                     <FaShareNodes className="hover:scale-125 transition-transform duration-500" />
                   </button>
-                 
+
                   <div className="flex bg-[#EE6D3F] dark:bg-[#222831] dark:hover:dark:bg-[#4b5563] hover:bg-[#cf582d] font-semibold text-white justify-center items-center w-full rounded-lg cursor-pointer">
                     Beli
                   </div>
@@ -448,7 +391,6 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
           {/* Jumlah & Beli — Fixed Bottom di hp */}
           {!loadingProduk && (
             <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-[#393E46] dark:border-0 shadow-black shadow-2xl p-4 border-t md:hidden z-50 ">
-
               <div className="flex justify-between items-center">
                 <h1 className="text-base font-medium">Jumlah</h1>
                 <div className="flex gap-x-2 items-center">
@@ -469,22 +411,6 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
                   className="p-2 border-black border-2 dark:bg-[#222831] dark:border-[#222831] rounded-xl hover:text-[#EE6D3F] hover:border-[#EE6D3F] cursor-pointer transition-all duration-200"
                 >
                   <FaShareNodes className="hover:scale-125 transition-transform duration-300" />
-                </div>
-                <div
-                  className="bg-[#E1DDDD] dark:bg-[#222831] w-10 p-2 text-xl rounded-lg"
-                  onClick={onKeranjangClick}
-                >
-                  {loadingKeranjang ? (
-                    <>
-                      <div className="col-span-6 flex justify-center items-center h-full">
-                        <Loading w={4} h={4} />
-                      </div>
-                    </>
-                  ) : (
-                    <>
-                      <AiOutlineShoppingCart />
-                    </>
-                  )}
                 </div>
                 <div className="flex bg-[#EE6D3F] dark:bg-[#222831] font-semibold text-white justify-center items-center w-full rounded-lg cursor-pointer">
                   Beli
@@ -577,8 +503,6 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
             </Slider>
           )}
         </div>
-
-    
       </div>
       <ModalShare
         isOpen={openModal}
