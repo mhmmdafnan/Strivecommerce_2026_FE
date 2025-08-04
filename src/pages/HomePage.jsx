@@ -138,7 +138,7 @@ const HomePage = () => {
   return (
     <>
       {/* container */}
-      <div className="max-w-7xl mx-auto font-bold h-screen dark:bg-[#121212] bg-white px-5 md:px-20 py-5">
+      <div className="max-w-7xl  mx-auto font-bold dark:bg-[#121212] bg-white px-5 md:px-20 py-5">
         {/* Produk Utama */}
         <div className="flex flex-row gap-x-4 mb-2 md:mb-4">
           <div className="relative basis-full lg:basis-2/3 h-80">

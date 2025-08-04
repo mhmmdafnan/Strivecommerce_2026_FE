@@ -24,6 +24,7 @@ import TambahAlamat from "./pages/TambahAlamat.jsx";
 import PaymentPage from "./pages/PaymentPage.jsx"
 import { useState } from "react";
 import { ThemeProvider } from "./Component/ThemeContext.jsx";
+import Footer from "./Component/Footer.jsx";
 
 // Wrapper untuk mengatur kondisi Navbar
 const AppRoutes = ({ isLoginModal, setIsLoginModal }) => {
@@ -83,6 +84,7 @@ const AppRoutes = ({ isLoginModal, setIsLoginModal }) => {
 
         <Route path="/register" element={<SignupPage />} />
       </Routes>
+        <Footer />
     </>
   );
 };

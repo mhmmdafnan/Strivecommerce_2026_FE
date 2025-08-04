@@ -22,7 +22,7 @@ import LoginModal from "./LoginModal.jsx";
 export default function Navbar({ isLoginModal, setIsLoginModal }) {
   const apiUrl = import.meta.env.VITE_API_URL; // URL API
   const [isSideMenuOpen, setMenu] = useState(false);
-  // const [isLoginModalOpen, setLoginModalOpen] = useState(false);
+  const [isLoginModalOpen, setLoginModalOpen] = useState(false);
   const navigate = useNavigate();
   const { darkMode, setDarkMode } = useTheme();
 
@@ -108,12 +108,12 @@ export default function Navbar({ isLoginModal, setIsLoginModal }) {
         {/* last section */}
         <div className="flex items-center gap-4">
           {/* cart icon */}
-          <div
+          {/* <div
             className="cursor-pointer group w-4 md:w-12 transition-all flex duration-500"
             // onClick={() => setDarkMode(!darkMode)}
           >
             <ToggleDarkMode darkMode={darkMode} setDarkMode={setDarkMode} />
-          </div>
+          </div> */}
           {/* <div onClick={handleCartClick} className="cursor-pointer group w-6 hover:w-32 transition-all flex items-center duration-500">
             <AiOutlineSearch className="text-xl hidden md:flex" /> */}
           {/* <AiOutlineShoppingCart className="text-xl hidden md:flex " /> */}
@@ -123,7 +123,7 @@ export default function Navbar({ isLoginModal, setIsLoginModal }) {
 
           {/* </div> */}
 
-          {cookies.isLoggedIn ? (
+          {/* {cookies.isLoggedIn ? (
             <div
               onClick={handleCartClick}
               className="cursor-pointer group w-6 hover:w-24 transition-all flex duration-500"
@@ -133,7 +133,7 @@ export default function Navbar({ isLoginModal, setIsLoginModal }) {
                 Keranjang
               </span>
             </div>
-          ) : null}
+          ) : null} */}
 
 
 

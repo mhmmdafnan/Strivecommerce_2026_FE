@@ -84,6 +84,16 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
     </div>
   );
 
+  const onBeliClick = (phoneNumber) => {
+    const formattedNumber = phoneNumber.replace(/^0/, "62");
+    const fullUrl = window.location.href;
+    const message = `Halo, saya tertarik dengan produk Anda pada ${fullUrl}. Apakah masih ada?`;
+    window.open(
+      `https://wa.me/${formattedNumber}?text=${encodeURIComponent(message)}`,
+      "_blank"
+    );   
+  }
+
   const sliderSettings = {
     dots: false,
     infinite: true,
@@ -125,6 +135,8 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
 
         if (response.data.success) {
           const produkData = response.data.data;
+          console.log(produkData);
+          
           setDataProduk(produkData);
           // console.log(response.data.data.variasi[0].path);
 
@@ -382,7 +394,10 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
                     <FaShareNodes className="hover:scale-125 transition-transform duration-500" />
                   </button>
 
-                  <div className="flex bg-[#EE6D3F] dark:bg-[#222831] dark:hover:dark:bg-[#4b5563] hover:bg-[#cf582d] font-semibold text-white justify-center items-center w-full rounded-lg cursor-pointer">
+                  <div 
+                    className="flex bg-[#EE6D3F] dark:bg-[#222831] dark:hover:dark:bg-[#4b5563] hover:bg-[#cf582d] font-semibold text-white justify-center items-center w-full rounded-lg cursor-pointer"
+                    onClick={() => onBeliClick(dataProduk.user.telp)}
+                    >
                     Beli
                   </div>
                 </div>
@@ -413,7 +428,10 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
                 >
                   <FaShareNodes className="hover:scale-125 transition-transform duration-300" />
                 </div>
-                <div className="flex bg-[#EE6D3F] dark:bg-[#222831] font-semibold text-white justify-center items-center w-full rounded-lg cursor-pointer">
+                <div 
+                  className="flex bg-[#EE6D3F] dark:bg-[#222831] font-semibold text-white justify-center items-center w-full rounded-lg cursor-pointer"
+                  onClick={() => onBeliClick(dataProduk.user.telp)}
+                  >
                   Beli
                 </div>
               </div>
