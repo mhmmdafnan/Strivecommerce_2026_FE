@@ -11,6 +11,7 @@ import fotoToko from "../assets/img/produk/toko olahraga1.jpeg";
 import produk1 from "../assets/img/produk/kursi 1.jpg";
 import produk2 from "../assets/img/produk/kursi 2.jpg";
 import produk3 from "../assets/img/produk/kursi 3.jpg";
+import logoHomePage from "../assets/img/logo_homepage.png";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import Loading from "../Component/Loading";
@@ -121,7 +122,7 @@ const HomePage = () => {
         // Set produk slider
         if (sliderProdukRes.data.success) {
           console.log(sliderProdukRes.data);
-          
+
           setProdukSlider(sliderProdukRes.data.data);
         }
       } catch (error) {
@@ -138,58 +139,21 @@ const HomePage = () => {
   return (
     <>
       {/* container */}
-      <div className="max-w-7xl mx-auto font-bold h-screen dark:bg-[#121212] bg-white px-5 md:px-20 py-5">
+      <div className="max-w-7xl mx-auto h-screen dark:bg-[#121212] bg-white px-5 md:px-20 py-5">
         {/* Produk Utama */}
-        <div className="flex flex-row gap-x-4 mb-2 md:mb-4">
-          <div className="relative basis-full lg:basis-2/3 h-80">
-            {/* Overlay Teks Atas */}
-            <div className="absolute top-3 left-4 w-fit bg-[#FE5D26] bg-opacity-80 text-white px-4 py-2 rounded-xl cursor-pointer">
-              <div className="flex justify-between items-center">
-                <div className="flex gap-x-1 md:gap-x-2 items-center">
-                  <div className="flex text-4xl items-center justify-center hover:scale-110 transition-all duration-300 ">
-                    <MdOutlineStoreMallDirectory />
-                  </div>
-                  <div className="group max-w-20 md:max-w-40 overflow-hidden">
-                    <h1 className="text-lg font-semibold whitespace-nowrap group-hover:animate-marquee">
-                      Toko Olahraga Unsulbar
-                    </h1>
-                  </div>
-                </div>
-              </div>
+        <div className="flex md:flex-col-2 items-center  justify-center md:justify-between h-60 bg-gradient-to-r from-[#f76b1c] to-[#fcae1e] rounded-xl shadow-lg py-5 px-4 md:pl-10">
+          <div>
+            <div className="font-light text-white">Selamat Datang di</div>
+            <div className="font-extrabold mt-4 mb-2 text-3xl md:text-4xl text-white">
+              STRIVE MARKET
             </div>
-            <img
-              src={fotoToko}
-              className="w-full object-cover h-full rounded-3xl"
-              alt=""
-            />
-            {/* Overlay Teks Bawah */}
-            <div className="absolute bottom-4 left-4 right-4 bg-gradient-to-tr from-[#C9C9C9] to-[#636363] opacity-95 text-white px-4 py-2 rounded-xl hover:scale-95 transition-all duration-500 cursor-pointer">
-              <div className="flex justify-between items-center">
-                <div className="flex gap-x-2 items-center">
-                  <div className="h-12 w-12">
-                    <img
-                      src={produk1}
-                      className="w-full h-full object-cover rounded-3xl border-2 border-gray-200"
-                      alt=""
-                    />
-                  </div>
-                  <div className="">
-                    <h1 className="text-lg font-semibold">Toko</h1>
-                    <span className="text-sm font-extralight">Rp. xxxxxx</span>
-                  </div>
-                </div>
-                <div className="flex bg-white rounded-full text-xl text-gray-800 items-center justify-center p-2  hover:scale-125 transition-all duration-300">
-                  <AiOutlineShoppingCart />
-                </div>
-              </div>
+            <div className="text-white">
+              E-comerce UMKM pertama se-
+              <span className="font-semibold">Sulawesi Barat</span>
             </div>
           </div>
-          <div className="hidden lg:block lg:basis-1/3 rounded-3xl h-80 w-full bg-slate-800">
-            <img
-              src={fotoToko}
-              className="w-full object-cover h-full rounded-3xl"
-              alt=""
-            />
+          <div className="hidden md:flex items-center justify-center w-40 h-40 mr-10">
+            <img src={logoHomePage} className="w-full h-full" alt="" />
           </div>
         </div>
         {/* Rekomendasi Produk  */}
@@ -227,9 +191,9 @@ const HomePage = () => {
                       {item.nama}
                     </div>
                     <div className="flex items-center gap-x-1 text-sm font-extralight text-gray-500 truncate">
-                        <MdOutlineStoreMallDirectory />
-                        {item.user.nama_toko}
-                      </div>
+                      <MdOutlineStoreMallDirectory />
+                      {item.user.nama_toko}
+                    </div>
                   </div>
                 ))}
               </Slider>
@@ -256,7 +220,7 @@ const HomePage = () => {
                   >
                     <img
                       src={getFirstImagePath(produk.path)}
-                      className="w-full h-30 object-cover rounded-3xl border-2 border-gray-200 hover:scale-105 transition-all duration-300"
+                      className="w-full h-40 object-contain rounded-3xl border-2 border-gray-200 hover:scale-105 transition-all duration-300"
                       alt={produk.nama}
                     />
                     <div className="p-2">
