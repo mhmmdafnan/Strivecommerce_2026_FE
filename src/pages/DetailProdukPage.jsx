@@ -149,7 +149,7 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
     fetchProduk();
   }, [idProduk]);
 
-  //goks
+  
   // Ambil produk slider setelah userId dari dataProduk tersedia
   useEffect(() => {
     if (!dataProduk) return;
