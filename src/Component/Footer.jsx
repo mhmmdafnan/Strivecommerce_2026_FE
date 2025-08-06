@@ -18,7 +18,7 @@ const footer = () => {
         isOpen={isLoginModalOpen}
         onSuccess={() => {
           setLoginModalOpen(false);
-          navigate("/akunSaya");
+          navigate("/tokoSaya");
         }}
         onClose={() => setLoginModalOpen(false)}
       />

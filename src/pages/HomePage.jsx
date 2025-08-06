@@ -21,10 +21,14 @@ const HomePage = () => {
   const [cookies, setCookie, removeCookie] = useCookies();
   const [hasilSearch, setHasilSearch] = useState([]);
   const [loadingSearch, setLoadingSearch] = useState(false);
+  const [loadingPage, setLoadingPage] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(false);
   const [onFocusSearch, setOnFocusSearch] = useState(false);
   const apiUrl = import.meta.env.VITE_API_URL;
+  const [pageNumber, setPageNumber] = useState(1);
+  const [totalProduk, setTotalProduk] = useState();
+  const dataPerPage = 12; // jumlah data per halaman
 
   const CustomPrev = (props) => (
     <div
@@ -87,54 +91,60 @@ const HomePage = () => {
     }
   };
 
+  const handleNextClick = () => {
+    setPageNumber(pageNumber + 1);
+  };
+
+  const handlePrevClick = () => {
+    setPageNumber(pageNumber - 1);
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
+    const fetchSliderProduk = async () => {
       try {
-        // Ambil dua data secara paralel
-        const [allProdukRes, sliderProdukRes] = await Promise.all([
-          axios.get(`${apiUrl}/api/v1/product`, {
-            params: {
-              total: 20,
-            },
-          }),
-          axios.get(`${apiUrl}/api/v1/product`, {
-            params: {
-              total: 10,
-              orderBy: "harga_asc",
-            },
-          }),
-        ]);
+        const res = await axios.get(`${apiUrl}/api/v1/product`, {
+          params: {
+            total: 10,
+            orderBy: "harga_asc",
+          },
+        });
 
-        console.log("slider", sliderProdukRes.data.data);
-        console.log("all", allProdukRes.data.data);
-
-        // Set data produk umum
-        if (allProdukRes.data.success) {
-          setDataProduk(allProdukRes.data.data);
-
-          // if (cookies["token"]) {
-          //   setCookie("isLoggedIn", true, { path: "/" });
-          //   setCookie("token", cookies["token"], { path: "/" });
-          // }
-        }
-
-        // Set produk slider
-        if (sliderProdukRes.data.success) {
-          console.log(sliderProdukRes.data);
-
-          setProdukSlider(sliderProdukRes.data.data);
+        if (res.data.success) {
+          setProdukSlider(res.data.data);
         }
       } catch (error) {
-        console.error("Gagal fetch data:", error);
-      } finally {
-        setLoading(false);
+        console.error("Gagal fetch produk slider:", error);
       }
     };
-    // console.log(cookies);
 
-    fetchData();
-  }, []);
+    fetchSliderProduk();
+  }, []); 
+
+  useEffect(() => {
+    const fetchMainProduk = async () => {
+      setLoadingPage(true);
+      try {
+        const jumlahRes = await axios.get(apiUrl + `/api/v1/product/count`);
+        const allProdukRes = await axios.get(`${apiUrl}/api/v1/product`, {
+          params: {
+            total: dataPerPage,
+            page: pageNumber,
+          },
+        });
+
+        if (allProdukRes.data.success) {
+          setTotalProduk(jumlahRes.data.total);
+          setDataProduk(allProdukRes.data.data);
+        }
+      } catch (error) {
+        console.error("Gagal fetch produk utama:", error);
+      } finally {
+        setLoadingPage(false);
+      }
+    };
+
+    fetchMainProduk();
+  }, [pageNumber]);
 
   useEffect(() => {
     setLoadingSearch(true);
@@ -176,7 +186,7 @@ const HomePage = () => {
   return (
     <>
       {/* container */}
-      <div className="max-w-7xl  mx-auto font-bold dark:bg-[#121212] bg-white px-5 md:px-20 py-5">
+      <div className="max-w-7xl  mx-auto font-bold dark:bg-[#dataPerPage1212] bg-white px-5 md:px-20 py-5">
         {/* Produk Utama */}
         <div className="flex md:flex-col-2 items-center  justify-center md:justify-between h-60 bg-gradient-to-r from-[#f76b1c] to-[#fcae1e] rounded-xl shadow-lg py-5 px-4 md:pl-10">
           <div>
@@ -295,9 +305,8 @@ const HomePage = () => {
         {/* List Produk */}
         <div className="relative mt-10">
           <h2 className="text-xl mb-4">Daftar Produk</h2>
-
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2 md:gap-4 lg:gap-6">
-            {loading ? (
+            {loadingPage ? (
               <div className="col-span-6 flex justify-center items-center h-80">
                 <Loading w={10} h={10} />
               </div>
@@ -331,6 +340,56 @@ const HomePage = () => {
               </>
             )}
           </div>
+          {!loading && (
+            <div className="flex justify-center items-center gap-x-2 mt-20">
+              {pageNumber > 1 && (
+                <span
+                  className="bg-[#EE6D3F] cursor-pointer rounded-xl px-3 text-white"
+                  onClick={handlePrevClick}
+                >
+                  Prev
+                </span>
+              )}
+
+              {Array.from(
+                { length: Math.ceil(totalProduk / dataPerPage) },
+                (_, i) => i + 1
+              )
+                .filter(
+                  (page) =>
+                    // Tampilkan halaman yang dekat dengan halaman aktif (maks 5 halaman)
+                    Math.abs(page - pageNumber) <= 2 ||
+                    page === 1 ||
+                    page === totalProduk
+                )
+                .map((page, index, arr) => {
+                  const isLast = index === arr.length - 1;
+                  const isCurrent = page === pageNumber;
+                  return (
+                    <span
+                      key={page}
+                      className={`px-3 py-1 rounded-xl cursor-pointer ${
+                        isCurrent
+                          ? "bg-[#f0ab92] text-black font-bold"
+                          : "bg-gray-200 text-black hover:bg-gray-300"
+                      }`}
+                      onClick={() => setPageNumber(page)}
+                    >
+                      {page}
+                    </span>
+                  );
+                })}
+
+              {pageNumber < totalProduk && (
+                <span
+                  className="bg-[#EE6D3F] cursor-pointer rounded-xl px-3 text-white"
+                  onClick={handleNextClick}
+                >
+                  Next
+                </span>
+              )}
+            </div>
+          )}
         </div>
       </div>
       <Footer />

@@ -22,6 +22,7 @@ const TokoSayaPage = () => {
   const inputRef = useRef(null);
   const idUser = cookies.user_id;
   const [loading, setLoading] = useState(false);
+  
 
   const handleSelectAll = () => {
     const allChecked = produkList.every((item) => item.isChecked);
@@ -122,7 +123,7 @@ const TokoSayaPage = () => {
           },
         }
       );
-      console.log(response.data.data.path_file);
+      // console.log(response.data.data.path_file);
       setCookie("path_file", response.data.data.path_file);
       toast.success("Foto profil berhasil diupdate");
       // Refresh foto (misalnya set cookie baru atau reload user data)
@@ -130,6 +131,55 @@ const TokoSayaPage = () => {
       console.error("Upload gagal:", error);
       toast.error("Gagal mengunggah foto");
     }
+  };
+
+  const handleDeleteProduk = (id) => {
+    toast(
+      ({ closeToast }) => (
+        <div>
+          <p>Yakin ingin menghapus produk ini?</p>
+          <div className="flex justify-end gap-2 mt-2">
+            <button
+              className="bg-gray-300 px-3 py-1 rounded"
+              onClick={() => closeToast()}
+            >
+              Batal
+            </button>
+            <button
+              className="bg-red-500 text-white px-3 py-1 rounded"
+              onClick={async () => {
+                try {
+                  const response = await axios.delete(
+                    `${apiUrl}/api/v1/product/${id}`,
+                    {
+                      headers: {
+                        Authorization: `Bearer ${cookies.token}`,
+                      },
+                    }
+                  );
+
+                  if (response.data.success) {
+                    toast.dismiss(); // Tutup toast konfirmasi
+                    toast.success("Produk berhasil dihapus");
+                    setProdukList((prev) => prev.filter((p) => p.id !== id));
+                  } else {
+                    toast.error("Gagal menghapus produk");
+                  }
+                } catch (error) {
+                  toast.error("Terjadi kesalahan saat menghapus");
+                }
+              }}
+            >
+              Hapus
+            </button>
+          </div>
+        </div>
+      ),
+      {
+        autoClose: false,
+        closeOnClick: false,
+      }
+    );
   };
 
   // Fetch data when page changes
@@ -353,7 +403,10 @@ const TokoSayaPage = () => {
                         >
                           <MdOutlineEdit className="text-xl" />
                         </div>
-                        <div className="text-red-500 hover:text-red-700 cursor-pointer">
+                        <div
+                          onClick={() => handleDeleteProduk(item.id)}
+                          className="text-red-500 hover:text-red-700 cursor-pointer"
+                        >
                           <MdOutlineDeleteOutline className="text-xl" />
                         </div>
                       </div>

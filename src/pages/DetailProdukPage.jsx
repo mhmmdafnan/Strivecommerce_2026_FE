@@ -1,5 +1,5 @@
 import Slider from "react-slick"; // tambahkan import ini
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 import { AiOutlineShoppingCart } from "react-icons/ai";
 import { IoChatboxEllipsesOutline } from "react-icons/io5";
@@ -91,38 +91,52 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
     window.open(
       `https://wa.me/${formattedNumber}?text=${encodeURIComponent(message)}`,
       "_blank"
-    );   
-  }
-
-  const sliderSettings = {
-    dots: false,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 6,
-    slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 3000,
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          slidesToShow: 6,
-        },
-      },
-      {
-        breakpoint: 768,
-        settings: {
-          slidesToShow: 4,
-        },
-      },
-      {
-        breakpoint: 480,
-        settings: {
-          slidesToShow: 2,
-        },
-      },
-    ],
+    );
   };
+
+  const getMinItem = () => {
+    const width = window.innerWidth;
+    if (width <= 480) return 2;
+    if (width <= 768) return 4;
+    if (width <= 1024) return 6;
+    return 6;
+  };
+
+  const minItem = getMinItem();
+
+  const sliderSettings = useMemo(() => {
+    const count = produkList.length;
+
+    return {
+      dots: false,
+      infinite: count > 1,
+      speed: 500,
+      slidesToShow: Math.min(count, 6),
+      slidesToScroll: 1,
+      autoplay: count > 1,
+      autoplaySpeed: 3000,
+      responsive: [
+        {
+          breakpoint: 1024,
+          settings: {
+            slidesToShow: Math.min(count, 6),
+          },
+        },
+        {
+          breakpoint: 768,
+          settings: {
+            slidesToShow: Math.min(count, 4),
+          },
+        },
+        {
+          breakpoint: 480,
+          settings: {
+            slidesToShow: Math.min(count, 2),
+          },
+        },
+      ],
+    };
+  }, [produkList]);
 
   // Ambil data produk utama berdasarkan idProduk
   useEffect(() => {
@@ -135,8 +149,8 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
 
         if (response.data.success) {
           const produkData = response.data.data;
-          console.log(produkData);
-          
+          // console.log(produkData);
+
           setDataProduk(produkData);
           // console.log(response.data.data.variasi[0].path);
 
@@ -161,11 +175,10 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
     fetchProduk();
   }, [idProduk]);
 
-  
   // Ambil produk slider setelah userId dari dataProduk tersedia
   useEffect(() => {
     if (!dataProduk) return;
-    
+
     const fetchSlider = async () => {
       try {
         const res = await axios.get(`${apiUrl}/api/v1/product`, {
@@ -395,10 +408,10 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
                     <FaShareNodes className="hover:scale-125 transition-transform duration-500" />
                   </button>
 
-                  <div 
+                  <div
                     className="flex bg-[#EE6D3F] dark:bg-[#222831] dark:hover:dark:bg-[#4b5563] hover:bg-[#cf582d] font-semibold text-white justify-center items-center w-full rounded-lg cursor-pointer"
                     onClick={() => onBeliClick(dataProduk.user.telp)}
-                    >
+                  >
                     Beli
                   </div>
                 </div>
@@ -429,10 +442,10 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
                 >
                   <FaShareNodes className="hover:scale-125 transition-transform duration-300" />
                 </div>
-                <div 
+                <div
                   className="flex bg-[#EE6D3F] dark:bg-[#222831] font-semibold text-white justify-center items-center w-full rounded-lg cursor-pointer"
                   onClick={() => onBeliClick(dataProduk.user.telp)}
-                  >
+                >
                   Beli
                 </div>
               </div>
@@ -491,6 +504,31 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
           {!produkList || produkList.length === 0 ? (
             <div className="col-span-6 flex justify-center items-center h-40">
               <Loading w={10} h={10} />
+            </div>
+          ) : produkList.length < minItem ? (
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+              {produkList.map((item) => (
+                <div
+                  key={item.id}
+                  className="p-2 hover:scale-105 transition-all duration-300 cursor-pointer"
+                  onClick={() => navigate("/detailProduk/" + item.id)}
+                >
+                  <img
+                    src={apiUrl + JSON.parse(item.path)[0]}
+                    alt={item.nama}
+                    className="w-full h-40 object-contain rounded-xl border border-gray-600"
+                  />
+                  <div className="mt-2 text-sm text-black font-light">
+                    {item.harga
+                      ? `Rp. ${item.harga.toLocaleString("id-ID")}`
+                      : "Harga tidak tersedia"}
+                  </div>
+                  <div className="text-md font-medium text-black truncate">
+                    {item.nama}
+                  </div>
+                  <div className="text-sm text-gray-500">{item.toko}</div>
+                </div>
+              ))}
             </div>
           ) : (
             <Slider
