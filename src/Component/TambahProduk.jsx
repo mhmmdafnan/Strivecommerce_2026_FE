@@ -86,6 +86,31 @@ const TambahProduk = () => {
     return val.replace(/[^\d]/g, "");
   };
 
+  const handleSuccessToast = (pesan) => {
+    toast.success(
+      ({ closeToast }) => (
+        <>
+          <div className="">
+            <div>{pesan}</div>
+            <div className="flex justify-center gap-2 mt-2">
+              <button
+                className="px-3 py-1 rounded-xl border-2 text-white hover:bg-white hover:text-green-600 text-sm"
+                onClick={() => window.close()}
+              >
+                Tutup Tab
+              </button>
+            </div>
+          </div>
+        </>
+      ),
+      {
+        autoClose: false,
+        closeOnClick: false,
+        closeButton: false,
+      }
+    );
+  };
+
   const updateData = async (idProduk, produkData) => {
     const form = new FormData();
 
@@ -126,7 +151,7 @@ const TambahProduk = () => {
           },
         }
       );
-      toast.success("Produk berhasil diupdate!");
+      handleSuccessToast("Produk berhasil diupdate!");
       return res.data.data;
     } catch (err) {
       console.error("Gagal mengirim data:", err);
@@ -162,7 +187,7 @@ const TambahProduk = () => {
       const res = await axios.post(`${apiUrl}/api/v1/product`, form, {
         headers: { "Content-Type": "multipart/form-data" },
       });
-      toast.success("Produk berhasil ditambahkan!");
+      handleSuccessToast("Produk berhasil ditambahkan!");
       return res.data;
     } catch (err) {
       console.error("Gagal mengirim data:", err);
@@ -246,7 +271,7 @@ const TambahProduk = () => {
     };
     fetchData();
   }, []);
-  
+
   useEffect(() => {
     return () => {
       imagePreview.forEach((url) => {
