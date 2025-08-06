@@ -63,6 +63,7 @@ const AppRoutes = ({ isLoginModal, setIsLoginModal }) => {
             />
           }
         />
+        <Route path="/toko/:userId" element={<TokoPage />} />
 
         <Route element={<LoginRoutes />}>
           <Route path="/akunSaya" element={<AkunSayaPage />} />
@@ -71,7 +72,7 @@ const AppRoutes = ({ isLoginModal, setIsLoginModal }) => {
           <Route path="/checkout" element={<CheckoutPage />} />
           <Route path="/loading" element={<LoadingAcc />} />
           <Route path="/formUMKM" element={<FormUMKMPage />} />
-          <Route path="/toko/:userId" element={<TokoPage />} />
+   
           <Route path="/alamat" element={<AlamatPage />} />
           <Route path="/TambahAlamat" element={<TambahAlamat />} />
           <Route path="/toko/:idToko" element={<TokoPage />} />
@@ -84,7 +85,7 @@ const AppRoutes = ({ isLoginModal, setIsLoginModal }) => {
 
         <Route path="/register" element={<SignupPage />} />
       </Routes>
-        <Footer />
+        
     </>
   );
 };

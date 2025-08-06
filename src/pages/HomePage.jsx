@@ -5,11 +5,7 @@ import { AiOutlineShoppingCart } from "react-icons/ai";
 import { MdOutlineStoreMallDirectory } from "react-icons/md";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { FaShareNodes } from "react-icons/fa6";
-
-import Navbar from "../Component/Navbar";
-import fotoToko from "../assets/img/produk/toko olahraga1.jpeg";
-import produk1 from "../assets/img/produk/kursi 1.jpg";
-import produk2 from "../assets/img/produk/kursi 2.jpg";
+import Footer from "../Component/Footer";
 import produk3 from "../assets/img/produk/kursi 3.jpg";
 import logoHomePage from "../assets/img/logo_homepage.png";
 import { useNavigate } from "react-router-dom";
@@ -337,6 +333,7 @@ const HomePage = () => {
           </div>
         </div>
       </div>
+      <Footer />
     </>
   );
 };

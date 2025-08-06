@@ -111,24 +111,10 @@ const LoginModal = ({ isOpen, onClose, onSuccess }) => {
         <div className="flex justify-center mb-5">
           <img src={Logo} alt="Logo" className="mx-auto h-10" />
         </div>
-        <h2 className="text-center text-2xl font-semibold text-gray-700 dark:text-white">
+        <h2 className="text-center text-2xl mb-8 font-semibold text-gray-700 dark:text-white">
           Selamat Datang
         </h2>
-        <p className="text-center text-xs text-gray-500 mb-10 dark:text-gray-300">
-          Belum punya akun?
-          <span
-            onClick={() => {
-              if (location.pathname === "/register") {
-                onClose(); // jika sudah di halaman "/"
-              } else {
-                navigate("/register"); // jika bukan di halaman "/"
-              }
-            }}
-            className="text-[#EE6D3F] font-bold hover:underline pl-1 cursor-pointer"
-          >
-            Daftar
-          </span>
-        </p>
+
 
         <form onSubmit={sendData} className="space-y-3 ">
           <input
@@ -183,10 +169,7 @@ const LoginModal = ({ isOpen, onClose, onSuccess }) => {
               <>Sign In</>
             )}
           </button>
-          <button className="flex justify-center items-center mt-3 w-full  border border-gray-300 hover:bg-gray-200 text-xs px-3 py-2 rounded-lg gap-2">
-            <img src={LogoGoogle} alt="Google" className="w-4 h-4" />
-            Sign In with Google
-          </button>
+
         </form>
       </div>
     </div>

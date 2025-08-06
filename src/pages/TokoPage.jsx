@@ -85,7 +85,7 @@ const TokoPage = () => {
   const apiUrl = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
   const [toko, setToko] = useState([]);
-  const { idToko } = useParams();
+  const { userId } = useParams();
   const [openModal, setOpenModal] = useState(false);
   const shareUrl = `${window.location.origin}${location.pathname}`;
   const [loading, setLoading] = useState(false);
@@ -100,10 +100,10 @@ const TokoPage = () => {
       try {
         // Ambil dua data secara paralel
 
-        const response = await axios.get(`${apiUrl}/api/v1/toko/${idToko}`);
+        const response = await axios.get(`${apiUrl}/api/v1/toko/${userId}`);
 
         // console.log(response.data.data.alamat[0].kodeKab);
-        // console.log(response.data.data);
+        console.log(response.data.data);
 
         // Set data produk umum
         if (response.data.success) {
@@ -134,7 +134,7 @@ const TokoPage = () => {
         const allProdukRes = await axios.get(`${apiUrl}/api/v1/product`, {
           params: {
             total: 12,
-            idToko: idToko,
+            idToko: userId,
           },
         });
 
@@ -180,9 +180,9 @@ const TokoPage = () => {
               <div className="text-xl font-semibold hover:text-[#EE6D3F]">
                 {toko.nama_toko}
               </div>
-              <div className="flex mb-2 text-xs items-center gap-x-1 text-gray-500 hover:text-gray-800">
+              {/* <div className="flex mb-2 text-xs items-center gap-x-1 text-gray-500 hover:text-gray-800">
                 <FaLocationDot /> {toko.alamat?.[0].kabupaten.nama}
-              </div>
+              </div> */}
               <div className="flex gap-x-2">
                 <div
                   onClick={() => {
@@ -237,9 +237,7 @@ const TokoPage = () => {
                   >
                     <img
                       src={
-                        apiUrl +
-                        "/pict/" +
-                        produk.id +
+                        apiUrl + 
                         JSON.parse(produk.path)[0]
                       }
                       className="w-full h-30 object-cover rounded-3xl border-2 border-gray-200 hover:scale-105 transition-all duration-300"
@@ -247,7 +245,7 @@ const TokoPage = () => {
                     />
                     <div className="p-2">
                       <div className="text-xs font-extralight text-black">
-                        Rp. {produk.variasi[0].harga.toLocaleString("id-ID")}
+                        Rp. {produk.harga.toLocaleString("id-ID")}
                       </div>
                       <div className="text-md font-medium text-black truncate">
                         {produk.nama}

@@ -6,7 +6,7 @@ import { IoChatboxEllipsesOutline } from "react-icons/io5";
 import { MdOutlineStoreMallDirectory } from "react-icons/md";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { FaShareNodes } from "react-icons/fa6";
-
+import Footer from "../Component/Footer";
 import ModalShare from "../Component/ShareModal";
 import fotoToko from "../assets/img/market foto.png";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
@@ -189,7 +189,8 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
   }, [dataProduk]);
 
   return (
-    <div className="dark:bg-[#393E41] transition-all duration-500">
+    <>
+    <div className="dark:bg-[#393E41] transition-all duration-500 min-h-[calc(100vh-64px)]">
       <LoginModal
         isOpen={isLoginModal}
         onClose={() => setIsLoginModal(false)}
@@ -457,7 +458,7 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
                   />
                 </div>
                 <div
-                  onClick={() => navigate("/toko/" + dataProduk.userId)}
+                  onClick={() => navigate("/toko/" + dataProduk.user.id)}
                   className="cursor-pointer"
                 >
                   <div className="text-xl font-semibold hover:text-[#EE6D3F]">
@@ -530,6 +531,8 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
         text={shareText}
       />
     </div>
+    <Footer />
+    </>
   );
 };
 
