@@ -11,6 +11,7 @@ import fotoToko from "../assets/img/produk/toko olahraga1.jpeg";
 import produk1 from "../assets/img/produk/kursi 1.jpg";
 import produk2 from "../assets/img/produk/kursi 2.jpg";
 import produk3 from "../assets/img/produk/kursi 3.jpg";
+import logoHomePage from "../assets/img/logo_homepage.png";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import Loading from "../Component/Loading";
@@ -22,7 +23,11 @@ const HomePage = () => {
   const [dataProduk, setDataProduk] = useState([]);
   const [produkSlider, setProdukSlider] = useState([]);
   const [cookies, setCookie, removeCookie] = useCookies();
+  const [hasilSearch, setHasilSearch] = useState([]);
+  const [loadingSearch, setLoadingSearch] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(false);
+  const [onFocusSearch, setOnFocusSearch] = useState(false);
   const apiUrl = import.meta.env.VITE_API_URL;
 
   const CustomPrev = (props) => (
@@ -121,7 +126,7 @@ const HomePage = () => {
         // Set produk slider
         if (sliderProdukRes.data.success) {
           console.log(sliderProdukRes.data);
-          
+
           setProdukSlider(sliderProdukRes.data.data);
         }
       } catch (error) {
@@ -135,63 +140,117 @@ const HomePage = () => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    setLoadingSearch(true);
+    if (searchQuery.trim() === "") {
+      setHasilSearch([]);
+      return;
+    }
+
+    const delayDebounce = setTimeout(() => {
+      setLoadingSearch(true);
+      // console.log(`${apiUrl}/api/v1/product/search?keyword=${encodeURIComponent(searchQuery)}`);
+
+      axios
+        .get(
+          `${apiUrl}/api/v1/product/search?keyword=${encodeURIComponent(
+            searchQuery
+          )}`
+        )
+        .then((res) => {
+          console.log(res.data);
+          if (res.data.success) {
+            setHasilSearch(res.data.data); // atau res.data.result sesuai struktur
+          } else {
+            setHasilSearch([]);
+          }
+        })
+        .catch((err) => {
+          console.error("Error fetching data:", err);
+          setHasilSearch([]);
+        })
+        .finally(() => {
+          setLoadingSearch(false);
+        });
+    }, 500); // 500ms delay (debounce)
+
+    return () => clearTimeout(delayDebounce); // clear timer saat searchQuery berubah
+  }, [searchQuery]);
+
   return (
     <>
       {/* container */}
       <div className="max-w-7xl  mx-auto font-bold dark:bg-[#121212] bg-white px-5 md:px-20 py-5">
         {/* Produk Utama */}
-        <div className="flex flex-row gap-x-4 mb-2 md:mb-4">
-          <div className="relative basis-full lg:basis-2/3 h-80">
-            {/* Overlay Teks Atas */}
-            <div className="absolute top-3 left-4 w-fit bg-[#FE5D26] bg-opacity-80 text-white px-4 py-2 rounded-xl cursor-pointer">
-              <div className="flex justify-between items-center">
-                <div className="flex gap-x-1 md:gap-x-2 items-center">
-                  <div className="flex text-4xl items-center justify-center hover:scale-110 transition-all duration-300 ">
-                    <MdOutlineStoreMallDirectory />
-                  </div>
-                  <div className="group max-w-20 md:max-w-40 overflow-hidden">
-                    <h1 className="text-lg font-semibold whitespace-nowrap group-hover:animate-marquee">
-                      Toko Olahraga Unsulbar
-                    </h1>
-                  </div>
-                </div>
-              </div>
+        <div className="flex md:flex-col-2 items-center  justify-center md:justify-between h-60 bg-gradient-to-r from-[#f76b1c] to-[#fcae1e] rounded-xl shadow-lg py-5 px-4 md:pl-10">
+          <div>
+            <div className="font-light text-white">Selamat Datang di</div>
+            <div className="font-extrabold mt-4 mb-2 text-3xl md:text-4xl text-white">
+              STRIVE MARKET
             </div>
-            <img
-              src={fotoToko}
-              className="w-full object-cover h-full rounded-3xl"
-              alt=""
-            />
-            {/* Overlay Teks Bawah */}
-            <div className="absolute bottom-4 left-4 right-4 bg-gradient-to-tr from-[#C9C9C9] to-[#636363] opacity-95 text-white px-4 py-2 rounded-xl hover:scale-95 transition-all duration-500 cursor-pointer">
-              <div className="flex justify-between items-center">
-                <div className="flex gap-x-2 items-center">
-                  <div className="h-12 w-12">
-                    <img
-                      src={produk1}
-                      className="w-full h-full object-cover rounded-3xl border-2 border-gray-200"
-                      alt=""
-                    />
-                  </div>
-                  <div className="">
-                    <h1 className="text-lg font-semibold">Toko</h1>
-                    <span className="text-sm font-extralight">Rp. xxxxxx</span>
-                  </div>
-                </div>
-                <div className="flex bg-white rounded-full text-xl text-gray-800 items-center justify-center p-2  hover:scale-125 transition-all duration-300">
-                  <AiOutlineShoppingCart />
-                </div>
-              </div>
+            <div className="text-white">
+              E-comerce UMKM pertama se-
+              <span className="font-semibold">Sulawesi Barat</span>
             </div>
           </div>
-          <div className="hidden lg:block lg:basis-1/3 rounded-3xl h-80 w-full bg-slate-800">
-            <img
-              src={fotoToko}
-              className="w-full object-cover h-full rounded-3xl"
-              alt=""
-            />
+          <div className="hidden md:flex items-center justify-center w-40 h-40 mr-10">
+            <img src={logoHomePage} className="w-full h-full" alt="" />
           </div>
         </div>
+
+        {/* Search */}
+        <div className="relative w-full flex justify-center mt-10 mb-5">
+          <input
+            type="text"
+            placeholder="Temukan produk..."
+            className="w-full p-2 outline-none font-normal border-2 border-gray-300 rounded-lg max-w-md active:border-[#EE6D3F] focus:border-[#EE6D3F] transition-all duration-500 md:focus:scale-105"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onFocus={() => setOnFocusSearch(true)}
+            onBlur={() => {
+              setTimeout(() => setOnFocusSearch(false), 200); // delay agar klik pada hasil bisa diproses
+            }}
+          />
+
+          {searchQuery.trim() !== "" && onFocusSearch && (
+            <div className="absolute top-full left-1/2 font-normal -translate-x-1/2 w-full max-w-md bg-gray-200 rounded-lg z-50 mt-2 shadow-md">
+              {loadingSearch ? (
+                <p className="px-4 py-2">Loading...</p>
+              ) : hasilSearch.length > 0 ? (
+                hasilSearch.map((item, i) => (
+                  <div
+                    key={i}
+                    className={`px-6 text-sm py-3 cursor-pointer hover:bg-gray-300 ${
+                      i < hasilSearch.length - 1 ? "border-b border-white" : ""
+                    }`}
+                    onClick={() => {
+                      navigate("/detailProduk/" + item.id);
+                      setSearchQuery("");
+                      setOnFocusSearch(false);
+                    }}
+                  >
+                    <div className="flex items-center gap-x-2">
+                      <img
+                        src={getFirstImagePath(item.path)}
+                        alt={item.nama}
+                        className="h-8 object-contain rounded-md"
+                      />
+                      <div className="w-full">
+                        <div>{item.nama}</div>
+                        <div className="text-gray-500 text-xs">
+                          {item.user.nama_toko}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <p className="px-4 py-2 text-gray-500">Tidak ditemukan</p>
+              )}
+            </div>
+          )}
+        </div>
+
         {/* Rekomendasi Produk  */}
         <div className="relative mt-10">
           <h2 className="text-xl mb-4">Rekomendasi Produk</h2>
@@ -227,9 +286,9 @@ const HomePage = () => {
                       {item.nama}
                     </div>
                     <div className="flex items-center gap-x-1 text-sm font-extralight text-gray-500 truncate">
-                        <MdOutlineStoreMallDirectory />
-                        {item.user.nama_toko}
-                      </div>
+                      <MdOutlineStoreMallDirectory />
+                      {item.user.nama_toko}
+                    </div>
                   </div>
                 ))}
               </Slider>
@@ -256,7 +315,7 @@ const HomePage = () => {
                   >
                     <img
                       src={getFirstImagePath(produk.path)}
-                      className="w-full h-30 object-cover rounded-3xl border-2 border-gray-200 hover:scale-105 transition-all duration-300"
+                      className="w-full h-40 object-contain rounded-3xl border-2 border-gray-200 hover:scale-105 transition-all duration-300"
                       alt={produk.nama}
                     />
                     <div className="p-2">
