@@ -1,17 +1,50 @@
+import axios from "axios";
 import { useState } from "react";
+import { useCookies } from "react-cookie";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { MdOutlineEdit } from "react-icons/md";
+import { toast } from "react-toastify";
 
 const GantiPasswordModal = ({ isOpen, onClose }) => {
+  const apiUrl = import.meta.env.VITE_API_URL;
   const [passwordLama, setPasswordLama] = useState("");
   const [passwordBaru, setPasswordBaru] = useState("");
   const [konfirmasiPassword, setKonfirmasiPassword] = useState("");
   const [showPasswordLama, setShowPasswordLama] = useState(false);
   const [showPasswordBaru, setShowPasswordBaru] = useState(false);
   const [showPasswordBaruConf, setShowPasswordBaruConf] = useState(false);
+  const [cookies] = useCookies();
 
   const handleSubmit = async (e) => {
-    onClose();
+    e.preventDefault();
+    console.log(cookies.user_id);
+    
+
+    if (!passwordLama || !passwordBaru || !konfirmasiPassword) {
+      toast.error("Semua kolom wajib diisi.");
+      return;
+    }
+
+    if (passwordBaru !== konfirmasiPassword) {
+      toast.error("Konfirmasi password tidak cocok.");
+      return;
+    }
+
+    try {
+      const response = await axios.patch(
+        `${apiUrl}/api/v1/users/password/${cookies.user_id}`,
+        {
+          passwordLama: passwordLama,
+          password: passwordBaru,
+        }
+      );
+
+      toast.success("Password berhasil diubah.");
+      onClose(); // tutup modal jika pakai modal
+    } catch (error) {
+      // console.error("Gagal:", error);
+      toast.error(msg);
+    }
   };
 
   if (!isOpen) return null;
@@ -38,7 +71,7 @@ const GantiPasswordModal = ({ isOpen, onClose }) => {
               type={showPasswordLama ? "text" : "password"}
               value={passwordLama}
               onChange={(e) => setPasswordLama(e.target.value)}
-              className="w-full mt-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full mt-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#EE6D3F] text-gray-600"
             />
             <div
               className="absolute top-12 right-3 transform -translate-y-1/2 cursor-pointer text-gray-500"
@@ -55,7 +88,7 @@ const GantiPasswordModal = ({ isOpen, onClose }) => {
               type={showPasswordBaru ? "text" : "password"}
               value={passwordBaru}
               onChange={(e) => setPasswordBaru(e.target.value)}
-              className="w-full mt-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full mt-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#EE6D3F] text-gray-600"
             />
             <div
               className="absolute top-12 right-3 transform -translate-y-1/2 cursor-pointer text-gray-500"
@@ -72,7 +105,7 @@ const GantiPasswordModal = ({ isOpen, onClose }) => {
               type={showPasswordBaruConf ? "text" : "password"}
               value={konfirmasiPassword}
               onChange={(e) => setKonfirmasiPassword(e.target.value)}
-              className="w-full mt-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full mt-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#EE6D3F] text-gray-600"
             />
             <div
               className="absolute top-12 right-3 transform -translate-y-1/2 cursor-pointer text-gray-500"

@@ -41,7 +41,7 @@ const LoginModal = ({ isOpen, onClose, onSuccess }) => {
         email: formData.email,
         password: formData.pass,
       });
-      console.log(response);
+      // console.log(response);
 
       if (response.data.success) {
         setCookie("isLoggedIn", true);
