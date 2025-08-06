@@ -3,20 +3,24 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { MdOutlineEdit } from "react-icons/md";
 import { useCookies } from "react-cookie";
+import { toast } from "react-toastify";
+import axios from "axios";
 
 const EditAccountModal = ({ isOpen, onClose, onGantiPassword, idUser }) => {
   const navigate = useNavigate();
-  // const backendUrl = import.meta.env.VITE_API_URL;
+  const apiUrl = import.meta.env.VITE_API_URL;
   const [cookies, setCookie] = useCookies();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [formData, setFormData] = useState({
-    firstName: cookies["firstName"],
-    lastName: cookies["lastName"],
-    email: cookies["email"],
-    jenisKelamin: cookies["gender"],
-    tanggalLahir: cookies["tanggal_lahir"],
-    telepon: cookies["telp"],
+    nama_toko: cookies["nama_toko"] || "",
+    // inisialisasi state untuk menyimpan data form
+    firstName: cookies["firstName"] || "",
+    lastName: cookies["lastName"] || "",
+    email: cookies["email"] || "",
+    jenisKelamin: cookies["gender"] || "",
+    tanggalLahir: cookies["tanggal_lahir"] || "",
+    telepon: cookies["telp"] || "",
   });
 
   const formatDateForInput = (dateString) => {
@@ -38,7 +42,41 @@ const EditAccountModal = ({ isOpen, onClose, onGantiPassword, idUser }) => {
 
   // Submit form: gunakan FormData untuk multipart (untuk file upload jika diperlukan)
   const handleSubmit = async (e) => {
-    onClose();
+    e.preventDefault();
+
+    // Validasi sederhana
+    if (!formData.tanggalLahir || !formData.telepon) {
+      alert("Tanggal lahir dan no telepon wajib diisi.");
+      return;
+    }
+
+    try {
+      // Kirim data ke backend (ganti URL sesuai kebutuhan)
+      const response = await axios.patch(
+        `${apiUrl}/api/v1/users/${idUser}`,
+        formData
+      );
+
+      const result = await response.data;
+
+      if (response.data.success) {
+        setCookie("nama_toko", formData.nama_toko);
+        setCookie("firstName", formData.firstName);
+        setCookie("lastName", formData.lastName);
+        setCookie("email", formData.email);
+        setCookie("gender", formData.jenisKelamin);
+        setCookie("tanggal_lahir", formData.tanggalLahir);
+        setCookie("telp", formData.telepon);
+        toast.success("Data Akun berhasil diupdate!");
+        onClose(); // Tutup modal setelah submit
+        // Bisa juga panggil fungsi refresh data atau redirect
+      } else {
+        toast.error("Gagal memperbarui data: " + result.message);
+      }
+    } catch (error) {
+      console.error("Gagal mengirim data:", error);
+      toast.error("Gagal mengupdate data akun. Silakan coba lagi.");
+    }
   };
 
   if (!isOpen) return null;
@@ -59,77 +97,94 @@ const EditAccountModal = ({ isOpen, onClose, onGantiPassword, idUser }) => {
         </h2>
 
         {/* Form */}
-        <div className="space-y-4">
-          <div>
-            <label className="text-sm font-medium">Nama Awal</label>
-            <input
-              type="text"
-              name="firstName"
-              value={formData.firstName}
-              onChange={handleChange}
-              className="w-full mt-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#EE6D3F] text-gray-600"
-            />
-          </div>
-          <div>
-            <label className="text-sm font-medium">Nama Akhir</label>
-            <input
-              type="text"
-              name="lastName"
-              value={formData.lastName}
-              onChange={handleChange}
-              className="w-full mt-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#EE6D3F] text-gray-600"
-            />
-          </div>
-          <select
-            name="jenisKelamin"
-            onChange={handleChange}
-            value={formData.gender} // ✅ ini kuncinya
-            className="w-full mt-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#EE6D3F] text-gray-600"
-          >
-            <option value="" disabled>
-              -- Pilih Jenis Kelamin --
-            </option>
-            <option value="1">Laki-laki</option>
-            <option value="2">Perempuan</option>
-          </select>
+        <div className="space-y-4 ">
+          <div className="space-y-4 overflow-auto w-full max-h-[60vh] px-2">
+            <div>
+              <label className="text-sm font-medium">Nama Toko<span className="text-red-500">*</span></label>
+              <input
+                type="text"
+                name="nama_toko"
+                value={formData.nama_toko}
+                onChange={handleChange}
+                className="w-full mt-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#EE6D3F] text-gray-600"
+              />
+            </div>
+            <div>
+              <label className="text-sm font-medium">Nama Awal<span className="text-red-500">*</span></label>
+              <input
+                type="text"
+                name="firstName"
+                value={formData.firstName}
+                onChange={handleChange}
+                className="w-full mt-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#EE6D3F] text-gray-600"
+              />
+            </div>
+            <div>
+              <label className="text-sm font-medium">Nama Akhir<span className="text-red-500">*</span></label>
+              <input
+                type="text"
+                name="lastName"
+                value={formData.lastName}
+                onChange={handleChange}
+                className="w-full mt-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#EE6D3F] text-gray-600"
+              />
+            </div>
+            <div>
+              <label className="text-sm font-medium">
+                Jenis Kelamin<span className="text-red-500">*</span>
+              </label>
+              <select
+                name="jenisKelamin"
+                onChange={handleChange}
+                value={formData.gender} //
+                className="w-full mt-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#EE6D3F] text-gray-600"
+              >
+                <option value="" disabled>
+                  -- Pilih Jenis Kelamin --
+                </option>
+                <option value="1">Laki-laki</option>
+                <option value="2">Perempuan</option>
+              </select>
+            </div>
 
-          <div>
-            <label className="text-sm font-medium">
-              Tanggal Lahir<span className="text-red-500">*</span>
-            </label>
-            <input
-              type="date"
-              name="tanggalLahir"
-              value={formatDateForInput(formData.tanggalLahir)}
-              onChange={handleChange}
-              className="w-full mt-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#EE6D3F] text-gray-600"
-            />
-          </div>
+            <div>
+              <label className="text-sm font-medium">
+                Tanggal Lahir<span className="text-red-500">*</span>
+              </label>
+              <input
+                type="date"
+                name="tanggalLahir"
+                value={formatDateForInput(formData.tanggalLahir)}
+                onChange={handleChange}
+                className="w-full mt-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#EE6D3F] text-gray-600"
+              />
+            </div>
 
-          <div>
-            <label className="text-sm font-medium">Email</label>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              disabled
-              className="w-full mt-1 p-2 border rounded bg-gray-200 text-gray-600 cursor-not-allowed"
-            />
-          </div>
+            <div>
+              <label className="text-sm font-medium">Email</label>
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                disabled
+                className="w-full mt-1 p-2 border rounded bg-gray-200 text-gray-600 cursor-not-allowed"
+              />
+            </div>
 
-          <div>
-            <label className="text-sm font-medium">
-              No Telepon<span className="text-red-500">*</span>
-            </label>
-            <input
-              type="text"
-              name="telepon"
-              value={formData.telepon}
-              required
-              // value={formData.telepon == "undefined" ? "-" : formData.telepon}
-              onChange={handleChange}
-              className="w-full mt-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#EE6D3F] text-gray-600"
-            />
+            <div>
+              <label className="text-sm font-medium">
+                No Telepon<span className="text-red-500">*</span>
+              </label>
+              <input
+                type="text"
+                name="telepon"
+                value={formData.telepon}
+                required
+                // value={formData.telepon == "undefined" ? "-" : formData.telepon}
+                onChange={handleChange}
+                className="w-full mt-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#EE6D3F] text-gray-600"
+              />
+            </div>
           </div>
 
           <div className="flex justify-center items-center">

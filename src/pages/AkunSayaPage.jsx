@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { MdOutlineEdit, MdOutlineStore } from "react-icons/md";
 
 import Navbar from "../Component/Navbar";
+import UserFoto from "../assets/img/market foto.png";
 import EditAccountModal from "../Component/EditAccountModal";
 import GantiPasswordModal from "../Component/GantiPasswordModal";
 import { useCookies } from "react-cookie";
@@ -112,9 +113,9 @@ const AkunSayaPage = () => {
             {/* Kartu Foto Profil */}
             <div className="flex justify-center md:justify-start md:basis-1/2 max-w-[300px] w-full">
               <div className="bg-[#E9E9E9] rounded-lg p-4 border-2 border-[#EE6D3F] shadow-md">
-                <div className="w-full h-50 relative">
+                <div className="w-50 h-50 relative">
                   <img
-                    src={apiUrl + "/img/profile_image/" + cookies["path_file"]}
+                    src={cookies.path_file ? apiUrl + "/img/profile_image/" + cookies["path_file"] : UserFoto}
                     alt="Profile"
                     className="w-full h-full object-cover rounded-lg cursor-pointer"
                   />
@@ -128,7 +129,7 @@ const AkunSayaPage = () => {
                   {/* Overlay Ubah Foto */}
                   <div
                     onClick={handleUbahFoto}
-                    className="absolute bottom-2 left-1/2 -translate-x-1/2 w-[90%] text-[#EE6D3F] hover:scale-105 font-semibold text-lg px-2 py-1 border-2 border-[#EE6D3F] rounded-lg text-center cursor-pointer transition-transform duration-300"
+                    className="absolute bottom-2 left-1/2 -translate-x-1/2 w-[90%] text-white hover:scale-105 font-semibold text-lg px-2 py-1 bg-[#EE6D3F] rounded-lg text-center cursor-pointer transition-transform duration-300"
                   >
                     Ubah Foto
                   </div>
