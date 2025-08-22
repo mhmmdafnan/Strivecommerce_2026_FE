@@ -18,7 +18,7 @@ const Sidebar = () => {
   // Fungsi Logout
   const removeAllCookie = () => {
     // Implement logout logic here
-    console.log("User logged out");
+
     deleteCookie("isLoggedIn");
     deleteCookie("token");
     deleteCookie("user_id");

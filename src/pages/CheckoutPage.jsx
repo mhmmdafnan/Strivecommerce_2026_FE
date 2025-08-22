@@ -15,9 +15,6 @@ import Loading from "../Component/Loading";
 const CheckoutPage = () => {
   const location = useLocation();
   const keranjang = location.state?.keranjang || [];
-  console.log(keranjang);
-
-  //   console.log(keranjang);
   const apiUrl = import.meta.env.VITE_API_URL; // URL API
   const [loadingSubmit, setLoadingSubmit] = useState(false);
   const [pengiriman, setPengiriman] = useState(0);
@@ -41,8 +38,6 @@ const CheckoutPage = () => {
   };
 
   const showAlamatModalHandler = (id) => {
-    console.log("id aktif yang dipilih :", id);
-
     setAlamatAktif(dataAlamat.find((alamat) => alamat.id == id));
   };
 
@@ -67,10 +62,8 @@ const CheckoutPage = () => {
           },
         }
       );
-
-      console.log(response.data); // hasil ongkir
     } catch (error) {
-      console.error("Error saat menghitung ongkir:", error);
+      // console.error("Error saat menghitung ongkir:", error);
     }
   };
 
@@ -86,37 +79,29 @@ const CheckoutPage = () => {
     return total + 212000 + ongkir;
   }
 
-  
   const creatTransaksi = async () => {
     // setLoadingAlamat(true);
     try {
       const produkIds = keranjang[0].produk.map((item) => item.produkId);
-      const tokoId = keranjang[0].tokoId
-      const response = await axios.post(
-        `${apiUrl}/api/v1/transaksi`,
-        {
-          userId : cookie.user_id,
-          tokoId : tokoId,
-          status : 0,
-          harga : totalPayment(),
-          time : new Date(),
-          listIdProduk : JSON.stringify(produkIds),
-        }
-      );
-      // console.log(response.data.data);
-      const id = response.data.data
-      console.log(id);
-      
+      const tokoId = keranjang[0].tokoId;
+      const response = await axios.post(`${apiUrl}/api/v1/transaksi`, {
+        userId: cookie.user_id,
+        tokoId: tokoId,
+        status: 0,
+        harga: totalPayment(),
+        time: new Date(),
+        listIdProduk: JSON.stringify(produkIds),
+      });
+      const id = response.data.data;
 
       if (response.data.success) {
-        navigate('/payment/' + id)        
-
+        navigate("/payment/" + id);
       } else {
         setShowLoginError(true);
       }
     } catch (error) {
       // setShowLoginError(true);
-      console.log(error);
+      // console.log(error);
     } finally {
       // setLoadingAlamat(false);
     }
@@ -130,7 +115,6 @@ const CheckoutPage = () => {
           `${apiUrl}/api/v1/alamat/` + cookie["user_id"],
           {}
         );
-        console.log(response.data.data);
 
         if (response.data.success) {
           const alamatFromBE = response.data.data;
@@ -145,7 +129,7 @@ const CheckoutPage = () => {
         }
       } catch (error) {
         // setShowLoginError(true);
-        console.log(error);
+        // console.log(error);
       } finally {
         setLoadingAlamat(false);
       }
@@ -164,13 +148,11 @@ const CheckoutPage = () => {
           },
         })
         .catch((err) => {
-          console.error("Error:", err);
+          // console.error("Error:", err);
         });
 
       return res.data.rajaongkir.results;
     };
-
-    // console.log(getProvinces());
 
     getOngkir();
     fetchProduk();
@@ -421,7 +403,10 @@ const CheckoutPage = () => {
                 </label> */}
               </div>
 
-              <div className="button-bayar text-white py-2 mt-2 mx-2 bg-orange-500 text-center rounded-lg shadow-md" onClick={creatTransaksi}>
+              <div
+                className="button-bayar text-white py-2 mt-2 mx-2 bg-orange-500 text-center rounded-lg shadow-md"
+                onClick={creatTransaksi}
+              >
                 Bayar Sekarang
               </div>
             </div>

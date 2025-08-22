@@ -19,17 +19,17 @@ const AlamatPage = () => {
   const navigate = useNavigate();
 
   const onTambahAlamatClick = () => {
-    navigate("/TambahAlamat")
-  }
+    navigate("/TambahAlamat");
+  };
 
   const onClose = () => {
     setShowConfirm(false);
-  }
+  };
 
   const onDeleteAlamatClick = (id) => {
     setIdAlamat(id);
     setShowConfirm(true);
-  }
+  };
 
   const onSuccessDelete = (id) => {
     const deleteAlamat = async () => {
@@ -39,8 +39,6 @@ const AlamatPage = () => {
           `${apiUrl}/api/v1/alamat/` + id,
           {}
         );
-        console.log(response.data.data);
-
         if (response.data.success) {
           window.location.reload();
         } else {
@@ -48,13 +46,13 @@ const AlamatPage = () => {
         }
       } catch (error) {
         // setShowLoginError(true);
-        console.log(error);
+        // console.log(error);
       } finally {
         // setLoading(false);
       }
     };
     deleteAlamat();
-  }
+  };
 
   useEffect(() => {
     const fetchProduk = async () => {
@@ -64,7 +62,6 @@ const AlamatPage = () => {
           `${apiUrl}/api/v1/alamat/` + cookie["user_id"],
           {}
         );
-        console.log(response.data.data);
 
         if (response.data.success) {
           setDataAlamat(response.data.data);
@@ -73,7 +70,7 @@ const AlamatPage = () => {
         }
       } catch (error) {
         // setShowLoginError(true);
-        console.log(error);
+        // console.log(error);
       } finally {
         setLoading(false);
       }
@@ -83,7 +80,12 @@ const AlamatPage = () => {
 
   return (
     <>
-      <ConfirmModal isOpen={showConfirm} msg={"Apakah anda yakin ingin menghapus alamat?"} onClose={onClose} onSuccess={() => onSuccessDelete(idAlamat)}/>
+      <ConfirmModal
+        isOpen={showConfirm}
+        msg={"Apakah anda yakin ingin menghapus alamat?"}
+        onClose={onClose}
+        onSuccess={() => onSuccessDelete(idAlamat)}
+      />
       <div className="max-w-7xl mx-auto px-5 md:px-10 py-5 mb-20 md:mt-0">
         <h1 className="text-sm text-gray-600 cursor-pointer">Alamat Saya</h1>
         <div className="bg-white px-4 py-6 mt-4 max-w-3xl mx-auto">
@@ -95,14 +97,20 @@ const AlamatPage = () => {
             <>
               {Array.isArray(dataAlamat) && dataAlamat.length > 0 ? (
                 <>
-                  <div className="w-full flex justify-end cursor-pointer items-center text-center text-orange-500 hover:text-orange-400" onClick={onTambahAlamatClick}>
+                  <div
+                    className="w-full flex justify-end cursor-pointer items-center text-center text-orange-500 hover:text-orange-400"
+                    onClick={onTambahAlamatClick}
+                  >
                     <div className="px-2 py-1 rounded-md flex justify-center items-center">
                       <IoAdd /> Tambah Alamat
                     </div>
                   </div>
-                  {dataAlamat.map((alamat,idx) => {
+                  {dataAlamat.map((alamat, idx) => {
                     return (
-                      <div key={idx} className="alamat bg-white mx-2 p-2 mb-4 rounded-lg border-2 border-gray-200 flex justify-between items-center">
+                      <div
+                        key={idx}
+                        className="alamat bg-white mx-2 p-2 mb-4 rounded-lg border-2 border-gray-200 flex justify-between items-center"
+                      >
                         <div className="">
                           {/* <p className="text-xs text-gray-600">Alamat Pengiriman</p> */}
                           <div className="flex items-center flex-row gap-2 mt-1">
@@ -128,7 +136,12 @@ const AlamatPage = () => {
                             <div className="text-xs mt-2">Alamat Utama</div>
                           )}
                         </div>
-                        <div className="text-red-500 text-xl" onClick={() => {onDeleteAlamatClick(alamat.id)}}>
+                        <div
+                          className="text-red-500 text-xl"
+                          onClick={() => {
+                            onDeleteAlamatClick(alamat.id);
+                          }}
+                        >
                           <MdDelete />
                         </div>
                       </div>
@@ -137,16 +150,17 @@ const AlamatPage = () => {
                 </>
               ) : (
                 <>
-                  <div className="w-full flex justify-end cursor-pointer items-center text-center text-orange-500 hover:text-orange-400" onClick={onTambahAlamatClick}>
+                  <div
+                    className="w-full flex justify-end cursor-pointer items-center text-center text-orange-500 hover:text-orange-400"
+                    onClick={onTambahAlamatClick}
+                  >
                     <div className="px-2 py-1 rounded-md flex justify-center items-center">
                       <IoAdd /> Tambah Alamat
                     </div>
                   </div>
                   <div className="col-span-6 flex justify-center items-center h-40">
                     {/* <Loading w={10} h={10} /> */}
-                    <h1 className="text-gray-400 text-xl">
-                      Belum ada alamat
-                    </h1>
+                    <h1 className="text-gray-400 text-xl">Belum ada alamat</h1>
                   </div>
                 </>
               )}

@@ -24,7 +24,6 @@ function MainPage() {
   const [data, setData] = useState([]);
 
   const handleAksiClick = (id) => {
-    // console.log("id dalam fungsi", id);
     setIdPengajuan(id);
     setIsDetailPengajuanModalOpen(true);
     // setTrigger(!trigger)
@@ -66,7 +65,7 @@ function MainPage() {
         });
         setData(response.data.data);
       } catch (error) {
-        console.error("Gagal fetch data:", error);
+        // console.error("Gagal fetch data:", error);
       } finally {
         setLoading(false);
       }

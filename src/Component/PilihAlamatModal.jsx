@@ -2,11 +2,6 @@ import { useState } from "react";
 import { CiLocationOn } from "react-icons/ci";
 
 const PilihAlamatModal = ({ isOpen, onClose, onSelect, data }) => {
-
-    // console.log(data);
-
-
-
   const handleSelect = (id) => {
     // setSelectedAddress(address);
     onSelect(id);
@@ -29,7 +24,10 @@ const PilihAlamatModal = ({ isOpen, onClose, onSelect, data }) => {
 
         {data.map((item, idx) => {
           return (
-            <div key={idx} className="alamat mb-4 bg-white mx-2 p-2 rounded-lg  shadow-md md:flex md:justify-between justify-center items-center">
+            <div
+              key={idx}
+              className="alamat mb-4 bg-white mx-2 p-2 rounded-lg  shadow-md md:flex md:justify-between justify-center items-center"
+            >
               <div className="">
                 <p className="text-xs text-gray-600">Alamat Pengiriman</p>
                 <div className="flex items-center flex-row gap-2 mt-1">
@@ -39,8 +37,7 @@ const PilihAlamatModal = ({ isOpen, onClose, onSelect, data }) => {
                   </p>
                 </div>
                 <div className="font-light text-xs text-gray-500 truncate">
-                  {item.provinsi.nama},{" "}
-                  {item.kabupaten.nama},{" "}
+                  {item.provinsi.nama}, {item.kabupaten.nama},{" "}
                   {item.kecamatan.nama}
                 </div>
                 <div className="font-light text-xs text-gray-500 truncate">

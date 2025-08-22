@@ -17,7 +17,6 @@ const GantiPasswordModal = ({ isOpen, onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(cookies.user_id);
     
 
     if (!passwordLama || !passwordBaru || !konfirmasiPassword) {
@@ -43,7 +42,7 @@ const GantiPasswordModal = ({ isOpen, onClose }) => {
       onClose(); // tutup modal jika pakai modal
     } catch (error) {
       // console.error("Gagal:", error);
-      toast.error(msg);
+      toast.error(error.response?.data?.message || "Gagal mengubah password.");
     }
   };
 

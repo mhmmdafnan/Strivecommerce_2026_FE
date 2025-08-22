@@ -22,7 +22,6 @@ const TokoSayaPage = () => {
   const inputRef = useRef(null);
   const idUser = cookies.user_id;
   const [loading, setLoading] = useState(false);
-  
 
   const handleSelectAll = () => {
     const allChecked = produkList.every((item) => item.isChecked);
@@ -35,7 +34,6 @@ const TokoSayaPage = () => {
 
   const logout = () => {
     // Implement logout logic here
-    console.log("User logged out");
     deleteCookie("isLoggedIn");
     deleteCookie("token");
     deleteCookie("user_id");
@@ -123,12 +121,11 @@ const TokoSayaPage = () => {
           },
         }
       );
-      // console.log(response.data.data.path_file);
       setCookie("path_file", response.data.data.path_file);
       toast.success("Foto profil berhasil diupdate");
       // Refresh foto (misalnya set cookie baru atau reload user data)
     } catch (error) {
-      console.error("Upload gagal:", error);
+      // console.error("Upload gagal:", error);
       toast.error("Gagal mengunggah foto");
     }
   };
@@ -184,7 +181,6 @@ const TokoSayaPage = () => {
 
   // Fetch data when page changes
   useEffect(() => {
-    console.log(cookies);
     const fetchData = async () => {
       setLoading(true);
       try {
@@ -197,12 +193,11 @@ const TokoSayaPage = () => {
             Authorization: `Bearer ${cookies.token}`,
           },
         });
-        // console.log(produkResponse.data);
         if (produkResponse.data.success) {
           setProdukList(produkResponse.data.data);
         }
       } catch (error) {
-        console.log(error);
+        // console.log(error);
       } finally {
         setLoading(false);
       }

@@ -74,7 +74,7 @@ const EditAccountModal = ({ isOpen, onClose, onGantiPassword, idUser }) => {
         toast.error("Gagal memperbarui data: " + result.message);
       }
     } catch (error) {
-      console.error("Gagal mengirim data:", error);
+      // console.error("Gagal mengirim data:", error);
       toast.error("Gagal mengupdate data akun. Silakan coba lagi.");
     }
   };

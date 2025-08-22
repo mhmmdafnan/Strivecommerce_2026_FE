@@ -100,11 +100,9 @@ const KeranjangPage = () => {
 
   const addTotal = (tokoId, produkId) => {
     // Tambah jumlah produk dalam keranjang
-    console.log(tokoId, produkId);
 
     const newDbKeranjang = dbKeranjang.map((toko) => {
       if (toko.tokoId === tokoId) {
-        // console.log(toko);
         return {
           ...toko,
           produk: toko.produk.map((p) => {
@@ -145,7 +143,6 @@ const KeranjangPage = () => {
 
     const newDbKeranjang = dbKeranjang.map((toko) => {
       if (toko.tokoId === tokoId) {
-        // console.log(toko);
         return {
           ...toko,
           produk: toko.produk.map((p) => {
@@ -266,8 +263,6 @@ const KeranjangPage = () => {
     const fetchKeranjang = async () => {
       setLoading(true);
       try {
-        console.log(cookies.user_id);
-
         const response = await axios.get(`${apiUrl}/api/v1/cart`, {
           params: {
             userId: cookies.user_id,
@@ -276,20 +271,16 @@ const KeranjangPage = () => {
             Authorization: `Bearer ${cookies.token}`,
           },
         });
-        // console.log(response.data.data);
 
         if (response.data.success) {
-          // console.log(JSON.stringify(response.data.data));
-
           const grouped = groupByToko(response.data.data);
-          console.log(grouped);
 
           setDataKeranjang(grouped);
         } else {
         }
       } catch (error) {
         // setShowLoginError(true);
-        console.log(error);
+        // console.log(error);
       } finally {
         setLoading(false);
       }
@@ -298,10 +289,7 @@ const KeranjangPage = () => {
     fetchKeranjang();
   }, []);
 
-  useEffect(() => {
-    // console.log(JSON.stringify(dbKeranjang));
-    console.log(dbKeranjang);
-  }, [dbKeranjang]);
+  useEffect(() => {}, [dbKeranjang]);
 
   return (
     <div className="w-full  ">
@@ -455,7 +443,10 @@ const KeranjangPage = () => {
                                             : "opacity-40"
                                         }`}
                                         onClick={() =>
-                                          addTotal(toko.tokoId, produk.product.id)
+                                          addTotal(
+                                            toko.tokoId,
+                                            produk.product.id
+                                          )
                                         }
                                       >
                                         +
