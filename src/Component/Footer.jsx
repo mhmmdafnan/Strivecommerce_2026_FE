@@ -24,7 +24,7 @@ const footer = () => {
       />
     <footer className="bg-[#EE6D3F] text-white py-4">
       <div className="container mx-auto text-center flex justify-between items-center">
-        <p className="text-sm">&copy; 2025 Strive Marketplace - Set Up Inc.</p>
+        <p className="text-sm">&copy; 2025 Strive Commerce - Set Up Inc.</p>
         {cookies.isLoggedIn ? (
             <p className="bg-white text-[#EE6D3F] px-4 py-1 rounded-full text-sm cursor-pointer" onClick={() => navigate("/tokoSaya")}>
               Toko
