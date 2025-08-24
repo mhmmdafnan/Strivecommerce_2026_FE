@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import Loading from "../Component/Loading";
 import axios from "axios";
+import KategoriUMKM from "../Component/KategoriUMKM";
 // import cookies from "react-cookies";
 
 const HomePage = () => {
@@ -29,6 +30,7 @@ const HomePage = () => {
   const [pageNumber, setPageNumber] = useState(1);
   const [totalProduk, setTotalProduk] = useState();
   const dataPerPage = 12; // jumlah data per halaman
+  const [selectedKategori, setSelectedKategori] = useState(null);
 
   const CustomPrev = (props) => (
     <div
@@ -99,6 +101,12 @@ const HomePage = () => {
     setPageNumber(pageNumber - 1);
   };
 
+  const handleSelectKategori = (id) => {
+    console.log("Selected Kategori ID:", id);
+    setSelectedKategori(id);
+    // Lakukan sesuatu dengan ID kategori yang dipilih
+  };
+
   useEffect(() => {
     const fetchSliderProduk = async () => {
       try {
@@ -118,20 +126,36 @@ const HomePage = () => {
     };
 
     fetchSliderProduk();
-  }, []); 
+  }, []);
 
   useEffect(() => {
     const fetchMainProduk = async () => {
       setLoadingPage(true);
       try {
-        const jumlahRes = await axios.get(apiUrl + `/api/v1/product/count`);
-        const allProdukRes = await axios.get(`${apiUrl}/api/v1/product`, {
-          params: {
-            total: dataPerPage,
-            page: pageNumber,
-          },
-        });
-
+        let allProdukRes; // <-- deklarasi di luar
+        let jumlahRes;
+        if (selectedKategori == null) {
+          jumlahRes = await axios.get(apiUrl + `/api/v1/product/count`);
+          allProdukRes = await axios.get(`${apiUrl}/api/v1/product`, {
+            params: {
+              total: dataPerPage,
+              page: pageNumber,
+            },
+          });
+        } else {
+          jumlahRes = await axios.get(apiUrl + `/api/v1/product/count`, {
+            params: {
+              kategori: selectedKategori,
+            },
+          });
+          allProdukRes = await axios.get(`${apiUrl}/api/v1/product`, {
+            params: {
+              total: dataPerPage,
+              page: pageNumber,
+              kategori: selectedKategori,
+            },
+          });
+        }
         if (allProdukRes.data.success) {
           setTotalProduk(jumlahRes.data.total);
           setDataProduk(allProdukRes.data.data);
@@ -144,7 +168,7 @@ const HomePage = () => {
     };
 
     fetchMainProduk();
-  }, [pageNumber]);
+  }, [pageNumber, selectedKategori]);
 
   useEffect(() => {
     setLoadingSearch(true);
@@ -202,7 +226,6 @@ const HomePage = () => {
             <img src={logoHomePage} className="w-full h-full" alt="" />
           </div>
         </div>
-
         {/* Search */}
         <div className="relative w-full flex justify-center mt-10 mb-5">
           <input
@@ -255,55 +278,60 @@ const HomePage = () => {
             </div>
           )}
         </div>
-
         {/* Rekomendasi Produk  */}
-        <div className="relative mt-10">
-          <h2 className="text-xl mb-4">Rekomendasi Produk</h2>
+        {produkSlider.length > 5 && (
+          <div className="relative mt-10">
+            <h2 className="text-xl mb-4">Rekomendasi Produk</h2>
 
-          {loading ? (
-            <div className="col-span-6 flex justify-center items-center h-40">
-              <Loading w={10} h={10} />
-            </div>
-          ) : (
-            <>
-              <Slider
-                {...sliderSettings}
-                prevArrow={<CustomPrev />}
-                nextArrow={<CustomNext />}
-              >
-                {produkSlider.map((item) => (
-                  <div
-                    key={item.id}
-                    className="p-2 hover:scale-105 transition-all duration-300 cursor-pointer"
-                    onClick={() => navigate("/detailProduk/" + item.id)}
-                  >
-                    <img
-                      src={getFirstImagePath(item.path)}
-                      alt={item.nama}
-                      className="w-full h-40 object-contain rounded-xl border border-gray-600 "
-                    />
-                    <div className="mt-2 text-sm text-black font-light">
-                      {item.harga
-                        ? `Rp. ${item.harga.toLocaleString("id-ID")}`
-                        : "Harga tidak tersedia"}
+            {loading ? (
+              <div className="col-span-6 flex justify-center items-center h-40">
+                <Loading w={10} h={10} />
+              </div>
+            ) : (
+              <>
+                <Slider
+                  {...sliderSettings}
+                  prevArrow={<CustomPrev />}
+                  nextArrow={<CustomNext />}
+                >
+                  {produkSlider.map((item) => (
+                    <div
+                      key={item.id}
+                      className="p-2 hover:scale-105 transition-all duration-300 cursor-pointer"
+                      onClick={() => navigate("/detailProduk/" + item.id)}
+                    >
+                      <img
+                        src={getFirstImagePath(item.path)}
+                        alt={item.nama}
+                        className="w-full h-40 object-contain rounded-xl border border-gray-600 "
+                      />
+                      <div className="mt-2 text-sm text-black font-light">
+                        {item.harga
+                          ? `Rp. ${item.harga.toLocaleString("id-ID")}`
+                          : "Harga tidak tersedia"}
+                      </div>
+                      <div className="text-md font-medium text-black truncate">
+                        {item.nama}
+                      </div>
+                      <div className="flex items-center gap-x-1 text-sm font-extralight text-gray-500 truncate">
+                        <MdOutlineStoreMallDirectory />
+                        {item.user.nama_toko}
+                      </div>
                     </div>
-                    <div className="text-md font-medium text-black truncate">
-                      {item.nama}
-                    </div>
-                    <div className="flex items-center gap-x-1 text-sm font-extralight text-gray-500 truncate">
-                      <MdOutlineStoreMallDirectory />
-                      {item.user.nama_toko}
-                    </div>
-                  </div>
-                ))}
-              </Slider>
-            </>
-          )}
-        </div>
+                  ))}
+                </Slider>
+              </>
+            )}
+          </div>
+        )}
 
         {/* List Produk */}
         <div className="relative mt-10">
           <h2 className="text-xl mb-4">Daftar Produk</h2>
+
+          {/* Kategori Filter */}
+          <KategoriUMKM onSelectCategory={handleSelectKategori} />
+
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2 md:gap-4 lg:gap-6">
             {loadingPage ? (
               <div className="col-span-6 flex justify-center items-center h-80">
@@ -339,7 +367,7 @@ const HomePage = () => {
               </>
             )}
           </div>
-          {!loading && (
+          {!loadingPage && (
             <div className="flex justify-center items-center gap-x-2 mt-20">
               {pageNumber > 1 && (
                 <span
@@ -379,7 +407,7 @@ const HomePage = () => {
                   );
                 })}
 
-              {pageNumber < totalProduk && (
+              {pageNumber < Math.ceil(totalProduk / dataPerPage) && (
                 <span
                   className="bg-[#EE6D3F] cursor-pointer rounded-xl px-3 text-white"
                   onClick={handleNextClick}

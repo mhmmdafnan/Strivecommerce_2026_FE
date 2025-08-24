@@ -144,8 +144,8 @@ const TambahProduk = () => {
         form,
         {
           headers: {
-            "Content-Type": "multipart/form-data",
             token: `${cookies["token"]}`,
+            "Content-Type": "multipart/form-data",
           },
         }
       );
@@ -183,12 +183,15 @@ const TambahProduk = () => {
     //  Kirim ke backend
     try {
       const res = await axios.post(`${apiUrl}/api/v1/product`, form, {
-        headers: { "Content-Type": "multipart/form-data" },
+        headers: {
+          token: `${cookies["token"]}`,
+          "Content-Type": "multipart/form-data",
+        },
       });
       handleSuccessToast("Produk berhasil ditambahkan!");
       return res.data;
     } catch (err) {
-      // console.error("Gagal mengirim data:", err);
+      console.error("Gagal mengirim data:", err);
       toast.error("Gagal menambahkan produk");
       return null;
     }
@@ -321,15 +324,24 @@ const TambahProduk = () => {
                   {/* kategori */}
                   <div className="flex flex-col md:flex-row md:items-center">
                     <label className="md:w-1/3 text-gray-700">Kategori</label>
-                    <input
-                      type="text"
+                    <select
                       name="kategori"
                       value={formData.kategori}
                       onChange={handleChange}
-                      className="mt-1 md:mt-0 p-2 border border-gray-300 rounded-lg w-full md:w-2/3 focus:ring-1 focus:ring-[#ff8052] focus:border-[#ff8052] focus:outline-none"
-                      //   required
-                    />
+                      className="mt-1 md:mt-0 p-2 border border-gray-300 rounded-lg w-full md:w-2/3 focus:ring-1 focus:ring-[#ff8052] focus:border-[#ff8052] focus:outline-none bg-white"
+                    >
+                      <option value="">-- Pilih Kategori --</option>
+                      <option value="1">Kuliner</option>
+                      <option value="2">Fashion</option>
+                      <option value="3">Kriya / Kerajinan</option>
+                      <option value="4">Agribisnis</option>
+                      <option value="5">Jasa</option>
+                      <option value="6">Digital</option>
+                      <option value="7">Perdagangan</option>
+                      <option value="8">Lainnya</option>
+                    </select>
                   </div>
+
                   {/* Harga */}
                   <div className="flex flex-col md:flex-row md:items-center mb-4">
                     <label className="md:w-1/3 text-gray-700">Harga</label>

@@ -118,6 +118,7 @@ const TokoSayaPage = () => {
         {
           headers: {
             "Content-Type": "multipart/form-data",
+            token: `${cookies["token"]}`,
           },
         }
       );
@@ -150,7 +151,7 @@ const TokoSayaPage = () => {
                     `${apiUrl}/api/v1/product/${id}`,
                     {
                       headers: {
-                        Authorization: `Bearer ${cookies.token}`,
+                        token: `${cookies.token}`,
                       },
                     }
                   );
@@ -187,7 +188,7 @@ const TokoSayaPage = () => {
         const produkResponse = await axios.get(`${apiUrl}/api/v1/product`, {
           params: {
             idToko: cookies.user_id,
-            total: 20,
+            total: 25,
           },
           headers: {
             Authorization: `Bearer ${cookies.token}`,

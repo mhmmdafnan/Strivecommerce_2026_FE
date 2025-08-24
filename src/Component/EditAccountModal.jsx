@@ -54,7 +54,12 @@ const EditAccountModal = ({ isOpen, onClose, onGantiPassword, idUser }) => {
       // Kirim data ke backend (ganti URL sesuai kebutuhan)
       const response = await axios.patch(
         `${apiUrl}/api/v1/users/${idUser}`,
-        formData
+        formData,
+        {
+          headers: {
+            token: `${cookies["token"]}`,
+          },
+        }
       );
 
       const result = await response.data;
@@ -100,7 +105,9 @@ const EditAccountModal = ({ isOpen, onClose, onGantiPassword, idUser }) => {
         <div className="space-y-4 ">
           <div className="space-y-4 overflow-auto w-full max-h-[60vh] px-2">
             <div>
-              <label className="text-sm font-medium">Nama Toko<span className="text-red-500">*</span></label>
+              <label className="text-sm font-medium">
+                Nama Toko<span className="text-red-500">*</span>
+              </label>
               <input
                 type="text"
                 name="nama_toko"
@@ -110,7 +117,9 @@ const EditAccountModal = ({ isOpen, onClose, onGantiPassword, idUser }) => {
               />
             </div>
             <div>
-              <label className="text-sm font-medium">Nama Awal<span className="text-red-500">*</span></label>
+              <label className="text-sm font-medium">
+                Nama Awal<span className="text-red-500">*</span>
+              </label>
               <input
                 type="text"
                 name="firstName"
@@ -120,7 +129,9 @@ const EditAccountModal = ({ isOpen, onClose, onGantiPassword, idUser }) => {
               />
             </div>
             <div>
-              <label className="text-sm font-medium">Nama Akhir<span className="text-red-500">*</span></label>
+              <label className="text-sm font-medium">
+                Nama Akhir<span className="text-red-500">*</span>
+              </label>
               <input
                 type="text"
                 name="lastName"

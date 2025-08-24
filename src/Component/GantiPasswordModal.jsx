@@ -17,7 +17,6 @@ const GantiPasswordModal = ({ isOpen, onClose }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
 
     if (!passwordLama || !passwordBaru || !konfirmasiPassword) {
       toast.error("Semua kolom wajib diisi.");
@@ -35,6 +34,11 @@ const GantiPasswordModal = ({ isOpen, onClose }) => {
         {
           passwordLama: passwordLama,
           password: passwordBaru,
+        },
+        {
+          headers: {
+            token: `${cookies["token"]}`,
+          },
         }
       );
 

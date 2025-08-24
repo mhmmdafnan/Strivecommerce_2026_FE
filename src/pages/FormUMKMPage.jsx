@@ -53,6 +53,7 @@ const FormUMKMPage = () => {
         {
           headers: {
             "Content-Type": "multipart/form-data",
+            token: `${cookies["token"]}`,
           },
         }
       );
