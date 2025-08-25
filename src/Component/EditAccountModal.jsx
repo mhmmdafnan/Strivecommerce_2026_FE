@@ -113,7 +113,7 @@ const EditAccountModal = ({ isOpen, onClose, onGantiPassword, idUser }) => {
                 name="nama_toko"
                 value={formData.nama_toko}
                 onChange={handleChange}
-                className="w-full mt-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#EE6D3F] text-gray-600"
+                className="w-full mt-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#990808] text-gray-600"
               />
             </div>
             <div>
@@ -125,7 +125,7 @@ const EditAccountModal = ({ isOpen, onClose, onGantiPassword, idUser }) => {
                 name="firstName"
                 value={formData.firstName}
                 onChange={handleChange}
-                className="w-full mt-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#EE6D3F] text-gray-600"
+                className="w-full mt-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#990808] text-gray-600"
               />
             </div>
             <div>
@@ -137,7 +137,7 @@ const EditAccountModal = ({ isOpen, onClose, onGantiPassword, idUser }) => {
                 name="lastName"
                 value={formData.lastName}
                 onChange={handleChange}
-                className="w-full mt-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#EE6D3F] text-gray-600"
+                className="w-full mt-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#990808] text-gray-600"
               />
             </div>
             <div>
@@ -148,7 +148,7 @@ const EditAccountModal = ({ isOpen, onClose, onGantiPassword, idUser }) => {
                 name="jenisKelamin"
                 onChange={handleChange}
                 value={formData.gender} //
-                className="w-full mt-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#EE6D3F] text-gray-600"
+                className="w-full mt-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#990808] text-gray-600"
               >
                 <option value="" disabled>
                   -- Pilih Jenis Kelamin --
@@ -167,7 +167,7 @@ const EditAccountModal = ({ isOpen, onClose, onGantiPassword, idUser }) => {
                 name="tanggalLahir"
                 value={formatDateForInput(formData.tanggalLahir)}
                 onChange={handleChange}
-                className="w-full mt-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#EE6D3F] text-gray-600"
+                className="w-full mt-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#990808] text-gray-600"
               />
             </div>
 
@@ -193,7 +193,7 @@ const EditAccountModal = ({ isOpen, onClose, onGantiPassword, idUser }) => {
                 required
                 // value={formData.telepon == "undefined" ? "-" : formData.telepon}
                 onChange={handleChange}
-                className="w-full mt-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#EE6D3F] text-gray-600"
+                className="w-full mt-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#990808] text-gray-600"
               />
             </div>
           </div>
@@ -201,7 +201,7 @@ const EditAccountModal = ({ isOpen, onClose, onGantiPassword, idUser }) => {
           <div className="flex justify-center items-center">
             <div
               onClick={handleSubmit}
-              className="w-fit px-5 bg-[#EE6D3F] hover:bg-[#d25f35] text-white py-2 rounded-xl font-semibold cursor-pointer"
+              className="w-fit px-5 bg-[#990808] hover:bg-[#bd1d1d] text-white py-2 rounded-xl font-semibold cursor-pointer"
             >
               <MdOutlineEdit className="inline-block mr-1" />
               Submit

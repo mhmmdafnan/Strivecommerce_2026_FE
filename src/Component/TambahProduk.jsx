@@ -282,7 +282,7 @@ const TambahProduk = () => {
 
   return (
     <>
-      <div className="max-w-7xl mx-auto px-5 md:px-20 py-5 mb-20 md:mt-0">
+      <div className="bg-[#f4f2ef] max-w-7xl mx-auto px-5 md:px-20 py-5 pb-20 md:mt-0">
         {/* Navigation */}
         <div className="flex gap-x-1 p-1 my-2">
           <div
@@ -295,7 +295,7 @@ const TambahProduk = () => {
             {idProduk ? "Edit Produk" : "Tambah Produk"}
           </div>
         </div>
-        <div className="bg-[#E9E9E9] shadow-lg border-[1px]  rounded-xl px-10 py-6 mt-4 max-w-5xl mx-auto">
+        <div className="bg-white shadow-lg border-[1px]  rounded-xl px-10 py-6 mt-4 max-w-5xl mx-auto">
           <div className="">
             <h1 className="text-xl font-bold mb-4">
               {idProduk ? "Edit Produk" : "Tambah Produk"}
@@ -316,7 +316,7 @@ const TambahProduk = () => {
                       name="nama"
                       value={formData.nama}
                       onChange={handleChange}
-                      className="mt-1 md:mt-0 p-2 border border-gray-300 rounded-lg w-full md:w-2/3 focus:ring-1 focus:ring-[#ff8052] focus:border-[#ff8052] focus:outline-none"
+                      className="mt-1 md:mt-0 p-2 border border-gray-300 rounded-lg w-full md:w-2/3 focus:ring-1 focus:ring-[#990808] focus:border-[#990808] focus:outline-none"
                       //   required
                     />
                   </div>
@@ -328,7 +328,7 @@ const TambahProduk = () => {
                       name="kategori"
                       value={formData.kategori}
                       onChange={handleChange}
-                      className="mt-1 md:mt-0 p-2 border border-gray-300 rounded-lg w-full md:w-2/3 focus:ring-1 focus:ring-[#ff8052] focus:border-[#ff8052] focus:outline-none bg-white"
+                      className="mt-1 md:mt-0 p-2 border border-gray-300 rounded-lg w-full md:w-2/3 focus:ring-1 focus:ring-[#990808] focus:border-[#990808] focus:outline-none bg-white"
                     >
                       <option value="">-- Pilih Kategori --</option>
                       <option value="1">Kuliner</option>
@@ -354,7 +354,7 @@ const TambahProduk = () => {
                           harga: toNumberOnly(e.target.value),
                         })
                       }
-                      className="mt-1 md:mt-0 p-2 border border-gray-300 rounded-lg w-full md:w-2/3 focus:ring-1 focus:ring-[#ff8052] focus:border-[#ff8052] focus:outline-none"
+                      className="mt-1 md:mt-0 p-2 border border-gray-300 rounded-lg w-full md:w-2/3 focus:ring-1 focus:ring-[#990808] focus:border-[#990808] focus:outline-none"
                     />
                   </div>
 
@@ -365,7 +365,7 @@ const TambahProduk = () => {
                       name="deskripsi"
                       value={formData.deskripsi}
                       onChange={handleChange}
-                      className="mt-1 md:mt-0 p-2 border rounded-lg w-full md:w-2/3 h-32 focus:ring-1 focus:ring-[#ff8052] focus:border-[#ff8052] focus:outline-none"
+                      className="mt-1 md:mt-0 p-2 border rounded-lg w-full md:w-2/3 h-32 focus:ring-1 focus:ring-[#990808] focus:border-[#990808] focus:outline-none"
                       //   required
                     ></textarea>
                   </div>
@@ -381,7 +381,7 @@ const TambahProduk = () => {
                       accept="image/*"
                       onChange={handleFileChange}
                       multiple
-                      className="mt-1 md:mt-0 p-2 border bg-white border-gray-300 rounded-lg w-full md:w-2/3 focus:ring-1 focus:ring-[#ff8052] focus:border-[#ff8052] focus:outline-none"
+                      className="mt-1 md:mt-0 p-2 border bg-white border-gray-300 rounded-lg w-full md:w-2/3 focus:ring-1 focus:ring-[#990808] focus:border-[#990808] focus:outline-none"
                       //   required={!idProduk}
                     />
                   </div>
@@ -406,7 +406,7 @@ const TambahProduk = () => {
                   <div className="flex justify-center mt-6">
                     <button
                       type="submit"
-                      className="bg-[#EE6D3F] text-white px-6 py-2 rounded-lg hover:bg-[#d25f35] transition"
+                      className="bg-[#990808] text-white px-6 py-2 rounded-lg hover:bg-[#bd1d1d] transition"
                     >
                       Submit
                     </button>
@@ -416,6 +416,11 @@ const TambahProduk = () => {
             )}
           </div>
         </div>
+      </div>
+      <div className="container py-5 mx-auto text-center flex justify-center items-center">
+        <p className="text-sm text-[#990808]">
+          &copy; 2025 Strive Marketplace - Set Up Inc.
+        </p>
       </div>
       {/* Sukses Modal  */}
       {showSuccessModal && (

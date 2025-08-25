@@ -8,7 +8,7 @@ import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { FaShareNodes } from "react-icons/fa6";
 import Footer from "../Component/Footer";
 import ModalShare from "../Component/ShareModal";
-import fotoToko from "../assets/img/market foto.png";
+import logoStrive from "../assets/img/logo.png";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { useCookies } from "react-cookie";
@@ -196,23 +196,23 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
 
   return (
     <>
-    <div className="dark:bg-[#393E41] transition-all duration-500 min-h-[calc(100vh-64px)]">
+    <div className="bg-[#f4f2ef] dark:bg-[#393E41] transition-all duration-500 min-h-[calc(100vh-64px)]">
       <LoginModal
         isOpen={isLoginModal}
         onClose={() => setIsLoginModal(false)}
         onSuccess={(data) => onSuccessLogin(data)}
       />
 
-      <div className="max-w-7xl mx-auto px-5 md:px-20 py-5 mb-20 md:mt-0">
+      <div className="max-w-7xl mx-auto px-5 md:px-20 py-5 pb-20 md:mt-0">
         {/* Navigation */}
         <div className="flex gap-x-1 p-1 my-2">
-          <div className="text-sm text-gray-400 hover:text-gray-800 cursor-pointer">
+          <div className="text-sm text-gray-400 hover:text-[#990808] cursor-pointer">
             Produk /
           </div>
-          <div className="text-sm text-gray-400 hover:text-gray-800 cursor-pointer">
+          <div className="text-sm text-gray-400 hover:text-[#990808] cursor-pointer">
             Nama Toko /
           </div>
-          <div className="text-sm text-[#EE6D3F] dark:text-white hover:text-[#bc5b38] cursor-pointer">
+          <div className="text-sm text-[#990808] dark:text-white hover:text-[#bc5b38] cursor-pointer">
             {!loadingProduk && <>{dataProduk ? dataProduk.nama : "-"}</>}
           </div>
         </div>
@@ -228,7 +228,7 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
                 {/* Gambar Utama */}
                 <div className="basis-1/2 max-w-4xl">
                   <div
-                    className="flex rounded-xl border-[1px] border-gray-500 max-h-[400px] h-[350px] items-center justify-center overflow-hidden"
+                    className="flex rounded-xl border-2 border-black max-h-[400px] h-[350px] items-center justify-center overflow-hidden"
                     onMouseMove={handleMouseMove}
                     onMouseEnter={() => setZoom(true)}
                     onMouseLeave={() => setZoom(false)}
@@ -264,14 +264,14 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
                             setSelectedIndex(index);
                           }}
                           className={`h-20 w-20 rounded-xl cursor-pointer transition-all duration-200 
-          border-[1px] hover:border-[#EE6D3F] ${
+          border-2 hover:border-[#990808] ${
             selectedIndex === index
-              ? "border-[#EE6D3F] ring-2 ring-[#EE6D3F]"
-              : "border-gray-500"
+              ? "border-[#990808] ring-2 ring-[#990808]"
+              : "border-black"
           }`}
                         >
                           <img
-                            src={`${apiUrl}${foto[index]}`}
+                            src={`${apiUrl}${foto}`}
                             className="rounded-xl h-full w-full object-cover"
                             alt={`foto-${index}`}
                           />
@@ -353,10 +353,10 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
                       setSelectedIndex(index);
                     }}
                     className={`h-20 w-20 rounded-xl cursor-pointer transition-all duration-200 
-              border-[1px] hover:border-[#EE6D3F] ${
+               hover:border-[#990808] ${
                 selectedIndex === index
-                  ? "border-[#EE6D3F] ring-2 ring-[#EE6D3F]"
-                  : "border-gray-500"
+                  ? "border-[#990808] ring-2 ring-[#990808]"
+                  : "border-black border-2"
               }`}
                   >
                     <img
@@ -377,7 +377,7 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
                   <div className="flex gap-x-2 items-center">
                     <div
                       onClick={() => jumlahProdukHandler("kurang")}
-                      className="bg-[#E1DDDD] dark:bg-[#222831] dark:hover:dark:bg-[#4b5563] px-2 rounded-md cursor-pointer hover:bg-[#cac8c8]"
+                      className="text-white bg-[#990808] dark:bg-[#222831] dark:hover:dark:bg-[#4b5563] px-2 rounded-md cursor-pointer hover:bg-[#bd1d1d]"
                     >
                       -
                     </div>
@@ -386,7 +386,7 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
                     </div>
                     <div
                       onClick={() => jumlahProdukHandler("tambahkan")}
-                      className="bg-[#E1DDDD] dark:bg-[#222831] dark:hover:dark:bg-[#4b5563] px-2 rounded-md cursor-pointer hover:bg-[#cac8c8]"
+                      className="text-white bg-[#990808] dark:bg-[#222831] dark:hover:dark:bg-[#4b5563] px-2 rounded-md cursor-pointer hover:bg-[#bd1d1d]"
                     >
                       +
                     </div>
@@ -395,13 +395,13 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
                 <div className="flex gap-x-2 mt-4">
                   <button
                     onClick={() => setOpenModal(true)}
-                    className="p-2 border-black dark:bg-[#222831] dark:border-[#222831] border-2 dark:hover:dark:bg-[#4b5563] rounded-xl hover:text-[#EE6D3F] dark:hover:text-white dark:hover:border-[#4b5563] hover:border-[#EE6D3F] cursor-pointer transition-all duration-200"
+                    className="p-2 border-black dark:bg-[#222831] dark:border-[#222831] border-2 dark:hover:dark:bg-[#4b5563] rounded-xl hover:text-[#990808] dark:hover:text-white dark:hover:border-[#4b5563] hover:border-[#990808] cursor-pointer transition-all duration-200"
                   >
                     <FaShareNodes className="hover:scale-125 transition-transform duration-500" />
                   </button>
 
                   <div
-                    className="flex bg-[#EE6D3F] dark:bg-[#222831] dark:hover:dark:bg-[#4b5563] hover:bg-[#cf582d] font-semibold text-white justify-center items-center w-full rounded-lg cursor-pointer"
+                    className="flex bg-[#990808] dark:bg-[#222831] dark:hover:dark:bg-[#4b5563] hover:bg-[#bd1d1d] font-semibold text-white justify-center items-center w-full rounded-lg cursor-pointer"
                     onClick={() => onBeliClick(dataProduk.user.telp)}
                   >
                     Beli
@@ -430,12 +430,12 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
               <div className="flex gap-x-2 mt-4">
                 <div
                   onClick={() => setOpenModal(true)}
-                  className="p-2 border-black border-2 dark:bg-[#222831] dark:border-[#222831] rounded-xl hover:text-[#EE6D3F] hover:border-[#EE6D3F] cursor-pointer transition-all duration-200"
+                  className="p-2 border-black border-2 dark:bg-[#222831] dark:border-[#222831] rounded-xl hover:text-[#990808] hover:border-[#990808] cursor-pointer transition-all duration-200"
                 >
                   <FaShareNodes className="hover:scale-125 transition-transform duration-300" />
                 </div>
                 <div
-                  className="flex bg-[#EE6D3F] dark:bg-[#222831] font-semibold text-white justify-center items-center w-full rounded-lg cursor-pointer"
+                  className="flex bg-[#990808] dark:bg-[#222831] font-semibold text-white justify-center items-center w-full rounded-lg cursor-pointer"
                   onClick={() => onBeliClick(dataProduk.user.telp)}
                 >
                   Beli
@@ -445,7 +445,7 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
           )}
         </div>
         {/* Bagian Toko  */}
-        <div className="flex justify-between dark:bg-[#222831] items-center px-4 py-2 border-[1px] border-[#ADB0B6] dark:border-0 shadow-xl rounded-xl">
+        <div className="flex justify-between dark:bg-[#222831] items-center px-4 py-2 border-2 border-[#990808] dark:border-0 shadow-xl rounded-xl">
           {loadingProduk ? (
             <>
               <div className="col-span-6 flex justify-center items-center h-full">
@@ -455,9 +455,9 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
           ) : (
             <>
               <div className="flex items-center gap-x-5 dark:text-white">
-                <div className="h-16 w-16 bg-slate-300 rounded-full ">
+                <div className="h-16 w-16 rounded-full ">
                   <img
-                    src={fotoToko}
+                    src={logoStrive}
                     className="object-contain h-full w-full p-2"
                     alt=""
                   />
@@ -466,10 +466,10 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
                   onClick={() => navigate("/toko/" + dataProduk.user.id)}
                   className="cursor-pointer"
                 >
-                  <div className="text-xl font-semibold hover:text-[#EE6D3F]">
+                  <div className="text-xl font-semibold hover:text-[#990808]">
                     {dataProduk ? dataProduk.user.nama_toko : ""}
                   </div>
-                  <div className="text-xs ">XX barang terjual</div>
+                  {/* <div className="text-xs ">XX barang terjual</div> */}
                 </div>
               </div>
 
@@ -482,7 +482,7 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
                     "_blank"
                   );
                 }}
-                className="text-xl p-1 hover:scale-125  cursor-pointer"
+                className="text-xl p-1 hover:scale-125 duration-200 bg-[#990808] rounded-full p-2 text-[#f4f2ef] cursor-pointer"
               >
                 <IoChatboxEllipsesOutline className="dark:text-white" />
               </div>
@@ -502,7 +502,7 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
               {produkList.map((item) => (
                 <div
                   key={item.id}
-                  className="p-2 hover:scale-105 transition-all duration-300 cursor-pointer"
+                  className="p-2 hover:scale-105 hover:shadow-xl rounded-lg transition-all duration-300 cursor-pointer"
                   onClick={() => navigate("/detailProduk/" + item.id)}
                 >
                   <img
@@ -531,7 +531,7 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
               {produkList.map((item) => (
                 <div
                   key={item.id}
-                  className="p-2 hover:scale-105 transition-all duration-300 cursor-pointer"
+                  className="p-2 hover:scale-105 hover:shadow-xl rounded-lg transition-all duration-300 cursor-pointer"
                   onClick={() => navigate("/detailProduk/" + item.id)}
                 >
                   <img

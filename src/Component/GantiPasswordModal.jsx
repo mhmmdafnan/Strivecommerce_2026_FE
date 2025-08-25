@@ -74,7 +74,7 @@ const GantiPasswordModal = ({ isOpen, onClose }) => {
               type={showPasswordLama ? "text" : "password"}
               value={passwordLama}
               onChange={(e) => setPasswordLama(e.target.value)}
-              className="w-full mt-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#EE6D3F] text-gray-600"
+              className="w-full mt-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#990808] text-gray-600"
             />
             <div
               className="absolute top-12 right-3 transform -translate-y-1/2 cursor-pointer text-gray-500"
@@ -91,7 +91,7 @@ const GantiPasswordModal = ({ isOpen, onClose }) => {
               type={showPasswordBaru ? "text" : "password"}
               value={passwordBaru}
               onChange={(e) => setPasswordBaru(e.target.value)}
-              className="w-full mt-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#EE6D3F] text-gray-600"
+              className="w-full mt-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#990808] text-gray-600"
             />
             <div
               className="absolute top-12 right-3 transform -translate-y-1/2 cursor-pointer text-gray-500"
@@ -108,7 +108,7 @@ const GantiPasswordModal = ({ isOpen, onClose }) => {
               type={showPasswordBaruConf ? "text" : "password"}
               value={konfirmasiPassword}
               onChange={(e) => setKonfirmasiPassword(e.target.value)}
-              className="w-full mt-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#EE6D3F] text-gray-600"
+              className="w-full mt-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#990808] text-gray-600"
             />
             <div
               className="absolute top-12 right-3 transform -translate-y-1/2 cursor-pointer text-gray-500"
@@ -121,7 +121,7 @@ const GantiPasswordModal = ({ isOpen, onClose }) => {
           <div className="flex justify-center items-center">
             <div
               onClick={handleSubmit}
-              className="w-fit px-5 mt-6 bg-[#EE6D3F] hover:bg-[#d25f35] text-white py-2 rounded-xl font-semibold cursor-pointer"
+              className="w-fit px-5 mt-6 bg-[#990808] hover:bg-[#bd1d1d] text-white py-2 rounded-xl font-semibold cursor-pointer"
             >
               <MdOutlineEdit className="inline-block mr-1" />
               Submit

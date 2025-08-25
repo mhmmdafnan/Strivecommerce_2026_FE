@@ -8,6 +8,7 @@ import { FaShareNodes } from "react-icons/fa6";
 import Footer from "../Component/Footer";
 import produk3 from "../assets/img/produk/kursi 3.jpg";
 import logoHomePage from "../assets/img/logo_homepage.png";
+import logoStrive from "../assets/img/logo.png";
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import Loading from "../Component/Loading";
@@ -209,15 +210,18 @@ const HomePage = () => {
   return (
     <>
       {/* container */}
-      <div className="max-w-7xl  mx-auto font-bold dark:bg-[#dataPerPage1212] bg-white px-5 md:px-20 py-5">
+      <div className="max-w-7xl  mx-auto font-bold dark:bg-[#dataPerPage1212] bg-[#F4F2EF] px-5 md:px-20 py-5">
         {/* Produk Utama */}
-        <div className="flex md:flex-col-2 items-center  justify-center md:justify-between h-60 bg-gradient-to-r from-[#f76b1c] to-[#fcae1e] rounded-xl shadow-lg py-5 px-4 md:pl-10">
+        <div className="flex md:flex-col-2 items-center  justify-center md:justify-between h-60 bg-gradient-to-l from-[#ed4c4c] to-[#990808] rounded-xl shadow-lg py-5 px-4 md:pl-10">
           <div>
             <div className="font-light text-white">Selamat Datang di</div>
             <div className="font-extrabold mt-4 mb-2 text-3xl md:text-4xl text-white">
               STRIVE MARKET
             </div>
-            <div className="text-white">
+            {/* <div>
+              <img src={logoStrive} className="w-48" alt="" />
+            </div> */}
+            <div className="text-white text-sm mt-4">
               E-comerce UMKM pertama se-
               <span className="font-semibold">Sulawesi Barat</span>
             </div>
@@ -231,7 +235,7 @@ const HomePage = () => {
           <input
             type="text"
             placeholder="Temukan produk..."
-            className="w-full p-2 outline-none font-normal border-2 border-gray-300 rounded-lg max-w-md active:border-[#EE6D3F] focus:border-[#EE6D3F] transition-all duration-500 md:focus:scale-105"
+            className="w-full p-2 outline-none font-normal border-2 border-gray-300 rounded-lg max-w-md active:border-[#990808] focus:border-[#990808] transition-all duration-500 md:focus:scale-105"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             onFocus={() => setOnFocusSearch(true)}
@@ -241,7 +245,7 @@ const HomePage = () => {
           />
 
           {searchQuery.trim() !== "" && onFocusSearch && (
-            <div className="absolute top-full left-1/2 font-normal -translate-x-1/2 w-full max-w-md bg-gray-200 rounded-lg z-50 mt-2 shadow-md">
+            <div className="absolute top-full left-1/2 font-normal -translate-x-1/2 w-full max-w-md bg-[#F4F2EF] rounded-lg z-50 mt-2 shadow-md">
               {loadingSearch ? (
                 <p className="px-4 py-2">Loading...</p>
               ) : hasilSearch.length > 0 ? (
@@ -297,13 +301,13 @@ const HomePage = () => {
                   {produkSlider.map((item) => (
                     <div
                       key={item.id}
-                      className="p-2 hover:scale-105 transition-all duration-300 cursor-pointer"
+                      className="p-2 hover:scale-105 hover:shadow-lg transition-all duration-300 cursor-pointer"
                       onClick={() => navigate("/detailProduk/" + item.id)}
                     >
                       <img
                         src={getFirstImagePath(item.path)}
                         alt={item.nama}
-                        className="w-full h-40 object-contain rounded-xl border border-gray-600 "
+                        className="w-full h-40 object-contain rounded-3xl border-2  border-gray-200 "
                       />
                       <div className="mt-2 text-sm text-black font-light">
                         {item.harga
@@ -343,7 +347,7 @@ const HomePage = () => {
                   <div
                     onClick={() => navigate("/detailProduk/" + produk.id)}
                     key={produk.id}
-                    className="h-34 cursor-pointer hover:shadow-md rounded-xl p-2"
+                    className="h-34 cursor-pointer hover:shadow-xl rounded-xl p-2"
                   >
                     <img
                       src={getFirstImagePath(produk.path)}
@@ -371,7 +375,7 @@ const HomePage = () => {
             <div className="flex justify-center items-center gap-x-2 mt-20">
               {pageNumber > 1 && (
                 <span
-                  className="bg-[#EE6D3F] cursor-pointer rounded-xl px-3 text-white"
+                  className="bg-[#990808] cursor-pointer rounded-xl px-3 text-white"
                   onClick={handlePrevClick}
                 >
                   Prev
@@ -397,7 +401,7 @@ const HomePage = () => {
                       key={page}
                       className={`px-3 py-1 rounded-xl cursor-pointer ${
                         isCurrent
-                          ? "bg-[#ee6d3f] text-white font-bold"
+                          ? "bg-[#990808] text-white font-bold"
                           : "bg-gray-200 text-black hover:bg-gray-300"
                       }`}
                       onClick={() => setPageNumber(page)}
@@ -409,7 +413,7 @@ const HomePage = () => {
 
               {pageNumber < Math.ceil(totalProduk / dataPerPage) && (
                 <span
-                  className="bg-[#EE6D3F] cursor-pointer rounded-xl px-3 text-white"
+                  className="bg-[#990808] cursor-pointer rounded-xl px-3 text-white"
                   onClick={handleNextClick}
                 >
                   Next

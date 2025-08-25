@@ -115,7 +115,7 @@ const LoginModal = ({ isOpen, onClose, onSuccess }) => {
         <form onSubmit={sendData} className="space-y-3 ">
           <input
             ref={firstInputRef}
-            className="bg-[#d8d8d8] text-xs px-3 py-2 mb-3 block rounded-lg w-full focus:ring-1 focus:ring-[#ff8052] focus:outline-none"
+            className="bg-[#d8d8d8] text-xs px-3 py-2 mb-3 block rounded-lg w-full focus:ring-1 focus:ring-[#990808] focus:outline-none"
             name="email"
             required
             type="text"
@@ -128,7 +128,7 @@ const LoginModal = ({ isOpen, onClose, onSuccess }) => {
             <input
               className={`bg-[#d8d8d8] text-xs ${
                 showLoginError ? "mb-0" : "mb-8"
-              } px-3 py-2 block rounded-lg w-full focus:ring-1 focus:ring-[#ff8052] focus:outline-none`}
+              } px-3 py-2 block rounded-lg w-full focus:ring-1 focus:ring-[#990808] focus:outline-none`}
               name="pass"
               required
               type={showPassword ? "text" : "password"}
@@ -153,7 +153,7 @@ const LoginModal = ({ isOpen, onClose, onSuccess }) => {
           )}
 
           <button
-            className="w-full bg-[#EE6D3F] hover:bg-[#ff8052] h-10 transition duration-150 px-3 py-2 rounded-lg text-white text-xs md:text-sm"
+            className="w-full bg-[#990808] hover:bg-[#fc2222] h-10 transition duration-150 px-3 py-2 rounded-lg text-white text-xs md:text-sm"
             type="submit"
             // onClick={sendData}
           >

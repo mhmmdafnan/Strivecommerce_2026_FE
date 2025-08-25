@@ -76,8 +76,8 @@ export default function KategoriUMKM({ onSelectCategory }) {
               className={`flex-shrink-0 w-40 flex flex-col items-center p-4 bg-white rounded-2xl shadow-md cursor-pointer transition transform
                 ${
                   isActive
-                    ? "ring-2 ring-[#ff8052] scale-105"
-                    : "hover:scale-105 hover:shadow-lg"
+                    ? "bg-gradient-to-l from-[#ed4c4c] to-[#990808] text-[#f4f2ef] scale-105"
+                    : "hover:scale-105 hover:shadow-lg text-gray-800"
                 }
               `}
             >
@@ -86,7 +86,7 @@ export default function KategoriUMKM({ onSelectCategory }) {
               >
                 <Icon size={32} />
               </div>
-              <p className="font-medium text-gray-700">{cat.name}</p>
+              <p className="font-medium ">{cat.name}</p>
             </div>
           );
         })}
