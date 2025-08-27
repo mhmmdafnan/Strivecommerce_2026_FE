@@ -23,7 +23,7 @@ const footer = () => {
         }}
         onClose={() => setLoginModalOpen(false)}
       />
-      <footer className=" bg-white py-4">
+      <footer className="py-4 bg-[#F4F2EF]">
         <div className="max-w-6xl mx-auto px-6 py-10 grid grid-cols-1 md:grid-cols-3 gap-x-16">
           {/* Kolom 1 - Info Website */}
           <div>

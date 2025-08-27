@@ -94,7 +94,7 @@ export default function Navbar({ isLoginModal, setIsLoginModal }) {
             <Link className="font-bold text-gray-500" to="/">
               Produk
             </Link>
-            <Link className="font-bold text-gray-500" to="">
+            <Link className="font-bold text-gray-500" to="/tentang">
               Tentang
             </Link>
           </div>

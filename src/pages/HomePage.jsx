@@ -210,7 +210,7 @@ const HomePage = () => {
   return (
     <>
       {/* container */}
-      <div className="max-w-7xl  mx-auto font-bold dark:bg-[#dataPerPage1212] bg-[#F4F2EF] px-5 md:px-20 py-5">
+      <div className="max-w-7xl  mx-auto font-bold dark:bg-[#dataPerPage1212]  px-5 md:px-20 py-5">
         {/* Produk Utama */}
         <div className="flex md:flex-col-2 items-center  justify-center md:justify-between h-60 bg-gradient-to-l from-[#ed4c4c] to-[#990808] rounded-xl shadow-lg py-5 px-4 md:pl-10">
           <div>
@@ -332,7 +332,7 @@ const HomePage = () => {
         {/* List Produk */}
         <div className="relative mt-10">
           <KategoriUMKM onSelectCategory={handleSelectKategori} />
-          <h2 className="text-xl mb-4">Daftar Produk</h2>
+          <h2 className="text-xl mt-4 mb-2">Daftar Produk</h2>
 
           {/* Kategori Filter */}
 

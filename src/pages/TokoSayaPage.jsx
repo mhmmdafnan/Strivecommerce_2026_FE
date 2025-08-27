@@ -208,7 +208,7 @@ const TokoSayaPage = () => {
 
   return (
     <>
-      <div className="bg-[#f4f2ef] max-w-7xl mx-auto px-5 md:px-10 py-5 pb-20 md:mt-0">
+      <div className="max-w-7xl mx-auto px-5 md:px-10 py-5 pb-20 md:mt-0">
         <h1 className="text-sm text-[#990808] cursor-pointer">
           {cookies.nama_toko}
         </h1>
@@ -417,11 +417,6 @@ const TokoSayaPage = () => {
           </div>
         </div>
       </div>
-      <div className="container py-5 mx-auto text-center flex justify-center items-center">
-        <p className="text-sm text-[#990808]">
-          &copy; 2025 Strive Marketplace - Set Up Inc.
-        </p>
-      </div>
 
       {/* Modal  */}
       <EditAccountModal
@@ -436,6 +431,12 @@ const TokoSayaPage = () => {
         isOpen={isGantiPasswordOpen}
         onClose={() => setGantiPasswordOpen(false)}
       />
+
+      <div className="bg-[#F4F2EF] py-5 mx-auto text-center flex justify-center items-center">
+        <p className="text-sm text-[#990808]">
+          &copy; 2025 Strive Marketplace - Set Up Inc.
+        </p>
+      </div>
     </>
   );
 };
