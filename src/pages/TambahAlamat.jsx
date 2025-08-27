@@ -31,7 +31,6 @@ const AlamatPage = () => {
     setAlamatDefault(event.target.checked);
   };
 
-
   const handleChangeDesa = (event) => {
     setSelectDesa(event.target.value);
   };
@@ -47,7 +46,6 @@ const AlamatPage = () => {
   };
 
   const onAlamatSubmit = async () => {
-    console.log(selectProv, selectKab, selectKec, selectDesa, kodePos, detail);
 
     if (!selectProv || !selectKab || !selectKec || !selectDesa || !kodePos) {
       alert("Silahkan Lengkapi isi Form");
@@ -64,18 +62,17 @@ const AlamatPage = () => {
         kodeKec: selectKec,
         kodeDesa: selectDesa,
         detail: detail,
-        nama : nama,
-        notelp : noTelp,
-        bangunan : namaBangunan,
+        nama: nama,
+        notelp: noTelp,
+        bangunan: namaBangunan,
         // catatan,
         kode_pos: kodePos,
         // is_toko,
         is_default: def,
       });
-      console.log(response);
 
       if (response.data.success) {
-        navigate("/alamat")
+        navigate("/alamat");
       } else {
         // setShowLoginError(true);
       }
@@ -91,7 +88,6 @@ const AlamatPage = () => {
       setLoadingProv(true);
       try {
         const response = await axios.get(`${apiUrl}/api/v1/prov`, {});
-        console.log(response.data.data);
 
         if (response.data.success) {
           setProv(response.data.data);
@@ -100,7 +96,7 @@ const AlamatPage = () => {
         }
       } catch (error) {
         // setShowLoginError(true);
-        console.log(error);
+        // console.log(error);
       } finally {
         setLoadingProv(false);
       }
@@ -118,7 +114,6 @@ const AlamatPage = () => {
           `${apiUrl}/api/v1/kab/` + selectProv,
           {}
         );
-        console.log(response.data.data);
 
         if (response.data.success) {
           setKab(response.data.data);
@@ -127,7 +122,7 @@ const AlamatPage = () => {
         }
       } catch (error) {
         // setShowLoginError(true);
-        console.log(error);
+        // console.log(error);
       } finally {
         setLoadingKab(false);
       }
@@ -145,7 +140,6 @@ const AlamatPage = () => {
           `${apiUrl}/api/v1/kec/` + selectProv + `/` + selectKab,
           {}
         );
-        console.log(response.data.data);
 
         if (response.data.success) {
           setKec(response.data.data);
@@ -154,7 +148,7 @@ const AlamatPage = () => {
         }
       } catch (error) {
         // setShowLoginError(true);
-        console.log(error);
+        // console.log(error);
       } finally {
         setLoadingKec(false);
       }
@@ -177,7 +171,6 @@ const AlamatPage = () => {
             selectKec,
           {}
         );
-        console.log(response.data.data);
 
         if (response.data.success) {
           setDesa(response.data.data);
@@ -186,7 +179,7 @@ const AlamatPage = () => {
         }
       } catch (error) {
         // setShowLoginError(true);
-        console.log(error);
+        // console.log(error);
       } finally {
         setLoadingDesa(false);
       }

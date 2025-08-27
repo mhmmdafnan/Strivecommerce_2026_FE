@@ -37,16 +37,11 @@ export default function Navbar({ isLoginModal, setIsLoginModal }) {
   };
 
   const onSuccessLogin = (data) => {
-    console.log(data);
-    
-
     if (data.data.role == 10) {
       navigate("/adminPengajuan");
       setIsLoginModal(false);
     }
     setIsLoginModal(false);
-
-    // console.log(cookies["token"], data.data.token);
   };
 
   return (
@@ -71,7 +66,7 @@ export default function Navbar({ isLoginModal, setIsLoginModal }) {
           </Link>
           <Link
             className="hidden lg:block  text-gray-400 dark:text-gray-300 dark:hover:text-gray-100 hover:text-black"
-            to=""
+            to="/tentang"
           >
             Tentang
           </Link>
@@ -134,8 +129,6 @@ export default function Navbar({ isLoginModal, setIsLoginModal }) {
               </span>
             </div>
           ) : null} */}
-
-
 
           {/* avtar img */}
         </div>

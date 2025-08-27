@@ -38,7 +38,6 @@ function MainPage() {
     }
   };
   const handleAksiClick = (id) => {
-    // console.log("id dalam fungsi", id);
     setIdPengajuan(id);
     setIsDetailPengajuanModalOpen(true);
     // setTrigger(!trigger)
@@ -73,10 +72,9 @@ function MainPage() {
       setLoading(true);
       try {
         const response = await axios.get(`${apiUrl}/api/v1/toko`);
-        // console.log(response.data.data[0]);
         setData(response.data.data);
       } catch (error) {
-        console.error("Gagal fetch data:", error);
+        // console.error("Gagal fetch data:", error);
       } finally {
         setLoading(false);
       }

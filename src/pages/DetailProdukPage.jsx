@@ -72,7 +72,6 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
     setCookie("token", data.data.token);
     setCookie("id_user", data.data.id_user);
     setIsLoginModal(false);
-    // console.log(cookies["token"], data.data.token);
   };
 
   const CustomNext = (props) => (
@@ -149,24 +148,19 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
 
         if (response.data.success) {
           const produkData = response.data.data;
-          // console.log(produkData);
 
           setDataProduk(produkData);
-          // console.log(response.data.data.variasi[0].path);
-
           // Parse path (array gambar)
           const fotoArray = JSON.parse(produkData.path);
-          // console.log(fotoArray);
 
           setFotoUtama(fotoArray[0]);
           setFotoProduk(fotoArray);
           setShareText(`Cek produk ${produkData.nama}, cuma di sini!`);
-          // console.log(fotoArray);
         } else {
           setShowLoginError(true);
         }
       } catch (error) {
-        console.error("Gagal fetch produk:", error);
+        // console.error("Gagal fetch produk:", error);
       } finally {
         setLoadingProduk(false);
       }
@@ -188,13 +182,12 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
             orderBy: "harga_asc",
           },
         });
-        console.log(res.data.data);
 
         if (res.data.success) {
           setProdukList(res.data.data);
         }
       } catch (error) {
-        console.error("Gagal fetch slider:", error);
+        // console.error("Gagal fetch slider:", error);
       }
     };
 
@@ -261,7 +254,6 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
                   </div>
                   {/* foto lainnya - desktop */}
                   <div className="flex md:hidden gap-2 p-2">
-                    {/* {console.log((fotoProduk))} */}
 
                     {fotoProduk.length > 1 ? (
                       fotoProduk.map((foto, index) => (

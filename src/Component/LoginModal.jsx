@@ -41,7 +41,6 @@ const LoginModal = ({ isOpen, onClose, onSuccess }) => {
         email: formData.email,
         password: formData.pass,
       });
-      // console.log(response);
 
       if (response.data.success) {
         setCookie("isLoggedIn", true);
@@ -61,12 +60,9 @@ const LoginModal = ({ isOpen, onClose, onSuccess }) => {
         setCookie("rating_toko", response.data.rating_toko);
         onSuccess(response);
       } else {
-        // console.log("sini");
-        
         setShowLoginError(true);
       }
     } catch (error) {
-      // console.log("sini", error);
       setShowLoginError(true);
     } finally {
       setLoading(false);

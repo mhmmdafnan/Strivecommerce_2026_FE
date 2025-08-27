@@ -14,73 +14,6 @@ import produk3 from "../assets/img/produk/kursi 3.jpg";
 import { MdOutlineStoreMallDirectory } from "react-icons/md";
 import Loading from "../Component/Loading";
 
-// const produkList = [
-//   {
-//     id: 1,
-//     nama: "Nama Barang wkwkwkwkwkkwkwkw",
-//     harga: "Rp. 100.000",
-//     toko: "Toko",
-//     gambar: produk1,
-//   },
-//   {
-//     id: 2,
-//     nama: "Nama Barang wkwkwkwkwkkwkwkw",
-//     harga: "Rp. 100.000",
-//     toko: "Toko",
-//     gambar: produk2,
-//   },
-//   {
-//     id: 3,
-//     nama: "Nama Barang wkwkwkwkwkkwkwkw",
-//     harga: "Rp. 100.000",
-//     toko: "Toko",
-//     gambar: produk3,
-//   },
-//   {
-//     id: 4,
-//     nama: "Nama Barang wkwkwkwkwkkwkwkw",
-//     harga: "Rp. 100.000",
-//     toko: "Toko",
-//     gambar: produk1,
-//   },
-//   {
-//     id: 5,
-//     nama: "Nama Barang wkwkwkwkwkkwkwkw",
-//     harga: "Rp. 100.000",
-//     toko: "Toko",
-//     gambar: produk2,
-//   },
-//   {
-//     id: 6,
-//     nama: "Nama Barang wkwkwkwkwkkwkwkw",
-//     harga: "Rp. 100.000",
-//     toko: "Toko",
-//     gambar: produk3,
-//   },
-//   {
-//     id: 7,
-//     nama: "Nama Barang wkwkwkwkwkkwkwkw",
-//     harga: "Rp. 100.000",
-//     toko: "Toko",
-//     gambar: produk1,
-//   },
-//   {
-//     id: 8,
-//     nama: "Nama Barang wkwkwkwkwkkwkwkw",
-//     harga: "Rp. 100.000",
-//     toko: "Toko",
-//     gambar: produk2,
-//   },
-//   {
-//     id: 9,
-//     nama: "Nama Barang wkwkwkwkwkkwkwkw",
-//     harga: "Rp. 100.000",
-//     toko: "Toko",
-//     gambar: produk3,
-//   },
-//   // dan seterusnya
-// ];
-
 const TokoPage = () => {
   const apiUrl = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
@@ -94,16 +27,11 @@ const TokoPage = () => {
 
   useEffect(() => {
     const fetchDataToko = async () => {
-      // console.log(typeof idToko);
-
       setLoading(true);
       try {
         // Ambil dua data secara paralel
 
-        const response = await axios.get(`${apiUrl}/api/v1/toko/${userId}`);
-
-        // console.log(response.data.data.alamat[0].kodeKab);
-        console.log(response.data.data);
+        const response = await axios.get(`${apiUrl}/api/v1/toko/${idToko}`);
 
         // Set data produk umum
         if (response.data.success) {
@@ -113,14 +41,11 @@ const TokoPage = () => {
           );
         }
       } catch (error) {
-        console.error("Gagal fetch data:", error);
+        // console.error("Gagal fetch data:", error);
       } finally {
         setLoading(false);
       }
     };
-    // console.log(cookies);
-    // console.log(toko.alamat[0]);
-    
 
     fetchDataToko();
   }, []);
@@ -138,13 +63,12 @@ const TokoPage = () => {
           },
         });
 
-
         // Set data produk umum
         if (allProdukRes.data.success) {
           setProdukList(allProdukRes.data.data);
         }
       } catch (error) {
-        console.error("Gagal fetch data:", error);
+        // console.error("Gagal fetch data:", error);
       } finally {
         setLoading(false);
       }

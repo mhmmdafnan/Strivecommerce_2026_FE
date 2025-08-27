@@ -72,7 +72,6 @@ const signupPage = () => {
           pass: loginData.pass,
         })
         .then((response) => {
-          console.log(response);
           setLoading(false);
           if (response.success) {
             navigate("/");

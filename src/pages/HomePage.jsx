@@ -86,7 +86,7 @@ const HomePage = () => {
       if (typeof parsed === "string") return apiUrl + parsed;
       return "/fallback-image.png";
     } catch (e) {
-      console.warn("Invalid path:", path);
+      // console.warn("Invalid path:", path);
       return "/fallback-image.png";
     }
   };
@@ -113,7 +113,7 @@ const HomePage = () => {
           setProdukSlider(res.data.data);
         }
       } catch (error) {
-        console.error("Gagal fetch produk slider:", error);
+        // console.error("Gagal fetch produk slider:", error);
       }
     };
 
@@ -137,7 +137,7 @@ const HomePage = () => {
           setDataProduk(allProdukRes.data.data);
         }
       } catch (error) {
-        console.error("Gagal fetch produk utama:", error);
+        // console.error("Gagal fetch produk utama:", error);
       } finally {
         setLoadingPage(false);
       }
@@ -164,7 +164,6 @@ const HomePage = () => {
           )}`
         )
         .then((res) => {
-          console.log(res.data);
           if (res.data.success) {
             setHasilSearch(res.data.data); // atau res.data.result sesuai struktur
           } else {
@@ -172,7 +171,7 @@ const HomePage = () => {
           }
         })
         .catch((err) => {
-          console.error("Error fetching data:", err);
+          // console.error("Error fetching data:", err);
           setHasilSearch([]);
         })
         .finally(() => {
@@ -370,7 +369,7 @@ const HomePage = () => {
                       key={page}
                       className={`px-3 py-1 rounded-xl cursor-pointer ${
                         isCurrent
-                          ? "bg-[#f0ab92] text-black font-bold"
+                          ? "bg-[#ee6d3f] text-white font-bold"
                           : "bg-gray-200 text-black hover:bg-gray-300"
                       }`}
                       onClick={() => setPageNumber(page)}

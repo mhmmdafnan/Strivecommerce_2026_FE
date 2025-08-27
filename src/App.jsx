@@ -25,6 +25,8 @@ import PaymentPage from "./pages/PaymentPage.jsx"
 import { useState } from "react";
 import { ThemeProvider } from "./Component/ThemeContext.jsx";
 import Footer from "./Component/Footer.jsx";
+import TentangPage from "./pages/TentangPage.jsx";
+
 
 // Wrapper untuk mengatur kondisi Navbar
 const AppRoutes = ({ isLoginModal, setIsLoginModal }) => {
@@ -54,6 +56,7 @@ const AppRoutes = ({ isLoginModal, setIsLoginModal }) => {
       <Routes>
         {/* Halaman publik */}
         <Route path="/" element={<HomePage />} />
+        <Route path="/tentang" element={<TentangPage />} />
         <Route
           path="/detailProduk/:idProduk"
           element={

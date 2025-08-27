@@ -21,7 +21,6 @@ const AkunSayaPage = () => {
 
   const logout = () => {
     // Implement logout logic here
-    console.log("User logged out");
     deleteCookie("isLoggedIn");
     deleteCookie("token");
     deleteCookie("user_id");
@@ -51,8 +50,6 @@ const AkunSayaPage = () => {
 
     const formData = new FormData();
     formData.append("foto", file);
-    // console.log(formData);
-
     // try {
     //   const response = await axios.post(
     //     "http://localhost:3000/api/edit-foto",
@@ -65,7 +62,7 @@ const AkunSayaPage = () => {
     //     }
     //   );
 
-    //   console.log("Foto berhasil diubah:", response.data);
+    
     //   // refresh data user atau tampilkan notifikasi
     // } catch (error) {
     //   console.error("Gagal upload foto:", error.response || error);
@@ -85,9 +82,7 @@ const AkunSayaPage = () => {
   };
 
   // Fetch data when page changes
-  useEffect(() => {
-    console.log(cookies);
-  }, []);
+  useEffect(() => {}, []);
 
   return (
     <>
@@ -115,7 +110,11 @@ const AkunSayaPage = () => {
               <div className="bg-[#E9E9E9] rounded-lg p-4 border-2 border-[#EE6D3F] shadow-md">
                 <div className="w-50 h-50 relative">
                   <img
-                    src={cookies.path_file ? apiUrl + "/img/profile_image/" + cookies["path_file"] : UserFoto}
+                    src={
+                      cookies.path_file
+                        ? apiUrl + "/img/profile_image/" + cookies["path_file"]
+                        : UserFoto
+                    }
                     alt="Profile"
                     className="w-full h-full object-cover rounded-lg cursor-pointer"
                   />

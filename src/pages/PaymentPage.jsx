@@ -6,7 +6,6 @@ import Loading from "../Component/Loading";
 // useEffect
 
 const CheckoutPage = () => {
-  //   console.log(keranjang);
   const { id } = useParams();
   const apiUrl = import.meta.env.VITE_API_URL; // URL API
   const [copyRek, setCopyRek] = useState(false);
@@ -23,7 +22,7 @@ const CheckoutPage = () => {
       setCopyRek(true);
       setTimeout(() => setCopyRek(false), 2000); // Reset pesan setelah 2 detik
     } catch (err) {
-      console.error("Gagal menyalin teks: ", err);
+      // console.error("Gagal menyalin teks: ", err);
     }
   };
 
@@ -33,7 +32,7 @@ const CheckoutPage = () => {
       setCopyTotal(true);
       setTimeout(() => setCopyTotal(false), 2000); // Reset pesan setelah 2 detik
     } catch (err) {
-      console.error("Gagal menyalin teks: ", err);
+      // console.error("Gagal menyalin teks: ", err);
     }
   };
 
@@ -41,25 +40,21 @@ const CheckoutPage = () => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        console.log(cookies.user_id);
-
         const response = await axios.get(`${apiUrl}/api/v1/transaksi`, {
           params: {
             transaksiId: id,
             userId: cookies.user_id,
           },
         });
-        // console.log(response.data.data);
 
         if (response.data.data == null) {
           navigate("/keranjang");
         } else {
-          console.log(response.data.data);
           setDataPayment(response.data.data);
         }
       } catch (error) {
         // navigate('/keranjang');
-        console.log(error);
+        // console.log(error);
       } finally {
         setLoading(false);
       }

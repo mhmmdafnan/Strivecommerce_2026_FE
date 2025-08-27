@@ -121,8 +121,6 @@ const TambahProduk = () => {
     form.append("kategori", produkData.kategori || 0);
     form.append("userId", cookies.user_id);
 
-    // console.log(produkData);
-
     // Kirim file utama (pastikan ini objek File)
     const adaFileBaru = produkData.media.some((file) => file instanceof File);
 
@@ -154,7 +152,7 @@ const TambahProduk = () => {
       handleSuccessToast("Produk berhasil diupdate!");
       return res.data.data;
     } catch (err) {
-      console.error("Gagal mengirim data:", err);
+      // console.error("Gagal mengirim data:", err);
       toast.error("Gagal mengupdate produk");
       return null;
     }
@@ -190,7 +188,7 @@ const TambahProduk = () => {
       handleSuccessToast("Produk berhasil ditambahkan!");
       return res.data;
     } catch (err) {
-      console.error("Gagal mengirim data:", err);
+      // console.error("Gagal mengirim data:", err);
       toast.error("Gagal menambahkan produk");
       return null;
     }
@@ -229,8 +227,6 @@ const TambahProduk = () => {
       }
       await updateData(idProduk, formData);
     } else {
-      console.log(formData);
-
       // const result = await sendData(formData);
       await sendData(formData);
     }
@@ -248,7 +244,6 @@ const TambahProduk = () => {
             },
           });
           const data = res.data.data;
-          console.log(data);
 
           // Set nilai default form
           setFormData({
@@ -264,7 +259,7 @@ const TambahProduk = () => {
             setImagePreview(parsed);
           }
         } catch (error) {
-          console.error("Gagal memuat data Produk:", error);
+          // console.error("Gagal memuat data Produk:", error);
         }
       }
       setLoading(false);

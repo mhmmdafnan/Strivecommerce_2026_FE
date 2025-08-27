@@ -42,9 +42,9 @@ const FormUMKMPage = () => {
     formData.append("telp", data.no_telp);
     formData.append("klasifikasi_toko", parseInt(data.kategori));
     formData.append("ktp", file); // file dari handleFileChange
-    for (let pair of formData.entries()) {
-      console.log(pair[0] + ":", pair[1]);
-    }
+    // for (let pair of formData.entries()) {
+    //   console.log(pair[0] + ":", pair[1]);
+    // }
 
     try {
       const response = await axios.post(
@@ -56,7 +56,6 @@ const FormUMKMPage = () => {
           },
         }
       );
-      console.log(response.data);
       if (response.data.success) {
         toast.success("Pengajuan berhasil!");
 
