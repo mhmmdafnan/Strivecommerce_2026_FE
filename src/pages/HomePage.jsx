@@ -331,10 +331,10 @@ const HomePage = () => {
 
         {/* List Produk */}
         <div className="relative mt-10">
+          <KategoriUMKM onSelectCategory={handleSelectKategori} />
           <h2 className="text-xl mb-4">Daftar Produk</h2>
 
           {/* Kategori Filter */}
-          <KategoriUMKM onSelectCategory={handleSelectKategori} />
 
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2 md:gap-4 lg:gap-6">
             {loadingPage ? (

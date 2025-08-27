@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useCookies } from "react-cookie";
-import logoStrive from "../assets/img/logo.png";
+import logoDefault from "../assets/img/logo_default.png";
 import { useNavigate } from "react-router-dom";
 import { MdOutlineEdit, MdOutlineDeleteOutline } from "react-icons/md";
 import EditAccountModal from "../Component/EditAccountModal";
@@ -217,17 +217,21 @@ const TokoSayaPage = () => {
           <div className="flex flex-col md:flex-row gap-5 md:gap-10 mb-6 justify-center">
             {/* Kartu Foto Profil */}
             <div className="flex justify-center md:justify-start md:basis-1/2 max-w-[300px] w-full">
-              <div className="bg-[#E9E9E9] rounded-lg p-4 border-2 border-[#990808] shadow-md">
+              <div className="w-72 h-96 bg-[#E9E9E9] rounded-lg p-4 border-2 border-[#990808] shadow-md">
                 <div className="w-50 h-50 relative">
-                  <img
-                    src={
-                      cookies.path_file
-                        ? apiUrl + "/img/profile_image/" + cookies["path_file"]
-                        : logoStrive
-                    }
-                    alt="Profile"
-                    className="w-full h-full object-cover rounded-lg cursor-pointer"
-                  />
+                  <div className="h-60 w-64 justify-center  flex">
+                    <img
+                      src={
+                        cookies.path_file
+                          ? apiUrl +
+                            "/img/profile_image/" +
+                            cookies["path_file"]
+                          : logoDefault
+                      }
+                      alt="Profile"
+                      className="w-full h-full object-contain rounded-lg cursor-pointer"
+                    />
+                  </div>
                   <input
                     type="file"
                     accept="image/*"

@@ -54,7 +54,7 @@ export default function KategoriUMKM({ onSelectCategory }) {
   };
 
   return (
-    <div className="max-w-6xl mx-auto px-4 ">
+    <div className="max-w-6xl mx-auto ">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-lg font-bold">Kategori UMKM</h2>
         <button
