@@ -59,13 +59,13 @@ export default function Navbar({ isLoginModal, setIsLoginModal }) {
             className="text-3xl cursor-pointer lg:hidden"
           />
           <Link
-            className="hidden lg:block  text-gray-400 dark:text-gray-300 dark:hover:text-gray-100 hover:text-black"
+            className="hidden lg:block  text-gray-400 dark:text-gray-300 dark:hover:text-gray-100 hover:text-[#990808]"
             to="/"
           >
             Produk
           </Link>
           <Link
-            className="hidden lg:block  text-gray-400 dark:text-gray-300 dark:hover:text-gray-100 hover:text-black"
+            className="hidden lg:block  text-gray-400 dark:text-gray-300 dark:hover:text-gray-100 hover:text-[#990808]"
             to="/tentang"
           >
             Tentang

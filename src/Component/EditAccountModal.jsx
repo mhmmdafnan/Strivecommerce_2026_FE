@@ -54,7 +54,12 @@ const EditAccountModal = ({ isOpen, onClose, onGantiPassword, idUser }) => {
       // Kirim data ke backend (ganti URL sesuai kebutuhan)
       const response = await axios.patch(
         `${apiUrl}/api/v1/users/${idUser}`,
-        formData
+        formData,
+        {
+          headers: {
+            token: `${cookies["token"]}`,
+          },
+        }
       );
 
       const result = await response.data;
@@ -100,33 +105,39 @@ const EditAccountModal = ({ isOpen, onClose, onGantiPassword, idUser }) => {
         <div className="space-y-4 ">
           <div className="space-y-4 overflow-auto w-full max-h-[60vh] px-2">
             <div>
-              <label className="text-sm font-medium">Nama Toko<span className="text-red-500">*</span></label>
+              <label className="text-sm font-medium">
+                Nama Toko<span className="text-red-500">*</span>
+              </label>
               <input
                 type="text"
                 name="nama_toko"
                 value={formData.nama_toko}
                 onChange={handleChange}
-                className="w-full mt-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#EE6D3F] text-gray-600"
+                className="w-full mt-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#990808] text-gray-600"
               />
             </div>
             <div>
-              <label className="text-sm font-medium">Nama Awal<span className="text-red-500">*</span></label>
+              <label className="text-sm font-medium">
+                Nama Awal<span className="text-red-500">*</span>
+              </label>
               <input
                 type="text"
                 name="firstName"
                 value={formData.firstName}
                 onChange={handleChange}
-                className="w-full mt-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#EE6D3F] text-gray-600"
+                className="w-full mt-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#990808] text-gray-600"
               />
             </div>
             <div>
-              <label className="text-sm font-medium">Nama Akhir<span className="text-red-500">*</span></label>
+              <label className="text-sm font-medium">
+                Nama Akhir<span className="text-red-500">*</span>
+              </label>
               <input
                 type="text"
                 name="lastName"
                 value={formData.lastName}
                 onChange={handleChange}
-                className="w-full mt-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#EE6D3F] text-gray-600"
+                className="w-full mt-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#990808] text-gray-600"
               />
             </div>
             <div>
@@ -137,7 +148,7 @@ const EditAccountModal = ({ isOpen, onClose, onGantiPassword, idUser }) => {
                 name="jenisKelamin"
                 onChange={handleChange}
                 value={formData.gender} //
-                className="w-full mt-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#EE6D3F] text-gray-600"
+                className="w-full mt-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#990808] text-gray-600"
               >
                 <option value="" disabled>
                   -- Pilih Jenis Kelamin --
@@ -156,7 +167,7 @@ const EditAccountModal = ({ isOpen, onClose, onGantiPassword, idUser }) => {
                 name="tanggalLahir"
                 value={formatDateForInput(formData.tanggalLahir)}
                 onChange={handleChange}
-                className="w-full mt-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#EE6D3F] text-gray-600"
+                className="w-full mt-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#990808] text-gray-600"
               />
             </div>
 
@@ -182,7 +193,7 @@ const EditAccountModal = ({ isOpen, onClose, onGantiPassword, idUser }) => {
                 required
                 // value={formData.telepon == "undefined" ? "-" : formData.telepon}
                 onChange={handleChange}
-                className="w-full mt-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#EE6D3F] text-gray-600"
+                className="w-full mt-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#990808] text-gray-600"
               />
             </div>
           </div>
@@ -190,7 +201,7 @@ const EditAccountModal = ({ isOpen, onClose, onGantiPassword, idUser }) => {
           <div className="flex justify-center items-center">
             <div
               onClick={handleSubmit}
-              className="w-fit px-5 bg-[#EE6D3F] hover:bg-[#d25f35] text-white py-2 rounded-xl font-semibold cursor-pointer"
+              className="w-fit px-5 bg-[#990808] hover:bg-[#bd1d1d] text-white py-2 rounded-xl font-semibold cursor-pointer"
             >
               <MdOutlineEdit className="inline-block mr-1" />
               Submit

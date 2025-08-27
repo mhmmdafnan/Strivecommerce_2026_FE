@@ -1,11 +1,13 @@
 import { useNavigate } from "react-router-dom";
 import LoginModal from "./LoginModal.jsx";
 import { useState } from "react";
-
+import logoStrive from "../assets/img/logo.png";
 import { Mail, Phone, MapPin, Globe } from "lucide-react";
+import { useCookies } from "react-cookie";
 
 const footer = () => {
   const [isLoginModalOpen, setLoginModalOpen] = useState(false);
+  const [cookies] = useCookies();
   const navigate = useNavigate();
   const showLoginModal = () => {
     setLoginModalOpen(true);
@@ -21,11 +23,14 @@ const footer = () => {
         }}
         onClose={() => setLoginModalOpen(false)}
       />
-      <footer className="bg-[#EE6D3F] text-white py-4">
+      <footer className=" bg-white py-4">
         <div className="max-w-6xl mx-auto px-6 py-10 grid grid-cols-1 md:grid-cols-3 gap-x-16">
           {/* Kolom 1 - Info Website */}
           <div>
-            <h2 className="text-xl font-bold mb-3">Strive Commerce</h2>
+            {/* <h2 className="text-xl font-bold mb-3"></h2> */}
+            <div className="mb-3 w-32 px-2 py-4">
+              <img src={logoStrive} alt="" />
+            </div>
             <p className="text-sm leading-relaxed">
               Strive Commerce adalah platform e-commerce untuk membantu UMKM
               memasarkan produk secara digital dan memperluas jangkauan pasar.
@@ -53,15 +58,19 @@ const footer = () => {
           <div>
             <h2 className="text-xl font-bold mb-3">Admin</h2>
             <p
-              className="bg-white text-[#EE6D3F] px-4 py-1 w-fit  rounded-full text-sm cursor-pointer hover:scale-105 duration-300"
-              onClick={showLoginModal}
+              className="bg-[#990808] text-white font-semibold px-4 py-1 w-fit  rounded-full text-sm cursor-pointer hover:scale-105 duration-300"
+              onClick={
+                cookies["isLoggedIn"]
+                  ? () => navigate("/tokoSaya")
+                  : showLoginModal
+              }
             >
-              Login Toko
+              {cookies["isLoggedIn"] ? "Halaman Toko" : "Login Toko"}
             </p>
           </div>
         </div>
         <div className="container mx-auto text-center flex justify-center items-center">
-          <p className="text-sm">
+          <p className="text-sm text-[#990808]">
             &copy; 2025 Strive Marketplace - Set Up Inc.
           </p>
         </div>

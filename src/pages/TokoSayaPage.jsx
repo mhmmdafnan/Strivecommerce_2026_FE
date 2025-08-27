@@ -1,9 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useCookies } from "react-cookie";
-
+import logoStrive from "../assets/img/logo.png";
 import { useNavigate } from "react-router-dom";
-import UserFoto from "../assets/img/market foto.png";
 import { MdOutlineEdit, MdOutlineDeleteOutline } from "react-icons/md";
 import EditAccountModal from "../Component/EditAccountModal";
 import GantiPasswordModal from "../Component/GantiPasswordModal";
@@ -118,6 +117,7 @@ const TokoSayaPage = () => {
         {
           headers: {
             "Content-Type": "multipart/form-data",
+            token: `${cookies["token"]}`,
           },
         }
       );
@@ -150,7 +150,7 @@ const TokoSayaPage = () => {
                     `${apiUrl}/api/v1/product/${id}`,
                     {
                       headers: {
-                        Authorization: `Bearer ${cookies.token}`,
+                        token: `${cookies.token}`,
                       },
                     }
                   );
@@ -187,7 +187,7 @@ const TokoSayaPage = () => {
         const produkResponse = await axios.get(`${apiUrl}/api/v1/product`, {
           params: {
             idToko: cookies.user_id,
-            total: 20,
+            total: 25,
           },
           headers: {
             Authorization: `Bearer ${cookies.token}`,
@@ -208,8 +208,8 @@ const TokoSayaPage = () => {
 
   return (
     <>
-      <div className="max-w-7xl mx-auto px-5 md:px-10 py-5 mb-20 md:mt-0">
-        <h1 className="text-sm text-gray-600 cursor-pointer">
+      <div className="bg-[#f4f2ef] max-w-7xl mx-auto px-5 md:px-10 py-5 pb-20 md:mt-0">
+        <h1 className="text-sm text-[#990808] cursor-pointer">
           {cookies.nama_toko}
         </h1>
 
@@ -217,13 +217,13 @@ const TokoSayaPage = () => {
           <div className="flex flex-col md:flex-row gap-5 md:gap-10 mb-6 justify-center">
             {/* Kartu Foto Profil */}
             <div className="flex justify-center md:justify-start md:basis-1/2 max-w-[300px] w-full">
-              <div className="bg-[#E9E9E9] rounded-lg p-4 border-2 border-[#EE6D3F] shadow-md">
+              <div className="bg-[#E9E9E9] rounded-lg p-4 border-2 border-[#990808] shadow-md">
                 <div className="w-50 h-50 relative">
                   <img
                     src={
                       cookies.path_file
                         ? apiUrl + "/img/profile_image/" + cookies["path_file"]
-                        : UserFoto
+                        : logoStrive
                     }
                     alt="Profile"
                     className="w-full h-full object-cover rounded-lg cursor-pointer"
@@ -238,7 +238,7 @@ const TokoSayaPage = () => {
                   {/* Overlay Ubah Foto */}
                   <div
                     onClick={handleUbahFoto}
-                    className="absolute bottom-2 left-1/2 -translate-x-1/2 w-[90%] text-white hover:scale-105 font-semibold text-lg px-2 py-1 bg-[#EE6D3F] rounded-lg text-center cursor-pointer transition-transform duration-300"
+                    className="absolute bottom-2 left-1/2 -translate-x-1/2 w-[90%] text-white hover:scale-105 font-semibold text-lg px-2 py-1 bg-[#990808] rounded-lg text-center cursor-pointer transition-transform duration-300"
                   >
                     Ubah Foto
                   </div>
@@ -301,7 +301,7 @@ const TokoSayaPage = () => {
                 <div className="flex flex-col items-center md:items-start mt-4 space-y-2">
                   <div
                     onClick={() => setIsEditProfileModalOpen(true)}
-                    className="flex items-center justify-center w-44 text-[#EE6D3F] border-2 border-[#EE6D3F] px-4 rounded-md hover:bg-[#EE6D3F] hover:text-white cursor-pointer transition-colors duration-300"
+                    className="flex items-center justify-center w-44 text-[#990808] border-2 border-[#990808] px-4 rounded-md hover:bg-[#990808] hover:text-white cursor-pointer transition-colors duration-300"
                   >
                     <MdOutlineEdit className="inline-block mr-1" />
                     Ubah Data Diri
@@ -309,12 +309,12 @@ const TokoSayaPage = () => {
 
                   <div
                     onClick={() => setGantiPasswordOpen(true)}
-                    className="flex items-center justify-center w-44 bg-[#4B4B4A] text-white px-5 border-2 border-[#4B4B4A] rounded-md hover:bg-[#242323] cursor-pointer transition-colors duration-300"
+                    className="flex items-center justify-center w-44 bg-[#4B4B4A] text-white px-5 border-2 border-[#4B4B4A] rounded-md hover:bg-[#242323] hover:border-[#242323] cursor-pointer transition-colors duration-300"
                   >
                     Ubah Password
                   </div>
                   <div
-                    className="flex items-center justify-center w-44 bg-red-500 text-white px-5 border-2 border-red-500 rounded-md hover:bg-red-600 cursor-pointer transition-colors duration-300"
+                    className="flex items-center justify-center w-44 bg-[#ff0000] text-white px-5 border-2 border-[#ff0000] rounded-md hover:bg-[#990202] hover:border-[#990202] cursor-pointer transition-colors duration-300"
                     onClick={logout}
                   >
                     logout
@@ -324,12 +324,12 @@ const TokoSayaPage = () => {
             </div>
           </div>
         </div>
-        <div className="bg-[#E9E9E9] shadow-lg border-[1px]  rounded-lg px-10 py-6 mt-4 max-w-5xl mx-auto">
+        <div className="bg-white shadow-lg border-[1px]  rounded-lg px-10 py-6 mt-4 max-w-5xl mx-auto">
           <div className="flex mb-4 justify-between">
             <h1 className="font-semibold">Produk Saya</h1>
             <div
               onClick={handleTambahKlik}
-              className="bg-[#EE6D3F] text-white px-4 rounded-lg cursor-pointer hover:bg-[#d25f35] transition-colors duration-300 flex items-center gap-2"
+              className="bg-[#990808] text-white px-4 rounded-lg cursor-pointer hover:bg-[#d02525] transition-colors duration-300 flex items-center gap-2"
             >
               Tambah
             </div>
@@ -380,7 +380,7 @@ const TokoSayaPage = () => {
                       <div className="flex justify-start items-center gap-2">
                         <div>
                           <img
-                            className="h-10 w-10 rounded-xl border-2 border-gray-400 object-contain"
+                            className="h-10 w-10 rounded-xl border border-gray-400 object-contain"
                             src={apiUrl + JSON.parse(item.path)[0]}
                             alt=""
                           />
@@ -394,13 +394,13 @@ const TokoSayaPage = () => {
                       <div className="flex justify-center gap-2">
                         <div
                           onClick={() => handleEditKlik(item.id)}
-                          className="text-gray-800 hover:text-[#EE6D3F] cursor-pointer"
+                          className="text-gray-800 hover:text-[#990808] cursor-pointer"
                         >
                           <MdOutlineEdit className="text-xl" />
                         </div>
                         <div
                           onClick={() => handleDeleteProduk(item.id)}
-                          className="text-red-500 hover:text-red-700 cursor-pointer"
+                          className="text-gray-800 hover:text-[#ff0000] cursor-pointer"
                         >
                           <MdOutlineDeleteOutline className="text-xl" />
                         </div>
@@ -412,6 +412,11 @@ const TokoSayaPage = () => {
             </div>
           </div>
         </div>
+      </div>
+      <div className="container py-5 mx-auto text-center flex justify-center items-center">
+        <p className="text-sm text-[#990808]">
+          &copy; 2025 Strive Marketplace - Set Up Inc.
+        </p>
       </div>
 
       {/* Modal  */}
