@@ -29,7 +29,7 @@ const TokoPage = () => {
 
   useEffect(() => {
     console.log(userId);
-    
+
     const fetchDataToko = async () => {
       setLoading(true);
       try {
@@ -40,7 +40,7 @@ const TokoPage = () => {
         // Set data produk umum
         if (response.data.success) {
           console.log(response.data.data);
-          
+
           setToko(response.data.data);
           setShareText(
             `Cek Toko ${response.data.data.nama_toko}, cuma di sini!`
@@ -114,7 +114,12 @@ const TokoPage = () => {
               <div className="flex gap-x-2">
                 <div
                   onClick={() => {
-                    window.open("https://wa.me/6281225759764", "_blank");
+                    window.open(
+                      `https://wa.me/62${
+                        toko ? toko.telp.replace(/^0/, "") : ``
+                      }`,
+                      "_blank"
+                    );
                   }}
                   className="text-xs flex items-center gap-x-1 px-2 py-1 rounded-xl bg-[#990808] text-white hover:bg-[#9e2525] cursor-pointer"
                 >
@@ -129,10 +134,10 @@ const TokoPage = () => {
               </div>
             </div>
           </div>
-          <div className="flex flex-col items-center">
+          {/* <div className="flex flex-col items-center">
             <div className="p-1 text-2xl font-semibold ">10</div>
             <div className="text-xs text-gray-500">Barang Terjual</div>
-          </div>
+          </div> */}
         </div>
         {/* List Produk*/}
         <div className="mt-10">
