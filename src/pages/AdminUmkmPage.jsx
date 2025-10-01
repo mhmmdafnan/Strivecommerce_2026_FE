@@ -3,8 +3,8 @@ import axios from "axios";
 import { useCookies } from "react-cookie";
 
 import Sidebar from "../Component/Sidebar";
-import foto from "../assets/img/picture1.jpeg";
-import kursi from "../assets/img/produk/kursi 1.jpg";
+// import foto from "../assets/img/picture1.jpeg";
+// import kursi from "../assets/img/produk/kursi 1.jpg";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import Loading from "../Component/Loading.jsx";
 import DetailPengajuanModal from "../Component/DetailPengajuanModal.jsx";

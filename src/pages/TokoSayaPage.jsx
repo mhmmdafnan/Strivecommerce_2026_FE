@@ -193,6 +193,8 @@ const TokoSayaPage = () => {
             Authorization: `Bearer ${cookies.token}`,
           },
         });
+        console.log(produkResponse.data.data);
+        
         if (produkResponse.data.success) {
           setProdukList(produkResponse.data.data);
         }
@@ -368,7 +370,11 @@ const TokoSayaPage = () => {
                     <Loading w={10} h={10} />
                   </div>
                 ) : (
-                  produkList.map((item) => (
+                  produkList.map((item) => {
+                     const file_path = item.path
+                ? JSON.parse(item.path)
+                : [];
+                return(
                     <div
                       key={item.id}
                       className="grid grid-cols-7 items-center text-center px-2 py-2 hover:bg-gray-100 transition duration-200"
@@ -385,7 +391,7 @@ const TokoSayaPage = () => {
                         <div>
                           <img
                             className="h-10 w-10 rounded-xl border border-gray-400 object-contain"
-                            src={apiUrl + JSON.parse(item.path)[0]}
+                            src={apiUrl + file_path[0]}
                             alt=""
                           />
                         </div>
@@ -410,7 +416,8 @@ const TokoSayaPage = () => {
                         </div>
                       </div>
                     </div>
-                  ))
+                  );
+                })
                 )}
               </div>
             </div>

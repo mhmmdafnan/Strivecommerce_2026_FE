@@ -395,6 +395,7 @@ const TambahProduk = () => {
                               ? apiUrl + imgPath
                               : imgPath
                           }
+                          // src={ imgPath}
                           alt={`Foto ${index + 1}`}
                           className="w-24 h-24 object-cover rounded-xl border-2 border-gray-500"
                         />

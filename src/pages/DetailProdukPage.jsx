@@ -212,7 +212,7 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
           <div className="text-sm text-gray-400 hover:text-[#990808] cursor-pointer">
             Nama Toko /
           </div>
-          <div className="text-sm text-[#990808] dark:text-white hover:text-[#bc5b38] cursor-pointer">
+          <div className="text-sm text-[#990808] dark:text-white hover:text-[#9e2525] cursor-pointer">
             {!loadingProduk && <>{dataProduk ? dataProduk.nama : "-"}</>}
           </div>
         </div>
@@ -372,7 +372,7 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
             {/* Jumlah & Beli — untuk Desktop */}
             {!loadingProduk && (
               <div className="basis-1/2 hidden md:block md:max-w-4xl md:px-4">
-                <div className="flex justify-between">
+                {/* <div className="flex justify-between">
                   <h1 className="text-xl">Jumlah</h1>
                   <div className="flex gap-x-2 items-center">
                     <div
@@ -391,7 +391,7 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
                       +
                     </div>
                   </div>
-                </div>
+                </div> */}
                 <div className="flex gap-x-2 mt-4">
                   <button
                     onClick={() => setOpenModal(true)}
@@ -413,7 +413,7 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
           {/* Jumlah & Beli — Fixed Bottom di hp */}
           {!loadingProduk && (
             <div className="fixed bottom-0 left-0 right-0 bg-white dark:bg-[#393E46] dark:border-0 shadow-black shadow-2xl p-4 border-t md:hidden z-50 ">
-              <div className="flex justify-between items-center">
+              {/* <div className="flex justify-between items-center">
                 <h1 className="text-base font-medium">Jumlah</h1>
                 <div className="flex gap-x-2 items-center">
                   <div className="bg-[#E1DDDD] dark:bg-[#222831] px-2 rounded-md cursor-pointer hover:bg-[#cac8c8]">
@@ -426,7 +426,7 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
                     +
                   </div>
                 </div>
-              </div>
+              </div> */}
               <div className="flex gap-x-2 mt-4">
                 <div
                   onClick={() => setOpenModal(true)}

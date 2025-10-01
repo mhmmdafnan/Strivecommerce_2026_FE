@@ -8,9 +8,11 @@ import { FaLocationDot, FaShareNodes } from "react-icons/fa6";
 
 import Navbar from "../Component/Navbar";
 import ModalShare from "../Component/ShareModal";
-import produk1 from "../assets/img/produk/kursi 1.jpg";
-import produk2 from "../assets/img/produk/kursi 2.jpg";
-import produk3 from "../assets/img/produk/kursi 3.jpg";
+
+import logoStrive from "../assets/img/logo.png";
+// import produk1 from "../assets/img/produk/kursi 1.jpg";
+// import produk2 from "../assets/img/produk/kursi 2.jpg";
+// import produk3 from "../assets/img/produk/kursi 3.jpg";
 import { MdOutlineStoreMallDirectory } from "react-icons/md";
 import Loading from "../Component/Loading";
 
@@ -26,15 +28,19 @@ const TokoPage = () => {
   const [shareText, setShareText] = useState();
 
   useEffect(() => {
+    console.log(userId);
+    
     const fetchDataToko = async () => {
       setLoading(true);
       try {
         // Ambil dua data secara paralel
 
-        const response = await axios.get(`${apiUrl}/api/v1/toko/${idToko}`);
+        const response = await axios.get(`${apiUrl}/api/v1/toko/${userId}`);
 
         // Set data produk umum
         if (response.data.success) {
+          console.log(response.data.data);
+          
           setToko(response.data.data);
           setShareText(
             `Cek Toko ${response.data.data.nama_toko}, cuma di sini!`
@@ -46,7 +52,6 @@ const TokoPage = () => {
         setLoading(false);
       }
     };
-
     fetchDataToko();
   }, []);
 
@@ -73,7 +78,6 @@ const TokoPage = () => {
         setLoading(false);
       }
     };
-    // console.log(cookies);
 
     fetchData();
   }, []);
@@ -86,22 +90,22 @@ const TokoPage = () => {
           <div className="text-sm text-gray-400 hover:text-gray-800 cursor-pointer">
             Home /
           </div>
-          <div className="text-sm text-[#EE6D3F] hover:text-[#bc5b38] cursor-pointer">
+          <div className="text-sm text-[#990808] hover:text-[#bc5b38] cursor-pointer">
             {toko.nama_toko}
           </div>
         </div>
         {/* Toko Card  */}
         <div className="flex justify-between items-center px-6 py-8 border-[1px] border-[#ADB0B6] shadow-xl rounded-xl">
           <div className="flex items-center gap-x-5 ">
-            <div className="h-24 w-24 bg-slate-300 rounded-full ">
+            <div className="h-24 w-24 bg-gray-200 rounded-full ">
               <img
-                src={fotoToko}
+                src={logoStrive}
                 className="object-contain h-full w-full p-2"
                 alt=""
               />
             </div>
             <div className="cursor-pointer">
-              <div className="text-xl font-semibold hover:text-[#EE6D3F]">
+              <div className="text-xl font-semibold hover:text-[#990808]">
                 {toko.nama_toko}
               </div>
               {/* <div className="flex mb-2 text-xs items-center gap-x-1 text-gray-500 hover:text-gray-800">
@@ -112,7 +116,7 @@ const TokoPage = () => {
                   onClick={() => {
                     window.open("https://wa.me/6281225759764", "_blank");
                   }}
-                  className="text-xs flex items-center gap-x-1 px-2 py-1 rounded-xl bg-[#EE6D3F] text-white hover:bg-[#bc5b38] cursor-pointer"
+                  className="text-xs flex items-center gap-x-1 px-2 py-1 rounded-xl bg-[#990808] text-white hover:bg-[#9e2525] cursor-pointer"
                 >
                   <IoChatboxEllipsesOutline /> Chat Penjual
                 </div>
@@ -160,10 +164,7 @@ const TokoPage = () => {
                     className="h-34 cursor-pointer hover:shadow-md rounded-xl p-2"
                   >
                     <img
-                      src={
-                        apiUrl + 
-                        JSON.parse(produk.path)[0]
-                      }
+                      src={apiUrl + JSON.parse(produk.path)[0]}
                       className="w-full h-30 object-cover rounded-3xl border-2 border-gray-200 hover:scale-105 transition-all duration-300"
                       alt={produk.nama}
                     />
