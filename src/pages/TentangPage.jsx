@@ -7,7 +7,7 @@ import Footer from "../Component/Footer";
 const TentangPage = () => {
   return (
     <>
-      <div className="bg-[#f4f2ef] max-w-7xl mx-auto px-5 md:px-20 py-5">
+      <div className=" max-w-7xl mx-auto px-5 md:px-20 py-5">
         <div className="flex flex-col items-center md:items-start justify-center mb-6">
           <h1 className="text-2xl font-bold text-center md:text-left">
             Tentang Strive
@@ -39,7 +39,7 @@ const TentangPage = () => {
         </div>
 
         {/* Bagian 2 - Fitur */}
-        <div className="flex flex-col md:flex-row items-center md:items-start justify-center gap-6 mt-6 mb-6 bg-white px-4 py-8 rounded-xl">
+        <div className="flex flex-col md:flex-row items-center md:items-start justify-center gap-6 mt-6 mb-6 bg-[#F4F2EF] px-4 py-8 rounded-xl">
           <div className="w-full md:w-1/2 flex flex-col items-start justify-center gap-y-4 px-4">
             <h1 className="font-bold text-2xl mb-2">Fitur Unggulan</h1>
             <p className="text-justify">

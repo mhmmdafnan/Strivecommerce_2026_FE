@@ -282,20 +282,20 @@ const TambahProduk = () => {
 
   return (
     <>
-      <div className="bg-[#f4f2ef] max-w-7xl mx-auto px-5 md:px-20 py-5 pb-20 md:mt-0">
+      <div className=" max-w-7xl mx-auto px-5 md:px-20 py-5 pb-20 md:mt-0">
         {/* Navigation */}
         <div className="flex gap-x-1 p-1 my-2">
           <div
             onClick={() => navigate("/tokoSaya")}
             className="text-sm text-gray-400 hover:text-gray-800 cursor-pointer"
           >
-            ß Toko Saya /
+            Toko Saya /
           </div>
           <div className="text-sm text-gray-400 hover:text-gray-800 cursor-pointer">
             {idProduk ? "Edit Produk" : "Tambah Produk"}
           </div>
         </div>
-        <div className="bg-white shadow-lg border-[1px]  rounded-xl px-10 py-6 mt-4 max-w-5xl mx-auto">
+        <div className="shadow-xl border-[1px]  rounded-xl px-10 py-6 mt-4 max-w-5xl mx-auto">
           <div className="">
             <h1 className="text-xl font-bold mb-4">
               {idProduk ? "Edit Produk" : "Tambah Produk"}
@@ -395,6 +395,7 @@ const TambahProduk = () => {
                               ? apiUrl + imgPath
                               : imgPath
                           }
+                          // src={ imgPath}
                           alt={`Foto ${index + 1}`}
                           className="w-24 h-24 object-cover rounded-xl border-2 border-gray-500"
                         />
@@ -417,7 +418,7 @@ const TambahProduk = () => {
           </div>
         </div>
       </div>
-      <div className="container py-5 mx-auto text-center flex justify-center items-center">
+      <div className="bg-[#F4F2EF] py-5 mx-auto text-center flex justify-center items-center">
         <p className="text-sm text-[#990808]">
           &copy; 2025 Strive Marketplace - Set Up Inc.
         </p>

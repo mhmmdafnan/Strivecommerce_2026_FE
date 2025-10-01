@@ -193,6 +193,8 @@ const TokoSayaPage = () => {
             Authorization: `Bearer ${cookies.token}`,
           },
         });
+        console.log(produkResponse.data.data);
+        
         if (produkResponse.data.success) {
           setProdukList(produkResponse.data.data);
         }
@@ -208,7 +210,7 @@ const TokoSayaPage = () => {
 
   return (
     <>
-      <div className="bg-[#f4f2ef] max-w-7xl mx-auto px-5 md:px-10 py-5 pb-20 md:mt-0">
+      <div className="max-w-7xl mx-auto px-5 md:px-10 py-5 pb-20 md:mt-0">
         <h1 className="text-sm text-[#990808] cursor-pointer">
           {cookies.nama_toko}
         </h1>
@@ -368,7 +370,11 @@ const TokoSayaPage = () => {
                     <Loading w={10} h={10} />
                   </div>
                 ) : (
-                  produkList.map((item) => (
+                  produkList.map((item) => {
+                     const file_path = item.path
+                ? JSON.parse(item.path)
+                : [];
+                return(
                     <div
                       key={item.id}
                       className="grid grid-cols-7 items-center text-center px-2 py-2 hover:bg-gray-100 transition duration-200"
@@ -385,7 +391,7 @@ const TokoSayaPage = () => {
                         <div>
                           <img
                             className="h-10 w-10 rounded-xl border border-gray-400 object-contain"
-                            src={apiUrl + JSON.parse(item.path)[0]}
+                            src={apiUrl + file_path[0]}
                             alt=""
                           />
                         </div>
@@ -410,17 +416,13 @@ const TokoSayaPage = () => {
                         </div>
                       </div>
                     </div>
-                  ))
+                  );
+                })
                 )}
               </div>
             </div>
           </div>
         </div>
-      </div>
-      <div className="container py-5 mx-auto text-center flex justify-center items-center">
-        <p className="text-sm text-[#990808]">
-          &copy; 2025 Strive Marketplace - Set Up Inc.
-        </p>
       </div>
 
       {/* Modal  */}
@@ -436,6 +438,12 @@ const TokoSayaPage = () => {
         isOpen={isGantiPasswordOpen}
         onClose={() => setGantiPasswordOpen(false)}
       />
+
+      <div className="bg-[#F4F2EF] py-5 mx-auto text-center flex justify-center items-center">
+        <p className="text-sm text-[#990808]">
+          &copy; 2025 Strive Marketplace - Set Up Inc.
+        </p>
+      </div>
     </>
   );
 };

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../Component/Navbar";
-import produk from "../assets/img/produk/kursi 1.jpg";
+// import produk from "../assets/img/produk/kursi 1.jpg";
 import { useCookies } from "react-cookie";
 import axios from "axios";
 import Loading from "../Component/Loading";

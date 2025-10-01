@@ -55,17 +55,17 @@ export default function KategoriUMKM({ onSelectCategory }) {
 
   return (
     <div className="max-w-6xl mx-auto ">
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-lg font-bold">Kategori UMKM</h2>
+      <div className="flex justify-between items-center mb-2">
+        <h2 className="text-xl font-bold">Kategori UMKM</h2>
         <button
           onClick={() => handleClearFilter()}
-          className="text-sm text-gray-500 hover:underline"
+          className="text-sm font-light text-gray-500 hover:underline"
         >
           Clear Filter
         </button>
       </div>
 
-      <div className="flex space-x-4 overflow-x-auto scrollbar-hide py-4">
+      <div className="flex space-x-4 overflow-x-auto scrollbar-hide px-2 py-2">
         {categories.map((cat) => {
           const Icon = cat.icon;
           const isActive = active === cat.id;
