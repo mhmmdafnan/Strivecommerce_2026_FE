@@ -42,14 +42,33 @@ const footer = () => {
             <h2 className="text-xl font-bold mb-3">Kontak Kami</h2>
             <ul className="space-y-2 text-sm">
               <li className="flex items-center gap-2">
-                <MapPin size={16} /> Jl. Pahlawan No. 123, Majene, Sulawesi
-                Barat
+                <span>
+                  <MapPin size={16} />
+                </span>
+                Jalan Prof. Dr. Baharuddin Lopa, S.H, Talumung, Baurung, Kec.
+                Banggae Tim., Kabupaten Majene, Sulawesi Barat 91412
               </li>
+
               <li className="flex items-center gap-2">
-                <Phone size={16} /> +62 812-3456-7890
+                <Phone size={16} />
+                <a
+                  href="https://wa.me/6282218880188"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:underline text-black"
+                >
+                  0822-1888-0188
+                </a>
               </li>
+
               <li className="flex items-center gap-2">
-                <Mail size={16} /> support@strivecommerce.com
+                <Mail size={16} />
+                <a
+                  href="mailto:bisdig@unsulbar.ac.id"
+                  className="hover:underline text-black"
+                >
+                  bisdig@unsulbar.ac.id
+                </a>
               </li>
             </ul>
           </div>
