@@ -51,6 +51,8 @@ const EditAccountModal = ({ isOpen, onClose, onGantiPassword, idUser }) => {
     }
 
     try {
+      console.log(formData);
+      
       // Kirim data ke backend (ganti URL sesuai kebutuhan)
       const response = await axios.patch(
         `${apiUrl}/api/v1/users/${idUser}`,
@@ -154,7 +156,7 @@ const EditAccountModal = ({ isOpen, onClose, onGantiPassword, idUser }) => {
                   -- Pilih Jenis Kelamin --
                 </option>
                 <option value="1">Laki-laki</option>
-                <option value="2">Perempuan</option>
+                <option value="0">Perempuan</option>
               </select>
             </div>
 
@@ -189,9 +191,9 @@ const EditAccountModal = ({ isOpen, onClose, onGantiPassword, idUser }) => {
               <input
                 type="text"
                 name="telepon"
-                value={formData.telepon}
-                required
-                // value={formData.telepon == "undefined" ? "-" : formData.telepon}
+                // value={formData.telepon}
+                // required
+                value={formData.telepon == "undefined" ? "-" : formData.telepon}
                 onChange={handleChange}
                 className="w-full mt-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#990808] text-gray-600"
               />

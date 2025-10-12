@@ -300,7 +300,7 @@ const TokoSayaPage = () => {
                 <div>
                   <h2>Jenis Kelamin</h2>
                   <p className="text-xs font-extralight text-gray-500">
-                    {cookies.gender == 1 ? "Laki-laki" : "Perempuan"}
+                    {cookies.gender == 1 ? "Laki-laki" : cookies.gender == 0 ? "Perempuan" : "-"}
                   </p>
                 </div>
                 {/* Tombol Aksi */}
