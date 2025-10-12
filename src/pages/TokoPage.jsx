@@ -28,7 +28,7 @@ const TokoPage = () => {
   const [shareText, setShareText] = useState();
 
   useEffect(() => {
-    console.log(userId);
+    // console.log(userId);
 
     const fetchDataToko = async () => {
       setLoading(true);
@@ -39,7 +39,7 @@ const TokoPage = () => {
 
         // Set data produk umum
         if (response.data.success) {
-          console.log(response.data.data);
+          // console.log(response.data.data);
 
           setToko(response.data.data);
           setShareText(

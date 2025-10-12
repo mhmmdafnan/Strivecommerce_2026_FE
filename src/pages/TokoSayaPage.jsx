@@ -193,7 +193,7 @@ const TokoSayaPage = () => {
             Authorization: `Bearer ${cookies.token}`,
           },
         });
-        console.log(produkResponse.data.data);
+        // console.log(produkResponse.data.data);
         
         if (produkResponse.data.success) {
           setProdukList(produkResponse.data.data);

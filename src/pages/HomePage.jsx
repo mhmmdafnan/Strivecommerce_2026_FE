@@ -103,7 +103,7 @@ const HomePage = () => {
   };
 
   const handleSelectKategori = (id) => {
-    console.log("Selected Kategori ID:", id);
+    // console.log("Selected Kategori ID:", id);
     setSelectedKategori(id);
     // Lakukan sesuatu dengan ID kategori yang dipilih
   };

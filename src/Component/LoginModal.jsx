@@ -42,7 +42,7 @@ const LoginModal = ({ isOpen, onClose, onSuccess }) => {
         password: formData.pass,
       });
 
-      console.log(response);
+      // console.log(response);
       
 
       if (response.data.success) {
