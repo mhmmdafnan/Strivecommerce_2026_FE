@@ -24,7 +24,7 @@ const AddResiModal = ({ isOpen, onClose, onSuccess, id }) => {
         },
       });
 
-      console.log(response.data.data);
+      // console.log(response.data.data);
 
       if (response.data.success) {
         onSuccess?.(); // trigger callback kalau ada
