@@ -51,8 +51,7 @@ const EditAccountModal = ({ isOpen, onClose, onGantiPassword, idUser }) => {
     }
 
     try {
-      console.log(formData);
-      
+    
       // Kirim data ke backend (ganti URL sesuai kebutuhan)
       const response = await axios.patch(
         `${apiUrl}/api/v1/users/${idUser}`,
