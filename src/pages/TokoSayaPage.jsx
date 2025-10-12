@@ -47,22 +47,22 @@ const TokoSayaPage = () => {
     deleteCookie("rating_toko");
     deleteCookie("gender");
     deleteCookie("path_file");
-    deleteCookie("tanggal_lahir");
+    // deleteCookie("tanggal_lahir");
     // Optionally, redirect to home or login page]
     navigate("/");
   };
 
-  const formatTanggal = (dateString) => {
-    if (!dateString) return "";
+  // const formatTanggal = (dateString) => {
+  //   if (!dateString) return "";
 
-    const tanggal = new Date(dateString);
+  //   const tanggal = new Date(dateString);
 
-    return tanggal.toLocaleDateString("id-ID", {
-      day: "2-digit",
-      month: "long",
-      year: "numeric",
-    });
-  };
+  //   return tanggal.toLocaleDateString("id-ID", {
+  //     day: "2-digit",
+  //     month: "long",
+  //     year: "numeric",
+  //   });
+  // };
 
   const handleCheckboxChange = (produkId) => {
     const updatedList = produkList.map((item) =>
@@ -72,7 +72,22 @@ const TokoSayaPage = () => {
   };
 
   const handleTambahKlik = () => {
-    // open new page
+    // open new page;
+    if (
+      cookies.telp == "" ||
+      cookies.telp == undefined ||
+      cookies.telp == null ||
+      cookies.gender == "" ||
+      cookies.gender == undefined ||
+      cookies.gender == null ||
+      cookies.nama_toko == "" ||
+      cookies.nama_toko == undefined ||
+      cookies.nama_toko == null
+    ) {
+      toast.error("Lengkapi data diri terlebih dahulu sebelum menambah produk");
+      setIsEditProfileModalOpen(true);
+      return;
+    }
     window.open("/tambahProduk", "_blank");
   };
   const handleEditKlik = (idProduk) => {
@@ -181,6 +196,7 @@ const TokoSayaPage = () => {
 
   // Fetch data when page changes
   useEffect(() => {
+    console.log(cookies);
     const fetchData = async () => {
       setLoading(true);
       try {
@@ -194,7 +210,7 @@ const TokoSayaPage = () => {
           },
         });
         // console.log(produkResponse.data.data);
-        
+
         if (produkResponse.data.success) {
           setProdukList(produkResponse.data.data);
         }
@@ -291,16 +307,20 @@ const TokoSayaPage = () => {
                     {cookies.telp}
                   </p>
                 </div>
-                <div>
+                {/* <div>
                   <h2>Tanggal Lahir</h2>
                   <p className="text-xs font-extralight text-gray-500">
                     {formatTanggal(cookies.tanggal_lahir)}
                   </p>
-                </div>
+                </div> */}
                 <div>
                   <h2>Jenis Kelamin</h2>
                   <p className="text-xs font-extralight text-gray-500">
-                    {cookies.gender == 1 ? "Laki-laki" : cookies.gender == 0 ? "Perempuan" : "-"}
+                    {cookies.gender == 1
+                      ? "Laki-laki"
+                      : cookies.gender == 0
+                      ? "Perempuan"
+                      : "-"}
                   </p>
                 </div>
                 {/* Tombol Aksi */}
@@ -371,53 +391,51 @@ const TokoSayaPage = () => {
                   </div>
                 ) : (
                   produkList.map((item) => {
-                     const file_path = item.path
-                ? JSON.parse(item.path)
-                : [];
-                return(
-                    <div
-                      key={item.id}
-                      className="grid grid-cols-7 items-center text-center px-2 py-2 hover:bg-gray-100 transition duration-200"
-                    >
-                      <div className="flex gap-x-4 items-center">
-                        <input
-                          type="checkbox"
-                          checked={item.isChecked}
-                          onChange={() => handleCheckboxChange(item.id)}
-                        />
-                        {item.id}
-                      </div>
-                      <div className="flex justify-start items-center gap-2">
-                        <div>
-                          <img
-                            className="h-10 w-10 rounded-xl border border-gray-400 object-contain"
-                            src={apiUrl + file_path[0]}
-                            alt=""
+                    const file_path = item.path ? JSON.parse(item.path) : [];
+                    return (
+                      <div
+                        key={item.id}
+                        className="grid grid-cols-7 items-center text-center px-2 py-2 hover:bg-gray-100 transition duration-200"
+                      >
+                        <div className="flex gap-x-4 items-center">
+                          <input
+                            type="checkbox"
+                            checked={item.isChecked}
+                            onChange={() => handleCheckboxChange(item.id)}
                           />
+                          {item.id}
                         </div>
-                        <div>{item.nama}</div>
+                        <div className="flex justify-start items-center gap-2">
+                          <div>
+                            <img
+                              className="h-10 w-10 rounded-xl border border-gray-400 object-contain"
+                              src={apiUrl + file_path[0]}
+                              alt=""
+                            />
+                          </div>
+                          <div>{item.nama}</div>
+                        </div>
+                        <div>{item.kategori}</div>
+                        <div>{item.stok} pcs</div>
+                        <div>{item.terjual} pcs</div>
+                        <div>Rp {item.harga.toLocaleString("id-ID")}</div>
+                        <div className="flex justify-center gap-2">
+                          <div
+                            onClick={() => handleEditKlik(item.id)}
+                            className="text-gray-800 hover:text-[#990808] cursor-pointer"
+                          >
+                            <MdOutlineEdit className="text-xl" />
+                          </div>
+                          <div
+                            onClick={() => handleDeleteProduk(item.id)}
+                            className="text-gray-800 hover:text-[#ff0000] cursor-pointer"
+                          >
+                            <MdOutlineDeleteOutline className="text-xl" />
+                          </div>
+                        </div>
                       </div>
-                      <div>{item.kategori}</div>
-                      <div>{item.stok} pcs</div>
-                      <div>{item.terjual} pcs</div>
-                      <div>Rp {item.harga.toLocaleString("id-ID")}</div>
-                      <div className="flex justify-center gap-2">
-                        <div
-                          onClick={() => handleEditKlik(item.id)}
-                          className="text-gray-800 hover:text-[#990808] cursor-pointer"
-                        >
-                          <MdOutlineEdit className="text-xl" />
-                        </div>
-                        <div
-                          onClick={() => handleDeleteProduk(item.id)}
-                          className="text-gray-800 hover:text-[#ff0000] cursor-pointer"
-                        >
-                          <MdOutlineDeleteOutline className="text-xl" />
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })
+                    );
+                  })
                 )}
               </div>
             </div>

@@ -33,7 +33,7 @@ const Sidebar = () => {
     deleteCookie("rating_toko");
     deleteCookie("gender");
     deleteCookie("path_file");
-    deleteCookie("tanggal_lahir");
+    // deleteCookie("tanggal_lahir");
     // Optionally, redirect to home or login page]
     navigate("/");
   };

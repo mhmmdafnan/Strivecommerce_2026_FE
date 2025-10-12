@@ -19,7 +19,7 @@ const EditAccountModal = ({ isOpen, onClose, onGantiPassword, idUser }) => {
     lastName: cookies["lastName"] || "",
     email: cookies["email"] || "",
     jenisKelamin: cookies["gender"] || "",
-    tanggalLahir: cookies["tanggal_lahir"] || "",
+    // tanggalLahir: cookies["tanggal_lahir"] || "",
     telepon: cookies["telp"] || "",
   });
 
@@ -45,8 +45,8 @@ const EditAccountModal = ({ isOpen, onClose, onGantiPassword, idUser }) => {
     e.preventDefault();
 
     // Validasi sederhana
-    if (!formData.tanggalLahir || !formData.telepon) {
-      alert("Tanggal lahir dan no telepon wajib diisi.");
+    if (!formData.telepon || !formData.nama_toko || !formData.jenisKelamin) {
+      toast.error("no telepon, nama toko, dan jenis kelamin wajib diisi.");
       return;
     }
 
@@ -71,7 +71,7 @@ const EditAccountModal = ({ isOpen, onClose, onGantiPassword, idUser }) => {
         setCookie("lastName", formData.lastName);
         setCookie("email", formData.email);
         setCookie("gender", formData.jenisKelamin);
-        setCookie("tanggal_lahir", formData.tanggalLahir);
+        // setCookie("tanggal_lahir", formData.tanggalLahir);
         setCookie("telp", formData.telepon);
         toast.success("Data Akun berhasil diupdate!");
         onClose(); // Tutup modal setelah submit
@@ -159,7 +159,7 @@ const EditAccountModal = ({ isOpen, onClose, onGantiPassword, idUser }) => {
               </select>
             </div>
 
-            <div>
+            {/* <div>
               <label className="text-sm font-medium">
                 Tanggal Lahir<span className="text-red-500">*</span>
               </label>
@@ -170,7 +170,7 @@ const EditAccountModal = ({ isOpen, onClose, onGantiPassword, idUser }) => {
                 onChange={handleChange}
                 className="w-full mt-1 p-2 border rounded focus:outline-none focus:ring-2 focus:ring-[#990808] text-gray-600"
               />
-            </div>
+            </div> */}
 
             <div>
               <label className="text-sm font-medium">Email</label>
