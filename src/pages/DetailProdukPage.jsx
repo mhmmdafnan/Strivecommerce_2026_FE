@@ -9,7 +9,7 @@ import { FaShareNodes } from "react-icons/fa6";
 import Footer from "../Component/Footer";
 import ModalShare from "../Component/ShareModal";
 import logoStrive from "../assets/img/logo.png";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { data, useLocation, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { useCookies } from "react-cookie";
 import LoginModal from "../Component/LoginModal";
@@ -172,6 +172,7 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
   // Ambil produk slider setelah userId dari dataProduk tersedia
   useEffect(() => {
     if (!dataProduk) return;
+    // console.log(dataProduk.user.path_file);
 
     const fetchSlider = async () => {
       try {
@@ -234,7 +235,7 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
                       onMouseLeave={() => setZoom(false)}
                     >
                       <img
-                        src={`${apiUrl}${fotoUtama}`}
+                        src={`${apiUrl}/${fotoUtama}`}
                         // src={
                         //   fotoUtama ? apiUrl + idProduk + "/" + fotoUtama : "-"
                         // }
@@ -279,7 +280,7 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
                       ) : (
                         <div className="h-20 w-20 rounded-xl border border-gray-500">
                           <img
-                            src={`${apiUrl}/img/product/${idProduk}${fotoProduk[0]}`}
+                            src={`${apiUrl}/${fotoProduk[0]}`}
                             className="rounded-xl h-full w-full object-cover"
                             alt="foto-utama"
                           />
@@ -447,6 +448,7 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
           <div className="flex justify-between dark:bg-[#222831] items-center px-4 py-2 border-2 border-[#990808] dark:border-0 shadow-xl rounded-xl">
             {loadingProduk ? (
               <>
+                {console.log(dataProduk)}
                 <div className="col-span-6 flex justify-center items-center h-full">
                   <Loading w={7} h={7} />
                 </div>
@@ -456,7 +458,11 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
                 <div className="flex items-center gap-x-5 dark:text-white">
                   <div className="h-16 w-16 rounded-full ">
                     <img
-                      src={logoStrive}
+                      src={
+                        dataProduk?.user.path_file
+                          ? `${apiUrl}/img/profile_image/${dataProduk?.user.path_file}`
+                          : logoStrive
+                      }
                       className="object-contain h-full w-full p-2"
                       alt=""
                     />
