@@ -235,7 +235,7 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
                       onMouseLeave={() => setZoom(false)}
                     >
                       <img
-                        src={`${apiUrl}/${fotoUtama}`}
+                        src={`${apiUrl}${fotoUtama}`}
                         // src={
                         //   fotoUtama ? apiUrl + idProduk + "/" + fotoUtama : "-"
                         // }
@@ -255,7 +255,9 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
                     </div>
                     {/* foto lainnya - desktop */}
                     <div className="flex md:hidden gap-2 p-2">
+                      {console.log("fotoProduk", fotoProduk)}
                       {fotoProduk.length > 1 ? (
+                
                         fotoProduk.map((foto, index) => (
                           <div
                             key={index}
@@ -448,7 +450,6 @@ const DetailProdukPage = ({ isLoginModal, setIsLoginModal }) => {
           <div className="flex justify-between dark:bg-[#222831] items-center px-4 py-2 border-2 border-[#990808] dark:border-0 shadow-xl rounded-xl">
             {loadingProduk ? (
               <>
-                {console.log(dataProduk)}
                 <div className="col-span-6 flex justify-center items-center h-full">
                   <Loading w={7} h={7} />
                 </div>

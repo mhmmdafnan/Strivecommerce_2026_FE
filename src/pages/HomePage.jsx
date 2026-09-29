@@ -111,6 +111,8 @@ const HomePage = () => {
   useEffect(() => {
     const fetchSliderProduk = async () => {
       try {
+        console.log("hali");
+        
         const res = await axios.get(`${apiUrl}/api/v1/product`, {
           params: {
             total: 10,

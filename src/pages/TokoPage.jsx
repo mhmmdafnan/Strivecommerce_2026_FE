@@ -99,7 +99,11 @@ const TokoPage = () => {
           <div className="flex items-center gap-x-5 ">
             <div className="h-24 w-24 bg-gray-200 rounded-full ">
               <img
-                src={logoStrive}
+                src={
+                  toko.path_file
+                    ? `${apiUrl}/img/profile_image/${toko?.path_file}`
+                    : logoStrive
+                }
                 className="object-contain h-full w-full p-2"
                 alt=""
               />

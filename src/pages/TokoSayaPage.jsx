@@ -196,7 +196,7 @@ const TokoSayaPage = () => {
 
   // Fetch data when page changes
   useEffect(() => {
-    console.log(cookies);
+    // console.log(cookies);
     const fetchData = async () => {
       setLoading(true);
       try {
