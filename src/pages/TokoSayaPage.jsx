@@ -77,9 +77,9 @@ const TokoSayaPage = () => {
       cookies.telp == "" ||
       cookies.telp == undefined ||
       cookies.telp == null ||
-      cookies.gender == "" ||
-      cookies.gender == undefined ||
-      cookies.gender == null ||
+      // cookies.gender == "" ||
+      // cookies.gender == undefined ||
+      // cookies.gender == null ||
       cookies.nama_toko == "" ||
       cookies.nama_toko == undefined ||
       cookies.nama_toko == null
